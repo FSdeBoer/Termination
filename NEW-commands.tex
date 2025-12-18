@@ -1,0 +1,283 @@
+%% Commands gathered from cmds, cmds2-209 & book.tex [MV]
+
+
+
+%% Moved from cmds [MV]
+
+% additions of defs for \WSUM ... \BIG done on 16-8-96
+% change of def of \IP on 25-8-86
+% new two lines added by Apt on 6-10-96
+\newcommand{\mycite}[1]{\citeyear{#1}\glossary{#1}}
+\newcommand{\myciteyear}[1]{\citeyear{#1}\glossary{#1}}
+
+\newcommand{\NN}{\mathbb{N}}  % ge�ndert von ERO
+\newcommand{\ZZ}{\mathbb{Z}}  % ge�ndert von ERO
+
+\newcommand{\IF}{\mbox{{\bf if}\ }}
+\newcommand{\FI}{\mbox{{\bf fi}}}
+\newcommand{\DO}{\mbox{{\bf do}\ }}
+\newcommand{\OD}{\mbox{{\bf od}}}
+\newcommand{\WHILE}{\mbox{{\bf while}\ }}
+\newcommand{\END}{\mbox{{\bf end}}}
+\newcommand{\THEN}{\mbox{\ {\bf then}\ }}
+\newcommand{\TTHEN}{\mbox{{\bf then}\ }}
+\newcommand{\ELSE}{\mbox{\ {\bf else}\ }}
+\newcommand{\EELSE}{\mbox{{\bf else}\ }}
+
+%\renewcommand{\T}{\mbox{{\bf true}}}
+\newcommand{\T}{\mbox{{\bf true}}}
+%\renewcommand{\F}{\mbox{{\bf false}}}
+\newcommand{\F}{\mbox{{\bf false}}}
+\newcommand{\FAIL}{{\bf fail}}
+\newcommand{\ES}{\mbox{$\emptyset$}}
+
+\newcommand{\ra}{\mbox{$\:\rightarrow\:$}}
+\newcommand{\tra}{\mbox{$\:\rightarrow^*\:$}}
+\newcommand{\lra}{\mbox{$\:\leftrightarrow\:$}}
+
+\newcommand{\A}{\mbox{$\ \wedge\ $}}
+\newcommand{\bigA}{\mbox{$\bigwedge$}}
+\newcommand{\Or}{\mbox{$\ \vee\ $}}
+\newcommand{\U}{\mbox{$\:\cup\:$}}
+\newcommand{\myI}{\mbox{$\:\cap\:$}}  % was \I
+%\newcommand{\I}{\mbox{$\:\cap\:$}}  % ERO: This macor leads to error:
+                                      %      "Command \I already defined"
+\newcommand{\sse}{\mbox{$\:\subseteq\:$}}
+
+\newcommand{\Mo}{\mbox{$\:\models\ $}}
+\newcommand{\Mf}{\mbox{$\:\models_{\it f\!air}\ $}}
+\newcommand{\Mt}{\mbox{$\:\models_{\it tot}\ $}}
+\newcommand{\Mwt}{\mbox{$\:\models_{\it wtot}\ $}}
+\newcommand{\Mp}{\mbox{$\:\models_{\it part}\ $}}
+
+\newcommand{\PR}{\mbox{$\vdash$}}
+
+\newcommand{\fa}{\mbox{$\forall$}}
+\newcommand{\te}{\mbox{$\exists$}}
+\newcommand{\fai}{\mbox{$\stackrel{\infty}{\forall}$}}
+\newcommand{\tei}{\mbox{$\stackrel{\infty}{\exists}$}}
+
+\newcommand{\LL}{\mbox{$\ldots$}}
+\newcommand{\LLn}{\mbox{$1,\ldots,n$}}
+
+\newcommand{\WP}{\mbox{{\bf while}  program}}
+\newcommand{\WPs}{\mbox{{\bf while}  programs}}
+\newcommand{\AW}{\mbox{{\bf await} statement}}
+\newcommand{\AWs}{\mbox{{\bf await} statements}}
+
+\newcommand{\IFP}{\mbox{$\IF B_1 \ra S_1 \qed \LL \qed B_n \ra S_n\ \FI$}}
+\newcommand{\DOP}{\mbox{$\DO B_1 \ra S_1 \qed \LL \qed B_n \ra S_n\ \OD$}}
+\newcommand{\DIP}{\mbox{$[S_1 \| \LL \| S_n]$}}
+\newcommand{\IFPa}{\mbox{$\IF \qed^n_{i=1}\ B_i \ra S_i\ \FI$}}
+\newcommand{\DOPa}{\mbox{$\DO \qed^n_{i=1}\ B_i \ra S_i\ \OD$}}
+
+\newcommand{\MS}[1]{\mbox{${\cal M}[\![{#1}]\!]$}}
+\newcommand{\MF}[1]{\mbox{${\cal M}_{{\it f\!air}}[\![{#1}]\!]$}}
+\newcommand{\MT}[1]{\mbox{${\cal M}_{{\it tot}}[\![{#1}]\!]$}}
+\newcommand{\MP}[1]{\mbox{${\cal M}_{{\it part}}[\![{#1}]\!]$}}
+\newcommand{\MWT}[1]{\mbox{${\cal M}_{{\it wtot}}[\![{#1}]\!]$}}
+\newcommand{\NS}[1]{\mbox{${\cal N}[\![{#1}]\!]$}}
+
+\newcommand{\ITE}[3]{\mbox{$\IF {#1} \THEN {#2} \ELSE {#3}\ \FI$}}
+\newcommand{\IT}[2]{\mbox{$\IF {#1} \THEN {#2}\ \FI$}}
+\newcommand{\WD}[1]{\mbox{$\WHILE {#1}\ \DO$}}
+\newcommand{\WDD}[2]{\mbox{$\WHILE {#1}\ \DO {#2}\ \OD$}}
+\newcommand{\W}[1]{\mbox{${\bf wait}\ {#1}$}}
+\newcommand{\AT}[1]{\mbox{${\bf await}\ {#1}\ {\bf then}$}}
+\newcommand{\ATE}[2]{\mbox{${\bf await}\ {#1} \THEN {#2}\ \END$}}
+\newcommand{\ATOM}[1]{\mbox{$\langle {#1} \rangle$}}
+\newcommand{\RU}[2]{\mbox{${\bf repeat}\ {#1}\ {\bf until}\ {#2}$}}
+
+\newcommand{\TF}[1]{\mbox{$T_{{\it f\!air}}({#1})$}}
+\newcommand{\TFn}{\mbox{$T_{{\it f\!air}}$}}
+
+\newcommand{\HT}[3]{\mbox{$\{{#1}\}\ {#2}\ \{{#3}\}$}}
+
+\newcommand{\HTT}[3]{\ensuremath{[{#1}]\ {#2}\ [{#3}]}}
+
+\newcommand{\sg}{{\mbox{$\sigma$}}}
+\newcommand{\Sg}{{\mbox{$\Sigma$}}}
+\newcommand{\om}{{\mbox{$\omega$}}}
+\newcommand{\al}{{\mbox{$\alpha$}}}
+\newcommand{\ba}{{\mbox{$\beta$}}}
+
+\newcommand{\B}[1]{\mbox{$[\![{#1}]\!]$}}       % brackets
+%\renewcommand{\C}[1]{\mbox{$\{{#1}\}$}}         % curly braces
+\newcommand{\C}[1]{\mbox{$\{{#1}\}$}}         % curly braces
+
+\newcommand{\UPDATE}{\mbox{$U\!P\!D\!AT\!E$}}
+\newcommand{\INIT}{\mbox{$I\!N\!IT$}}
+\newcommand{\SCH}{\mbox{$SC\!H$}}
+\newcommand{\FAIR}{\mbox{$F\!AI\!R$}}
+\newcommand{\RORO}{\mbox{$RO\!RO$}}
+\newcommand{\QUEUE}{\mbox{$QU\!EU\!E$}}
+\newcommand{\INV}{\mbox{$IN\!V$}}
+
+\newcommand{\ol}[1]{\mbox{$\overline{{#1}}$}}
+
+
+\newcommand{\NI}{\noindent} % With the new Springer sty this seems the better choice of the two
+%\newcommand{\NI}{\relax}
+
+%changed from \hfill$\qed$ to Springer default \qed [MW]
+\newcommand{\HB}{\qed \III}
+
+
+\newcommand{\VV}{\vspace{5 mm}}
+\newcommand{\III}{\vspace{3 mm}}
+\newcommand{\PP}{\mbox{$[S_1 \| \LL \| S_n]$}}
+
+\newcommand{\X}[1]{\mbox{$\:\stackrel{{#1}}{\rightarrow}\:$}}
+\newcommand{\lX}[1]{\mbox{$\:\stackrel{{#1}}{\longrightarrow}\:$}}
+
+%plus the ones define before in chapters:
+\newcommand{\zero}{\mbox{{\it ZERO}}}
+\newcommand{\ZERO}{\mbox{{\it ZERO-}}}
+\newcommand{\IP}[1]{\mbox{${\cal S}[\![{#1}]\!]$}}
+\newcommand{\po}{\mbox{$\ \sqsubseteq\ $}}
+\newcommand{\spo}{\mbox{$\ \sqsubset\ $}}
+\newcommand{\rpo}{\mbox{$\ \sqsupseteq\ $}}
+\newcommand{\rspo}{\mbox{$\ \sqsupset\ $}}
+\newcommand{\PRp}{\mbox{$\vdash_{PD}\ $}}
+\newcommand{\PRt}{\mbox{$\vdash_{TD}\ $}}
+\newcommand{\MINSUM}{\mbox{$M\!I\!N\!SU\!M$}}
+\newcommand{\AFIX}{\mbox{{\it AFIX}}}
+\newcommand{\AFIXP}{\mbox{{\it AFIX-P}}}
+\newcommand{\SUM}{\mbox{$SU\!M$}}
+\newcommand{\CROOK}{\mbox{$C\!ROO\!K$}}
+\newcommand{\ZERON}{\mbox{{\it ZERO-N}}}
+\newcommand{\GCD}{\mbox{{\it GCD}}}
+\newcommand{\FP}{\mbox{{\it full-page}}}
+\newcommand{\SPU}{\mbox{{\it PU}}}
+\newcommand{\SPUa}{\mbox{{\it PU1}}}
+\newcommand{\SPUb}{\mbox{{\it PU2}}}
+\newcommand{\SPUc}{\mbox{{\it PU3}}}
+\newcommand{\PRTNR}{\mbox{$\PR_{T\!N\!R}\ $}}
+\newcommand{\lex}{\mbox{$\:<_{lex}\:$}}
+\newcommand{\bx}{\mbox{$\bar{x}$}}
+\newcommand{\bz}{\mbox{$\bar{z}$}}
+\newcommand{\MFw}[1]{\mbox{${\cal M}_{{\it wf\!air}}\B{{#1}}$}}
+\newcommand{\TFw}[1]{\mbox{$T_{{\it wf\!air}}({#1})$}}
+\newcommand{\TFwn}{\mbox{$T_{{\it wf\!air}}$}}
+\newcommand{\WFAIR}{\mbox{$W\!F\!AI\!R$}}
+\newcommand{\VC}[1]{\mbox{{\it Var -- change}$({#1})$}}
+\newcommand{\FIND}{\mbox{$F\!I\!N\!D$}}
+\newcommand{\FINDPOS}{\mbox{$F\!I\!N\!D\!P\!O\!S$}}
+\newcommand{\nra}{\mbox{$\:\rightarrow^n\:$}}
+\newcommand{\ira}{\mbox{$\:\rightarrow^i\:$}}
+\newcommand{\era}{\mbox{$\:\rightarrow^{\epsilon}\:$}}
+\newcommand{\LA}{\mbox{$\langle$}}
+\newcommand{\RA}{\mbox{$\rangle$}}
+\newcommand{\SPUd}{\mbox{{\it PU4}}}
+\newcommand{\buffer}{\mbox{{\it buffer}}}
+\newcommand{\SPUe}{\mbox{{\it PU5}}}
+\newcommand{\PC}{\mbox{{\it PC}}}
+\newcommand{\MUTEXB}{\mbox{{\it MUTEX-B\/}}}
+\newcommand{\MUTEXS}{\mbox{{\it MUTEX-S\/}}}
+\newcommand{\TFa}[1]{\mbox{$T_{{\it f\!air}}^*({#1})$}}
+\newcommand{\TFb}[1]{\mbox{$T_{{\it f\!air}}^{**}({#1})$}}
+\newcommand{\TFna}{\mbox{$T_{{\it f\!air}}^*$}}
+\newcommand{\TFnb}{\mbox{$T_{{\it f\!air}}^{**}$}}
+\newcommand{\ENDs}      {{\bf end}}
+\newcommand{\BLOCK}     {\mbox{$B\!L\!O\!C\!K$}}
+\newcommand{\TERM}      {\mbox{$T\!E\!R\!M$}}
+\newcommand{\SENDER}    {\mbox{$S\!E\!N\!D\!E\!R$}}
+\newcommand{\TI}        {\mbox{$TI$}}
+\newcommand{\RECEIVER}  {\mbox{$R\!EC\!EIV\!E\!R$}}
+\newcommand{\FILTER}    {\mbox{$F\!I\!LT\!E\!R$}}
+\newcommand{\BODY}      {\mbox{$BO\!DY$}}
+\newcommand{\TRANS}     {\mbox{$T\!RAN\!S$}}
+\newcommand{\WSUM}      {{\it WSUM}}
+\newcommand{\CENTER}    {{\it CENTER}}
+\newcommand{\SETPART}   {{\it SETPART}}
+\newcommand{\SMALL}     {{\it SMALL}}
+\newcommand{\BIG}       {{\it BIG}}
+\newcommand{\MIN}       {\mbox{$M\!I\!N$}}
+\newcommand{\LEADER}    {\mbox{$L\!E\!AD\!E\!R$}} 
+\newcommand{\ENABLED}   {\mbox{$E\!N\!\!AB\!L\!E\!D$}}
+\newcommand{\CP}        {\mbox{$C\!O\!N\!T\!RO\!L\_P\!ART$}}
+\newcommand{\INTERRUPT} {\mbox{$I\!N\!T\!E\!RRU\!PT$}}
+\newcommand{\PRpn}      {\mbox{$\vdash_{PN}\:$}}
+\newcommand{\PRpdp}     {\mbox{$\vdash_{PDP}\:$}}
+\newcommand{\Eff}       {\mbox{$E\!f\!f$}}
+\newcommand{\BLANK}     {\mbox{`\ '}}
+\newcommand{\AST}       {\mbox{`$*$'}}
+\newcommand{\Mr}        {\mbox{$\:\models_{\it res}\ $}}
+\newcommand{\Mfw}       {\mbox{$\:\models_{\it f\!air-w}\ $}}
+\newcommand{\Mfr}       {\mbox{$\:\models_{\it f\!air-res}\ $}}
+\newcommand{\MQF}[1]    {\mbox{${\cal M}_{{\it q-f\!air}}[\![{#1}]\!]$}}
+\newcommand{\MFW}[1]    {\mbox{${\cal M}_{{\it f\!air-w}}[\![{#1}]\!]$}}
+
+\newcommand{\ignore}[1]{}  % for deleting parts of the text
+
+
+%\newenvironment{mytabbing}{\begin{tabbing}\hspace*{\leftskip}\=\+\kill}{\end{tabbing}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Moved from book.tex and safetycheck [MV]
+
+\newcommand{\fettEnde}{\makeboc[0pt]{}\hfill\mbox{$\qed$}}
+\newcommand{\qedEnde}{\makebox[0pt]{}\hfill\mbox{$\qed$}}
+\let\Ende\qedEnde
+
+\newcommand{\MathEnde}[1]{\\[-#1\baselineskip]\Ende}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%Ensures position of all \qed is flush right, added for Springer niceness [MV]
+%\smartqed
+
+% From cmds2-209 [MV]
+% marginlabel makes a marginnote
+\newcommand{\marginlabel}[1]{\mbox{}\marginpar[\hspace{0pt}#1\hfill]{\hfill\hspace{0pt}#1}}
+
+
+% From cmds2-209 [MV]
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% What is the advantage of these in new sty? Change to normal \label? [MV]
+
+% mylabel provides the possibility to draw a defined label on the margin
+% Does not work with svw2.sty :-( CK
+%\newcommand{\mylabel}[1]{\marginlabel{Def: #1}\label{#1}}
+% And this version puts out extra spaces... WHY??? CK
+%\newcommand{\mylabel}[1]{\label{#1}}
+\def\mylabel{\label}
+
+% mylabel provides the possibility to draw a referenced label on the margin
+% Does not work with svw2.sty :-( CK
+%\newcommand{\myref}[1]{\marginlabel{Ref: #1}\ref{#1}}
+% And this version puts out extra spaces... WHY??? CK
+%\newcommand{\myref}[1]{\ref{#1}}
+\def\myref{\ref}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% From cmds2-209 [MV]
+% label-command for tabbing-environments
+\newcommand{\tablabel}[1]{\`\refstepcounter{equation}\label{#1}(\theequation)}
+
+
+\def\nlni{\par\ifvmode\removelastskip\fi\vskip\baselineskip\noindent}
+
+% new commands by Frank
+
+\newcommand{\this}{{\bf this}}
+\newcommand{\Object}{{\bf object}}
+\newcommand{\init}{{\it init}}
+\newcommand{\nulll}{{\bf null}}
+\newcommand{\new}{{\bf new}}
+\newcommand{\created}{{\it created}}
+\newcommand{\nil}{{\bf nil}}
+%\newcommand{\return}{{\rm return}}
+\newcommand{\Objects}{{\cal D}_\Object}
+\newcommand{\inherits}{\mbox{$\sqsubseteq$}}
+\newcommand{\Classes}{{\cal C}}
+%\newcommand{\lock}{{\rm lock}}
+%\newcommand{\stack}{\theta}
+%\newcommand{\block}[1]{\{#1\}}
+\newcommand{\BEGIN}{\mbox{{\bf begin}}}
+\newcommand{\block}[1]{\mbox{$\BEGIN \ {#1}\ \END$}}
+\newcommand{\local}{\mbox{{\bf local}\ }}
+
+\newcommand{\sred}[1]{\textcolor{red}{#1}}
+\newcommand{\sblue}[1]{\textcolor{blue}{#1}}
+\newcommand{\bfe}[1]{\begin{bfseries}\emph{#1}\end{bfseries}}
