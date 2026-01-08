@@ -1,6 +1,6 @@
-% \documentclass[runningheads]{llncs}       % Frank's version only !
+\documentclass[runningheads]{llncs}       % Frank's version only !
 
-\documentclass[runningheads]{./llncs/llncs} % version in the git
+%\documentclass[runningheads]{./llncs/llncs} % version in the git
 
 \usepackage{enumerate}
 
@@ -175,7 +175,7 @@ contract paradigm.
 
 \section{Preliminaries}
 
-NAMES OF TWO SUBSECTIONS ADDED
+NAMES OF TWO SUBSECTIONS AND NOTION OF DERIVIBILITY ADDED
 
 \subsection{Admissibility and equivalence}
 
@@ -198,16 +198,32 @@ A proof rule
 \[ 
   (R) \qquad \frac{\varphi_1,\LL,\varphi_k}{\varphi}
 \]
+is called \bfe{derivable} \emph{PR}  if
+\[
+ \varphi_1, \LL, \varphi_k \vdash_{\mathit{PR}} \varphi.
+\]
+
+
+A proof rule
+\[ 
+  (R) \qquad \frac{\varphi_1,\LL,\varphi_k}{\varphi}
+\]
 is called \bfe{admissible in} \emph{PR} (see, e.g.~\cite{Pla13}) if
 \[
  \vdash_{\mathit{PR}} \varphi_1, \LL, \vdash_{\mathit{PR}} \varphi_k
  \mbox{ implies }
  \vdash_{\mathit{PR}} \varphi.
 \]
-Intuitively, if a rule is admissible in \emph{PR}
+Intuitively, if a rule is derivable or admissible in \emph{PR}
 it does not increase the power of the proof system \emph{PR} \cite{Pla13}, 
 but it serves as a lemma that simplifies proofs in \emph{PR} by condensing
 a detailed proof argument into one application of $(R)$.
+The application of a derivable rule can  be replaced without
+affecting the overall proof structure,  which in general is not the case
+with the application of an admissible rule.
+A derivable rule is also an admissible rule,  but in general the converse
+does not hold.
+
 
 
 We say that two proof systems $\it{PR}_1$ and $\it{PR}_2$ are \bfe{equivalent}
@@ -226,7 +242,15 @@ $\mathit{PR} \cup \{R_2\}$ are equivalent iff $R_1$ is admissible in
 $\mathit{PR} \cup \{R_2\}$ and $R_2$ is admissible in
 $\mathit{PR} \cup \{R_1\}$.
 
+The same holds for derivability:
+The proof systems $\mathit{PR} \cup \{R_1\}$ and
+$\mathit{PR} \cup \{R_2\}$ are equivalent iff $R_1$ is derivable  in
+$\mathit{PR} \cup \{R_2\}$ and $R_2$ is derivable in
+$\mathit{PR} \cup \{R_1\}$.
+
 \end{lemma}
+
+
 
 \subsection{LOOP rules}
 
@@ -887,7 +911,203 @@ implies soundness of the LOOP II rule.
 % the admissibility of standard auxiliary rules of Hoare's logic,
 % which requires further investigation.
 
+\subsection{Completeness}
+Next we discuss  \emph{completeness} of the proof systems II,III, IV, and V.
+Since these proof systems are equivalent, it 
+suffices to prove completeness for one of them.
+We opt here for the proof system V 
+for which
+we consider the standard notion of \emph{relative}
+completeness: For any first-order model $M$ of the assertion language
+we will show that  $M\models\HT{p}{S}{q}$
+implies  $T(M)\vdash_{\rm{V}}\HT{p}{S}{q}$, where
+$T(M)$ denotes the first-order theory of $M$,
+for use in the consequence rule.
+Here  $M\models\HT{p}{S}{q}$ defines the truth of 
+$\HT{p}{S}{q}$ in terms of the model $M$, that is,
+the basic notions of states, executions and satisfaction of the first-order formulas are defined in terms of the model $M$.
 
+We restrict to models $M$ for which 
+we can express in the assertion language
+the \emph{weakest precondition} $\mbox{\it wp}(S,q)$, for any statement
+$S$ and postcondition $q$.
+This weakest precondition $\mbox{\it wp}(S,q)$ denotes the set
+of initial states for which $S$ terminates in a final state
+satisfying $q$.
+We refer to Section \ref{sec:WP}
+for the standard weakest precondition calculus.
+Further, we restrict to models for which there exists
+% that these models include a well-founded
+% relation $<$ for the interpretation of the corresponding
+% relation symbol in the LOOP V rule, and 
+a parameterized extension $p(x)$
+ of  $\mbox{\it wp}(\WDD{B}{S},q)$, for some   fresh variable $x$
+ not appearing in $\WDD{B}{S}$ or $q$.
+This parameterized extension 
+implies $x\geq 0$ and
+satisfies 
+the following equivalences.
+
+% \begin{equation}\label{eq:wp1}
+% \mbox{\it wp}(\WDD{B}{S},q) \leftrightarrow
+% \exists x: \mbox{\it wp}(x,\WDD{B}{S},q)   
+% \end{equation}
+
+\begin{equation}\label{eq:wp1}
+(\exists x: p(x)) \leftrightarrow
+\mbox{\it wp}(\WDD{B}{S},q) 
+\end{equation}
+
+
+\begin{equation}\label{eq:wp2}
+p(x)\leftrightarrow
+(((\neg B)\wedge q)\vee (B\wedge \mbox{\it wp}(S, \exists y: p(y) \wedge y<x )))
+\end{equation}
+
+
+
+
+
+
+
+\begin{theorem}
+For any model $M$ for which there exists
+a parameterized extension 
+for every  weakest precondition of a loop statement
+and postcondition, we have that
+$M\models\HT{p}{S}{q}$ implies
+$T(M)\vdash_{\rm{V}}\HT{p}{S}{q}$.
+\end{theorem}
+
+\begin{proof}
+It suffices to show that
+$T(M)\vdash_{\rm{V}}\HT{\mbox{\it wp}(S,q)}{S}{q}$,
+for any $S$ and postcondition $q$, because $M\models\HT{p}{S}{q}$
+if and only if $p\rightarrow \mbox{\it wp}(S,q)\in T(M)$,
+by definition.
+The proof proceeds by induction on $S$.
+
+We treat the main case of a loop statement $\WDD{B}{S}$
+(the other cases follow directly from the induction hypotheses using the compositional characterization
+of the weakest precondition described in Section \ref{sec:WP}).
+% For notational convenience, let $p(x)$ abbreviate
+% $\mbox{\it wp}(x,\WDD{B}{S},q)$.
+Let $p(x)$ denote the paramterized extension of
+$\mbox{\it wp}(\WDD{B}{S},q)$.
+By the induction hypothesis
+we have
+\[
+\vdash_{\rm{V}}
+\HT{\mbox{\it wp}(S, \exists y: p(y) \wedge y<x )}{S}{\exists y: p(y) \wedge y<x }
+\]
+Applying the consequence rule, using Equivalence (\ref{eq:wp2}), then gives
+\[
+\vdash_{\rm{V}}
+\HT{p(x)\wedge B}{S}{\exists y: p(y) \wedge y<x }
+\]
+Now we can apply the LOOP V rule and obtain
+\[
+\vdash_{\rm{V}}
+\HT{\exists x:p(x)}{S}{\exists x:p(x)\wedge \neg B}
+\]
+By a final application of the consequence rule, using Equivalence
+(\ref{eq:wp1}) and that $\mbox{\it wp}(\WDD{B}{S},q)\wedge \neg B$ implies
+$q$,
+we obtain the desired result
+\[
+\vdash_{\rm{V}}
+\HT{\mbox{\it wp}(\WDD{B}{S},q)}{S}{q}
+\]
+
+\III
+\HB
+\end{proof}
+
+For a deterministic language,  for example the one considered in this paper, 
+the standard weakest precondition in fact amounts to the existence
+of a terminating computation.
+The  parameterized extension of the  standard weakest precondition 
+of a loop statement then additionally expresses
+the number of iterations of 
+the (outer) loop.
+Clearly in this case both the  Equivalences (\ref{eq:wp1})
+and (\ref{eq:wp2}) hold.
+Further, using standard coding techniques, we can show
+the expressibility of the standard weakest precondition and its parameterized
+extension for 
+the standard model of Peano arithmetic.
+
+In \cite{ABO90} completeness is discussed for proof system III
+(for the same deterministic language).
+Besides the expressibility of the standard weakest precondition
+this completeness proof requires the expressibility of the
+bound function as a term of the assertion language.
+For this however the standard coding techniques do not suffice.
+Instead it requires an extension of the assertion language
+with recursive functions or general Skolem functions as used
+in the derivability of the LOOP V rule in the proof system III.
+
+The  Equivalences (\ref{eq:wp1}) 
+and (\ref{eq:wp2}) also hold for  \emph{bounded} non-deterministic  extensions,
+for example, extensions with a non-deterministic choice statement
+$S_1+ S_2$ or Dijkstra's  guarded command language.
+For such languages the  additional parameter then 
+denotes  an \emph{upper-bound} of the number of iterations
+(of the loop statement).
+
+In programming languages which give rise to
+\emph{unbounded} non-determinism  such an upper-bound may not exist.
+For example
+when the programming language 
+features  a random assignment  which gives
+rise to \emph{countable} non-determinism (see \cite{AptP86}).
+To reason about termination of such programs it suffices
+to consider models which include the initial segment of the \emph{ordinals}
+consisting of all \emph{countable} ordinals.
+For such models the variable $x$ of the LOOP V rule ranges
+over this initial segment, $<$ denotes the membership relation,
+and $0$ denotes the empty set.
+A consequence of this generalization is that we cannot extend the usual coding techniques
+to  express  the standard weakest precondition and its parameterized extension 
+for loop statements, simply because
+the set of all countable ordinals is itself \emph{uncountable}.
+As with the general case of program correctness over 
+abstract data types, one needs more expressive
+assertion languages, e.g., quantification over finite sequences
+(as proposed in \cite{TZ88}).
+Here we resort to an extension of first-order logic
+with a \emph{least fix-point operator}.
+This allows to \emph{define} the weakest precondition $\mbox{\it wp}(S,q)$
+by induction on $S$ and define
+$\mbox{\it wp}(\WDD{B}{S},q)$ by 
+$\exists x: p(x)$, where
+$p(x)$ is defined by
+$$
+\mu R(x,\bar{z}):
+(\neg B)\wedge q)\vee (B\wedge \mbox{\it wp}(S, \exists y:R(y,\bar{z})  \wedge y<x ))
+$$
+Here $\bar{z}$ denote the (free) variables of $\WDD{B}{S}$ and $q$.
+This formula denotes the smallest interpretation of the relation
+$R$ which satisfies 
+$$(\neg B)\wedge q)\vee (B\wedge \mbox{\it wp}(S, \exists y:R(y,\bar{z})  \wedge y<x ))$$
+Such an interpretation exists because this latter formula
+defines a monotonic function on the complete lattice of all
+possible interpretations of $R$, which
+extends any interpretation
+of $R$ by evaluating this latter formula under  this interpretation,
+so that we can apply
+Knaster-Tarski Fixed Point Theorem.
+Further, $\exists x:p(x)$ indeed
+characterizes $\mbox{\it wp}(\WDD{B}{S},q)$
+because 
+we can associate
+with each node of  a terminating computation tree with
+a countable degree an ordinal
+which is bigger than all the ordinals associated with its child nodes.
+Note that the ordinals associated with the child nodes
+form a \emph{set} and therefore there exists an upper-bound
+(and the upper-bound of a countable set of countable ordinals is itself
+a countable ordinal).
 
 
 \section{Representing Proofs}
@@ -1335,6 +1555,35 @@ RULE \label{rul:cons} CONSEQUENCE
 Additionally, given an interpretation $\mathcal{I}$ for the underlying first-order language, 
 we use as axioms all assertions that are true in $\mathcal{I}$. 
 These assertions are used as premises in the CONSEQUENCE rule. 
+
+\section{Weakest Precondition Calculus}\label{sec:WP}
+The calculus consist of the following axioms:
+\VV
+
+\NI
+AXIOM  SKIP
+\[ \mbox{\it wp}(skip,p)\leftrightarrow p \]
+%
+\NI
+AXIOM  ASSIGNMENT
+\[  \mbox{\it wp}(u:=t,p)\leftrightarrow p[u:=t] \]
+%
+\NI
+RULE \label{rul:comp} COMPOSITION
+\[ \mbox{\it wp}(S_1;S_2,q)\leftrightarrow 
+         \mbox{\it wp}(S_1,\mbox{\it wp}(S_2,q))\]
+%
+\NI
+RULE  CONDITIONAL
+\[ \mbox{\it wp}(\ITE{B}{S_1}{S_2},q)\leftrightarrow
+(\mbox{\it wp}(S_1,q)\wedge B)\vee 
+(\mbox{\it wp}(S_2,q)\wedge \neg B)\]
+%
+\NI
+RULE  LOOP 
+\[ \mbox{\it wp}(\WDD{B}{S},q)\leftrightarrow
+(q\wedge \neg B)\vee (\mbox{\it wp}(S, \mbox{\it wp}(\WDD{B}{S},q))\wedge B)
+\]
 
 \section{Unrestricted Bound Functions} \label{LOOPIIt}
 
