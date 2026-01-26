@@ -111,10 +111,7 @@ establishing total correctness.  We analyze four versions of such a
 proof rule. 
 
 
-
 \medskip
-
-\NI
 
 
 \begin{itemize}
@@ -182,7 +179,7 @@ contract paradigm.
 \NI
 INCLUDED DERIVABILITY IN THE SUBSECTION TITLE
 
-\subsection{Derivability , admissibility and equivalence}
+\subsection{Derivability, admissibility and equivalence}
 
 Assume a given language that is determined by its set of formulas.  In
 what follows we assume that all considered axioms, proof rules, and
@@ -200,8 +197,6 @@ $\phi_1, \LL, \phi_m$ is empty and when \emph{PR} is a set of proof
 rules.
 
 \III
-\NI
-DEFINITION DERIVABILITY ADDED
 
 A proof rule
 \[ 
@@ -212,8 +207,6 @@ is called \bfe{derivable} in \emph{PR}  if
  \varphi_1, \LL, \varphi_k \vdash_{\mathit{PR}} \varphi.
 \]
 \NI
-END
-
 % A proof rule
 % \[ 
 %   (R) \qquad \frac{\varphi_1,\LL,\varphi_k}{\varphi}
@@ -225,14 +218,18 @@ is called \bfe{admissible in} \emph{PR} (see, e.g.~\cite[page 47]{Pla13}) if
  \mbox{ implies }
  \vdash_{\mathit{PR}} \varphi.
 \]
-Intuitively, if a rule is admissible in \emph{PR}
+MORE EXPLANATION \\
+By a derivable rule, a proof in the proof system \emph{PR} deducing the formula
+$\varphi$ from the formulas $\varphi_1, \LL, \varphi_k$ can be condensed
+into \emph{one step} deducing $\varphi$ from $\varphi_1, \LL, \varphi_k$.
+By an admissible rule, a proof of the formula $\varphi$ in the proof system PR
+that is manufactured by \emph{manipulating} $k$ given proofs of
+$\varphi_1, \LL, \varphi_k$ in the proof system \emph{PR} 
+can be condensed into \emph{one step} deducing $\varphi$ from $\varphi_1, \LL, \varphi_k$.
+Intuitively, if a rule is derivable or admissible in \emph{PR}
 it does not increase the power of the proof system \emph{PR} \cite{Pla13}, 
 but it serves as a lemma that simplifies proofs in \emph{PR} by condensing
 a detailed proof argument into one application of $(R)$.
-
-\NI
-EXPLANATION DERIVABILITY ADDED
-
 The application of a derivable rule can  be replaced locally without
 affecting the overall proof structure,  which in general is not the case
 with the application of an admissible rule.
@@ -390,6 +387,16 @@ the set of free variables of the assertion $p$ and by $var(t)$, $var(B)$, and $v
 the set of variables that appear in the
 expression $t$, the Boolean expression $B$, and the program $S$, respectively.
 
+\III
+\NI
+ADDED NOTATION SUBSTITUTION
+
+Here and below we denote by $p[x:=t]$ the result of replacing all free occurrences of the variable
+$x$ in $p$ by $t$ (assuming that after the replacement  no variables of $t$ 
+fall in the scope of a quantifier in $p$).
+
+\NI
+END
 
 
 We shall consider in total five proof systems concerned with the
@@ -398,19 +405,6 @@ correctness formulas. They only differ in the used LOOP rule.
 Proof system I denotes the customary proof system allowing us to prove 
 partial correctness of {\bf while} programs.  
 Its axioms and proof rules, due to \cite{Hoa69}, are listed in Appendix~\ref{sec:I}.
-
-\III
-\NI
-ADDED NOTATION SUBSTITUTION
-
-Here and below we denote by $p[x:=t]$ the result of replacing  free occurrences of the variable
-$x$ in $p$ by $t$ (assuming that after the replacement  no variables of $t$ 
-fall in the scope of a quantifier in $p$).
-
-\NI
-END
-
-%taken from our book \cite{ABO09}, are listed in the Appendix.
 Its LOOP rule has the following form:
 \III
 
@@ -425,7 +419,7 @@ RULE LOOP I
 
 
 
-In the proof system II this rule  is replaced by
+In the proof system II, this rule  is replaced by
 \III
 
 \NI
@@ -457,7 +451,7 @@ does not appear (free) in $p$.
 
 \III
 
-In the proof system III  LOOP I rule is replaced by
+In the proof system III,  LOOP I rule is replaced by
 \III
 
 \NI
@@ -599,11 +593,9 @@ the LOOP III rule. So the hybrid form of this rule arises only for
 nested loops.
 
 
-
-
 Parameterized loop invariants were first used in a rule proposed
 in \cite{Harel79}, where with each loop iteration the parameter was
-supposed to decrement exactly by 1.  The above LOOP V rule allows us
+supposed to decrement exactly by~1.  The above LOOP V rule allows us
 to generalize proofs of termination to arbitrary well-founded domains.
 Such a generalization is for example required for reasoning about
 termination in presence of \emph{countable non-determinism}
@@ -715,7 +707,7 @@ $$
  \HT{p \A B \A t'=z}{S}{p \A t'<z},
 $$
 so that we finally can apply the original LOOP II rule.
-
+\hfill \HB
 
 
 
@@ -1075,10 +1067,12 @@ THE CASES BELOW REFORMULATED.
 
    \item The LOOP II  is derivable in the proof system  V.
    
+\end{enumerate}
 
+We proceed by proving these properties.
 
-  \end{enumerate}
-\mbox{} \\
+\vspace{2mm}
+
 \NI
 $(i)$ From the premise
 \[
@@ -1742,7 +1736,7 @@ the standard model of Peano arithmetic.
 ADDED A DISCUSSION ON SKOLEM FUNCTIONS.
 
 Since the proof systems II-V are equivalent,
-completeness of the proof system V implies completeness
+completeness of the proof system~V implies completeness
 of the proof systems II-IV.
 However, the proof of this equivalence, i.e., the proof of Theorem
 \ref{thm:main},
