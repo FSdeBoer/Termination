@@ -336,7 +336,12 @@ in the system $\mbox{\it PR}\cup \mbox{\it AUX1}\cup\{R'\}$
 \end{itemize}
 \end{lemma}
 
+\NI
+ERO: The PROOF does not use AUX1 and AUX2, but I understand that
+Krzysztof wants to reformulate it. Therefore I did not change it.
+
 \begin{proof}
+
 For any proof system \mbox{\it PR} and set of rules \mbox{\it AUX}
 we have that if any $A\in \mbox{\it AUX}$ is admissible in \mbox{\it PR} then \mbox{\it PR} and
 $\mbox{\it PR}\cup\mbox{\it AUX}$ are equivalent.
@@ -356,8 +361,6 @@ So we derive  that  $R$ is admissible in $\mbox{\it PR}\cup \{R'\}$
 and similarly, that $R'$ is admissible in $\mbox{\it PR}\cup \{R\}$.
 From this it follows that $\mbox{\it PR}\cup \{R'\}$ and
 $\mbox{\it PR}\cup \{R\}$ are equivalent.
-
-
 \HB
 \end{proof}
 
@@ -644,6 +647,12 @@ reasoning about termination along the lines of LOOP IV rule.
 THE FOLLOWING  MODIFICATION USED UPFRONT TO EXPLAIN THE GENERAL APPROACH
 AS DESCRIBED IN LEMMA 1.
 
+ERO: I would prefer that these two versions of implications
+are not discussed in the main flow of the paper, but in a section
+on further variants of proof rules.
+
+\medskip
+
 Further, the last premise of each of the LOOP rules II-V and their
 variants can also be modified, by considering in each case the
 implication $p \A B \ra t \geq 0$ instead of $p \ra t \geq 0$. 
@@ -707,7 +716,7 @@ $$
  \HT{p \A B \A t'=z}{S}{p \A t'<z},
 $$
 so that we finally can apply the original LOOP II rule.
-\hfill \HB
+\HB
 
 
 
@@ -1537,7 +1546,8 @@ LOOP II rule, its soundness  follows directly from
 CONSEQUENCE rule.
 
 \NI
-END
+END.
+
 
 % Further, we can derive for  soundness
 % of the LOOP II rule from the soundness of the LOOP V rule,
@@ -2127,7 +2137,7 @@ To conclude let us discuss proof outlines in presence of the LOOP V
 rule.  To obtain a proof outline for $\HT{\T}{S_N}{\T}$ in the
 proof system V it suffices to modify the loop invariants in the proof
 outline for the proof system II given in Figure \ref{fig:po} as in the
-proof of Lemma \ref{lem:main}$(vi)$, so by using, respectively,
+proof of Theorem \ref{thm:main}$(vi)$, so by using, respectively,
 \[
   \mbox{$p(z) \equiv max(n - i, 0) = z$,}
 \]
