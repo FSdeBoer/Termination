@@ -1,0 +1,2660 @@
+\documentclass[runningheads]{llncs}       % Frank's version only !
+
+%\documentclass[runningheads]{./llncs/llncs} % version in the git
+
+\usepackage{enumerate}
+
+\usepackage{graphicx,color}
+
+\input NEW-commands.tex
+\newcommand{\AUX}{\mathit{AUX}}
+
+\author{
+Krzysztof R. Apt \inst{1} \and
+Frank S. de Boer \inst{2} \and
+Ernst-R\"udiger Olderog \inst{3}
+}
+
+\authorrunning{K.R. Apt, F.S. de Boer and E.-R. Olderog} 
+% First names are abbreviated in the running head.
+% If there are more than two authors, 'et al.' is used.
+
+\institute{
+CWI, Amsterdam, The Netherlands\\
+MIMUW, University of Warsaw, Poland\\
+\email{apt@cwi.nl} 
+\and
+CWI, Amsterdam, The Netherlands\\
+\email{F.S.de.Boer@cwi.nl}
+\and
+Carl von Ossietzky University of Oldenburg, Oldenburg, Germany\\
+\email{olderog@informatik.uni-oldenburg.de}
+}
+
+
+\title{Proof Rules for Termination of Loops:\\
+       A Comprehensive Analysis}
+
+\titlerunning{Termination of Loops}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+  We provide a comprehensive analysis of different proof rules for
+  proving termination of \textbf{while} programs and show their
+  proof-theoretic equivalence.  This involves a proof-theoretic
+  analysis of various auxiliary proof rules in Hoare's logic.  By
+  discussing representations of proofs in the form of proof outlines,
+  we reveal differences between these equivalent proof rules when used
+  in practice.  We also address applications in the context of the
+  paradigm of design by contract.
+\end{abstract}
+
+
+\section{Introduction}
+
+In his seminal paper \cite{Hoa69}, Hoare introduced an axiomatic method of reasoning
+about correctness of \textbf{while} programs, now called Hoare's logic. 
+It is based on correctness formulas
+$\HT{p}{S}{q}$, where $S$ is a program and $p$ and $q$ are assertions
+(logical formulas), with the interpretation
+   \begin{quote}
+   ``If the assertion $p$ is true before initiation of a program $S$,
+     then the assertion $q$ will be true on its completion.''
+   \end{quote}
+In this context $p$ is referred to as a \emph{precondition} and $q$ as 
+a \emph{postcondition} of $S$.
+
+However, in contrast to Floyd's earlier paper \cite{Flo67a} that dealt
+with correctness of flowchart programs, program termination was not
+addressed. To stress this difference one distinguishes now between
+\emph{partial correctness} that only focuses on the delivery of
+correct results, and \emph{total correctness}, that in addition
+stipulates that the program terminates.  So the original proposal of
+Hoare dealt with partial correctness.
+
+All approaches to proving program termination within Hoare’s logic formalize 
+Floyd’s \cite{Flo67a} observation that
+    \begin{quote}
+    ``Proofs of termination are dealt with by showing that each step of a program 
+      decreases some entity which cannot decrease indefinitely.”
+    \end{quote}
+
+The first extension of Hoare's logic
+to deal with total correctness is due to~\cite{MP74}. 
+Since then substantially simpler proof rules were proposed.
+In these proof rules variables that range over natural numbers are used.
+An appropriate relative completeness result, see for example \cite{ABO09}, 
+shows that variables ranging over more general well-founded orderings 
+are not needed.
+
+Termination continues to be a relevant and vibrant topic in program
+analysis, see for example~\cite{CookPR11} and the Annual International
+Termination Competition\footnote{
+\texttt{https://termination-portal.org/wiki/Termination\_Competition}}.
+The latter comprises various competition categories, 
+for instance proving termination of 
+C programs, Java bytecode programs, logic programs,
+functional programs, and term rewriting systems.
+Here we focus on the shape of termination proofs in the context of
+Hoare's logic. 
+To this end, we investigate four natural proof rules 
+from the proof-theoretic point of view.
+More specifically, we study {\bf while} programs with Hoare's 
+original proof system for program correctness, in which the well-known
+proof rule for partial correctness of the {\bf while} loops, which we
+call the LOOP I rule, is replaced by a suitable proof rule for
+establishing total correctness.  We analyze four versions of such a
+proof rule. 
+
+
+\medskip
+
+
+\begin{itemize}
+
+\item 
+% The LOOP III rule allows us to document proofs as \emph{proof
+%   outlines}, which is in particular useful when arguing about the
+%   interference freedom of component proofs in the context of parallel
+%   programs.
+The LOOP II rule involves a single, monolithic proof which
+  establishes an invariant, termination of the body of the \textbf{while}
+  loop, and which ensures that the body itself cannot be executed
+  infinitely often by a so-called bound function.
+% \item The LOOP IV rule is particularly well-suited when dealing with nested loops
+%       because it modularizes the correctness proof of the outer loop from
+%       the ones of the inner loops. It is a \emph{hybrid} proof rule with
+%       premises referring to proof systems for both partial and total correctness.
+
+\item The LOOP III rule achieves a separation of the reasoning about
+  the invariant and the bound function.
+
+\item
+The LOOP IV rule not only achieves a separation of the reasoning about
+the invariant and the bound function, it additionally involves
+a separate proof of the termination the body itself.
+As such it is particularly well-suited when dealing with nested loops
+because it modularizes the correctness proof of the outer loop from
+the ones of the inner loops. It is a \emph{hybrid} proof rule with
+premises referring to proof systems for both partial and total correctness.
+
+\item The LOOP V rule, like the LOOP II rule, is a monolithic rule
+which formalizes reasoning  about termination of a \textbf{while} loop in a single proof.
+However, instead  of an explicit representation of the bound function
+it uses  a parameter of the invariant itself.
+
+\end{itemize}
+
+Depending on the choice of the loop rule, we obtain proof systems that
+we refer to by II, III, IV, and V, respectively.  We show that these
+four proof systems are equivalent in the sense that every proof of a
+correctness formula $\HT{p}{S}{q}$ carried out in one of these systems
+can be effectively transformed into a correctness proof in any other
+of these proof systems.  This result is obtained by a detailed
+proof-theoretic analysis of the four loop rules in the context of
+these proof systems. In this analysis we make use of
+auxiliary proof rules which we show to be admissible in the proof systems.
+
+Even though Hoare's logic has been extensively studied (see for
+example our survey \cite{AO19}), little work has been done on the
+analysis of proofs in Hoare's logic. We are familiar with only three
+references, \cite{Apt81a}, \cite{GR16}, and \cite{Tiu02}, in which
+transformations of proofs in a Hoare logic are discussed.
+
+While these proof rules are equivalent, their use and representation
+in the form of proof outlines, which are programs annotated by
+assertions, differs. We illustrate this by analyzing a termination
+proof of a program with nested loops. We also address applications in
+the context of assertions used as annotations in the design by
+contract paradigm.
+
+
+\section{LOOP rules}
+
+We shall be concerned here with the language, the formulas of
+which are either first-order formulas, called \bfe{assertions}, or
+\bfe{correctness formulas}, which are constructs of the form $\HT{p}{S}{q}$,
+where $p$ and $q$ are assertions and $S$ is a \textbf{while} program.
+
+\NI KRA: (28-01) SLIGHTLY REFORMULATED
+
+We assume two disjoint sets of variables: a set \emph{lvar} of
+\bfe{logical} variables and a set \emph{pvar} of \bfe{program}
+variables. Programs refer only to program variables, while assertions
+may refer to both types of variables.  Logical variables are the only
+variables that can be quantified over. They are used in assertions as
+\bfe{freeze} variables.
+
+\NI
+END
+
+Below we denote by $\mathit{free}(p)$
+the set of free variables of the assertion $p$ and by $var(t)$, $var(B)$, and $var(S)$ 
+the set of variables that appear in the
+expression $t$, the Boolean expression $B$, and the program $S$, respectively.
+
+\III
+\NI
+ADDED NOTATION SUBSTITUTION
+
+\NI KRA (28-01): SLIGHTLY REWORDED. I WOULD LIKE TO SUGGEST TO DELETE
+THE SECOND SENTENCE: IT IS A STANDARD DEFINITION. ALSO WE NEVER HAVE
+TO PERFORM SUCH A RENAMING.
+
+We denote by $p[x:=t]$ the result of substituting all free occurrences
+of the variable $x$ in $p$ by the expression $t$. The standard
+definition takes care by means of renaming of bound variables that
+after the replacement no variable of $t$ becomes bound in $p$.
+
+\NI
+END
+
+We shall consider in total five proof systems concerned with the
+correctness formulas. They only differ in the used LOOP rule.
+
+Proof system I denotes the customary proof system allowing us to prove 
+partial correctness of {\bf while} programs.  
+Its axioms and proof rules, due to \cite{Hoa69}, are listed in Appendix~\ref{sec:I}.
+Its LOOP rule has the following form:
+\III
+
+\NI
+RULE LOOP I
+\[ 
+ \frac{ \HT{p \A B}{S}{p}                }
+      { \HT{p}{\WDD{B}{S}}{p \A \neg B}  }
+\]
+\III
+
+
+
+
+In the proof system II, this rule  is replaced by
+\III
+
+\NI
+RULE LOOP II
+\[
+ \begin{array}{l}
+  \HT{p \A B \A t=z}{S}{p \A t<z},          \\
+  p \ra t \geq 0                           \\
+  [-\medskipamount]
+  \hrulefill                                \\
+  \HT{p}{\WDD{B}{S}}{p \A \neg\ B}
+ \end{array}
+\]
+
+\III
+\NI
+KRA: (28-01) I WOULD LIKE TO SUGGEST TO DELETE BELOW 'free' (IT WAS '(free)'). NOTHING IS LOST
+BY SUCH A STRONGER REQUIREMENT.
+
+\NI
+where $t$ is an integer expression such that  $var(t)\subseteq \mbox{\it pvar}$
+and $z$ is a \emph{logical} integer variable that
+does not appear free in $p$.
+
+
+\III
+
+In the proof system III the  LOOP I rule is replaced by
+\III
+
+\NI
+RULE \label{rul:loop2} LOOP III
+\[
+ \begin{array}{l}
+  \HT{p \A B}{S}{p},                      \\
+  \HT{p \A B \A t=z}{S}{t<z},             \\
+  p \ra t \geq 0                         \\
+  [-\medskipamount]
+  \hrulefill                              \\
+  \HT{p}{\WDD{B}{S}}{p \A \neg\ B}
+ \end{array}
+\]
+%
+\NI
+where $t$ and $z$ are as above.
+
+\III
+
+In the context of the LOOP rules discussed here, 
+the assertion $p$ is called the \bfe{loop invariant} and the expression $t$
+is called the \bfe{bound function}. It provides an estimate how
+many iterations the loop will still perform before termination.
+
+We shall consider next the following hybrid rule that combines provability in two
+proof systems.
+\III
+
+\NI
+RULE LOOP IV
+\[
+ \begin{array}{l}
+  \vdash_{\rm{I}}  \HT{p \A B}{S}{p},             \\
+  \vdash_{\rm{I}}   \HT{p \A B \A t=z}{S}{t<z},   \\
+  \HT{p \A B}{S}{\mathbf{true}},                  \\
+  p \ra t \geq 0                                 \\
+  [-\medskipamount]
+  \hrulefill                                      \\
+  \HT{p}{\WDD{B}{S}}{p \A \neg\ B}
+ \end{array}
+\]
+%
+\NI
+where $t$ and $z$ are as above.
+\III
+
+Proof system~IV is obtained from proof system~I by replacing the LOOP
+I rule by the LOOP~IV rule. The use of two forms of provability in the
+premises of this rule can be circumvented by the following
+modification of the notation.  Denote the correctness
+formulas in the sense of partial correctness by $\HT{p}{S}{q}$ and in
+the sense of total correctness by $\HTT{p}{S}{q}$. Then combine the
+proof system~I with the proof system in which the axioms and proof
+rules of I except the LOOP~I rule are rewritten using the
+$\HTT{p}{S}{q}$ syntax. Finally, add to this proof system the LOOP IV
+rewritten as follows:
+\III
+
+\[
+ \begin{array}{l}
+  \HT{p \A B}{S}{p},                      \\
+  \HT{p \A B \A t=z}{S}{t<z},             \\
+  \HTT{p \A B}{S}{\mathbf{true}},         \\
+  p \ra t \geq 0                         \\
+  [-\medskipamount]
+  \hrulefill                              \\
+  \HTT{p}{\WDD{B}{S}}{p \A \neg\ B}
+ \end{array}
+\]
+
+\NI
+where $t$ and $z$ are as above.
+\III
+
+In what follows we use the original formulation of this rule, 
+as it will not lead to any ambiguities.
+
+
+The final LOOP V rule introduces an additional parameter
+in the loop invariant instead of a separate bound function.
+
+\III
+
+\NI
+RULE LOOP V
+\[
+ \begin{array}{l}
+ \HT{p(x)\wedge B}{S}{\exists y: p(y)\wedge y< x},          \\
+  p(x)\rightarrow x\geq 0                          \\
+  [-\medskipamount]
+  \hrulefill                                \\
+  \HT{\exists x:p(x)}{\WDD{B}{S}}{(\exists x:p(x)) \A \neg\ B}
+ \end{array}
+\]
+
+\NI
+where $x$ is an integer variable which  does not appear
+in $\WDD{B}{S}$, and $p(y)$ denotes the result of replacing
+$x$ in $p(x)$ by the fresh integer variable $y$.
+
+Note that the outer brackets in $(\exists x:p(x))$ can be dropped thanks to the assumption about the variable $x$.
+
+KRA: ADDED (TILL THE END OF THIS SECTION)
+
+The main aim of this paper is to prove the following result.
+
+\begin{theorem} \label{thm:abo}
+The proof systems II-V are equivalent.  
+\end{theorem}
+
+Here, of course, equivalence of the proof systems means that the same
+formulas can be proved in each of them.
+
+\section{Discussion}
+
+KRA: ADDED THE FIRST SENTENCE
+
+Before we proceed with the proof of Theorem \ref{thm:abo} let us
+discuss the introduced rules and some of their variants.  It is
+difficult to determine where the LOOP II rule was introduced first. We
+mentioned it in \cite{ABO90}. It also appears in \cite[page 64]{Rey98}
+and in \cite[page 151]{Almeida11}.  The LOOP III rule was introduced
+in \cite{OG76a}.  It corresponds to Dijkstra's modification of his
+weakest precondition semantics proposed in \cite{EWD:EWD573} and
+reproduced as %\cite{Dij82}.
+\cite{EWD:EWD573pub}.  We used it in our book \cite{ABO09}.
+
+The LOOP IV rule was introduced in \cite{ABO25}.
+It formalizes the following intuition. In order to prove the
+termination of a \textbf{while} loop it suffices to find a loop
+invariant and a bound function such that
+
+\begin{enumerate}[(i)]
+ \item the loop invariant is maintained by each loop body execution, 
+       in the sense of partial correctness,
+ \item each loop body execution decreases the bound function, 
+       also in the sense of partial correctness,
+ \item the loop body terminates, and
+ \item the loop invariant implies that the bound function remains non-negative.
+\end{enumerate}
+
+This rule supports modular reasoning about program correctness
+by separating the premises into partial correctness and termination
+properties.  This is of particular relevance in the presence of nested
+loops, i.e., when the loop body contains inner loops.  Then (i)
+establishes only the partial correctness of the loop body, whereas its
+termination is relegated to (iii). That the loop body can be iterated
+only finitely often is established in (ii) in combination with (iv).
+Note that for loop bodies without inner loops, partial and total
+correctness coincide. In this case the third premise,
+$\HT{p \A B}{S}{\mathbf{true}}$, can then be dropped, and we arrive at
+the LOOP III rule. So the hybrid form of this rule arises only for
+nested loops.
+
+Parameterized loop invariants were first used in a rule proposed
+in \cite{Harel79}, where with each loop iteration the parameter was
+supposed to decrement exactly by~1.  The above LOOP V rule allows us
+to generalize proofs of termination to arbitrary well-founded domains.
+Such a generalization is for example required for reasoning about
+termination in presence of \emph{countable non-determinism}
+\cite{AptP86}.  
+
+It is easy to manufacture a number of alternative LOOP rules. 
+Note for example that the LOOP II rule results from combining the first two
+premises of the LOOP III into one.  An analogous modification can be
+carried out in the case of the LOOP IV rule. 
+
+In \cite{AptP86} a different version of LOOP V rule was used, namely
+
+\[
+ \begin{array}{l}
+   p(x) \wedge x > 0 \ra B,                         \\
+ \HT{p(x)\wedge x > 0}{S}{\exists y: p(y)\wedge y< x},          \\
+   p(0) \ra \neg B,                         \\ 
+  [-\medskipamount]
+  \hrulefill                                \\
+  \HT{\exists x:p(x)}{\WDD{B}{S}}{p(0)}
+ \end{array}
+\]
+
+(In this rule, to deal with unbounded nondeterminism, it was stipulated
+that the variable $x$ ranges over ordinals instead over integers.)
+We found our LOOP rule V simpler to reason with.
+
+In turn, the following version of LOOP V results from separating the
+reasoning about termination along the lines of LOOP IV rule.
+
+\[
+ \begin{array}{l}
+ \vdash_{\rm{I}}\HT{p(x)\wedge B}{S}{\exists y: p(y)\wedge y< x},          \\
+ \HT{(\exists x:p) \wedge B}{S}{\T},\\
+  p(x)\rightarrow x\geq 0                          \\
+  [-\medskipamount]
+  \hrulefill                                \\
+  \HT{\exists x:p(x)}{\WDD{B}{S}}{(\exists x:p(x)) \A \neg\ B}
+ \end{array}
+\]
+
+
+\III
+\NI
+
+% THE FOLLOWING  MODIFICATION USED UPFRONT TO EXPLAIN THE GENERAL APPROACH
+% AS DESCRIBED IN LEMMA 1.
+
+% ERO: I would prefer that these two versions of implications
+% are not discussed in the main flow of the paper, but in a section
+% on further variants of proof rules.
+
+% \medskip
+
+A careful reader will notice that in the LOOP II, III and IV rules we
+imposed the restriction $var(t) \subseteq \mbox{\it pvar}$ on the
+variables of the bound function $t$ that is absent in the publications
+that use the LOOP II and III rules.
+
+Further, the last premise of each of the LOOP rules II-V and their
+variants can also be modified, by considering in each case the
+implication $p \A B \ra t \geq 0$ instead of $p \ra t \geq 0$. 
+
+KRA: ADDED SENTENCE. THE REST OF THE MATERIAL MOVED TO A LATER SECTION ON PROOFS OF THE RULES
+MODIFICATIONS.
+
+We shall return to these modifications in Appendix \ref{app:mod},
+where we prove that they are all inessential.
+
+
+\section{Proving Equivalence}
+
+NEW SECTION
+
+A direct proof of Theorem \ref{thm:abo} would require a detailed
+analysis of the shape of proofs. For example, in the case of the proof
+systems II and III we would have to construct in II a proof of the premise
+$ \HT{p \A B \A t=z}{S}{p \A t<z}$ of the LOOP II rule from the proofs
+of the premises $\HT{p \A B}{S}{p}$ and $\HT{p \A B \A t=z}{S}{t<z}$
+of the LOOP III rule, which looks daunting.
+
+Therefore we proceed differently. First we introduce a set of
+auxiliary rules using which we can deduce each LOOP rule from the
+other and then we show how we get get rid of these auxiliary rules.
+To explain this approach we introduce first the relevant notions from
+proof theory.
+
+\subsection{Admissibility and Derivability}
+
+KRA: THIS IS THE PREVIOUS SUBSECTION 2.1, MODIFIED
+
+\NI
+KRA: (29-01): NEW VERSION OF THIS SUBSECTION; CHANGES STARTING WITH 'START'
+
+Assume a given language that is determined by its set of formulas.  In
+what follows we assume that all considered axioms, proof rules, and
+proof systems are concerned with the same language.
+
+Given a proof system $T$ and two sequences of formulas
+$\phi_1, \LL, \phi_m$ and $\varphi_1, \LL, \varphi_n$ we write
+\[
+  \phi_1, \LL, \phi_m \vdash_T \varphi_1, \LL, \varphi_n
+\]
+to denote the fact that each formula $\varphi_i$ can be proved in
+$T$ using as additional axioms the formulas
+$\phi_1, \LL, \phi_m$.  We also use this notation when the sequence
+$\phi_1, \LL, \phi_m$ is empty and when $T$ is a set of proof
+rules.
+
+\NI
+'START'
+
+Given a proof system $T$ and a proof rule (in short: a rule) $R$ we
+abbreviate $T \cup \C{R}$ to $T \cup R$. Given two proof systems $T_1$
+and $T_2$ we abbreviate the statement that they are equivalent to
+$T_1 \approx T_2$ and the statement that every formula provable in
+$T_1$ is also provable in $T_2$ to $T_1 \preceq T_2$.
+
+\begin{definition}(See, e.g.~\cite[page 47]{Pla13}.)
+  
+  Consider a rule
+  \[ 
+  R \qquad \frac{\varphi_1,\LL,\varphi_k}{\varphi}
+\]
+and a proof system $T$. $R$ is called
+\begin{itemize}
+\item \emph{admissible in $T$} if 
+\[
+ \vdash_T \varphi_1, \LL, \vdash_T \varphi_k
+ \mbox{ implies }
+ \vdash_T \varphi,
+\]
+
+\item \emph{derivable in $T$} if 
+\[
+ \varphi_1, \LL, \varphi_k \vdash_T \varphi.
+\]
+
+\end{itemize}
+
+\end{definition}
+
+So for an admissible rule a proof in $T$ of its conclusion 
+that is manufactured by \emph{manipulating} $k$ proofs in $T$ 
+of its premises can be condensed into \emph{one step}. 
+In turn, a derivable rule allows us to condense a proof in $T$ of
+its conclusion from its premises into \emph{one step}.
+
+Both types of rules do not increase the power of the proof system $T$
+but serve as lemmas that simplify proofs in $T$ by condensing detailed
+proof arguments into one rule application.  Each application of a
+derivable rule can be expanded locally without affecting the overall
+proof structure, which in general is not the case with the application
+of an admissible rule.  A derivable rule is also admissible, but in
+general the converse does not hold.
+
+The following lemma explains the proof-theoretic status of both types
+of rules and clarifies the difference between them.
+
+\begin{lemma} \label{lem:AUX}
+  Consider a set of rules $\AUX$.
+  \begin{enumerate}[(i)]
+  \item 
+  Each rule from $\AUX$ is admissible in $T$ iff $T \approx T \cup \AUX$. 
+
+\item Each rule from $\AUX$ is derivable in $T$ iff for all proof
+  systems $U$ we have $T \cup U \approx T \cup U \cup \AUX$.
+
+\end{enumerate}
+\end{lemma}
+
+So derivability is monotone in the sense that if a rule is derivable
+in $T$ then it is also derivable in any proof system extending $T$. In
+constrast, simple examples show that admissibility is not monotone.
+
+\begin{proof}
+  We only prove $(ii)$.
+Below, when choosing a rule $R$ from $\AUX$, we assume that it has the format
+\[ 
+ \qquad \frac{\varphi_1,\LL,\varphi_k}{\varphi}
+\]
+
+\III
+
+\NI
+$(\Rightarrow)$ Fix a proof system $U$.  We need to show that in every
+proof in $T \cup U \cup \AUX$ each application of a rule from $\AUX$
+can be eliminated.  We proceed by induction on the lengths of
+proofs. Suppose that in a proof the last rule used was the rule $R$ from $\AUX$.
+So by the induction hypothesis
+$ \vdash_{T \cup U} \varphi_1, \LL, \vdash_{T \cup U} \varphi_k$.  But $R$
+derivable, so 
+$\varphi_1, \LL, \varphi_k \vdash_{T \cup U} \varphi$ and hence
+$\vdash_{T \cup U} \varphi$ follows.
+
+\III
+
+\NI
+$(\Leftarrow)$ Choose a rule $R$ from $\AUX$.
+We need to show that
+$\varphi_1, \LL, \varphi_k \vdash_T \varphi$, or equivalently
+$\vdash_{T \cup U} \varphi$, where $U$ consists of the set of axioms
+$\C{\varphi_1,\LL,\varphi_k}$.  But the latter claim holds since
+$\vdash_{T \cup U \cup \AUX} \varphi$.
+\HB
+\end{proof}
+
+Below we shall need only the left-to-right implications.  In what
+follows we shall use the notion of derivability to analyze similar
+rules. To make it more visible, given two rules $R_1$ and $R_2$ and a
+set of rules $\AUX$, we shall write `$R_1$ can be derived from $R_2$
+using $\AUX$' instead of `$R_1$ is derivable in $\AUX \cup R_2$'.
+
+The following lemma will allow us to structure the proof of the main result
+in a natural way.
+
+\begin{lemma} \label{lem:equ}
+  Suppose that
+  \begin{enumerate}[(i)]
+  \item $R_1$ can be derived from $R_2$ using $\AUX$,
+    
+  \item each rule from $\AUX$ is admissible in $T \cup R_2$.    
+  \end{enumerate}
+
+  Then $T \cup R_1 \preceq T \cup R_2$.
+\end{lemma}
+
+\begin{proof}
+  By $(i)$ and Lemma \ref{lem:AUX}$(ii)$
+\[
+T \cup R_2 \cup \AUX \approx T \cup R_1 \cup R_2 \cup \AUX
+\]
+and by $(ii)$ and Lemma \ref{lem:AUX}$(i)$
+\[
+T \cup R_2 \approx T \cup R_2 \cup \AUX.
+\]
+So 
+\[
+T \cup R_2 \approx T \cup R_1 \cup R_2 \cup \AUX,
+\]
+from which the claim follows since
+\[
+  T \cup R_1 \preceq T \cup R_1 \cup R_2 \cup \AUX.
+\]
+\HB  
+\end{proof}
+
+
+\subsection{Auxiliary Rules}
+\label{subsec:aux}
+
+KRA: THE FIRST SENTENCE ADDED
+
+The next step consists of identifying the appropriate auxiliary rules. 
+In the proof-theoretic analysis of the LOOP II and III rules, we make
+use of the following two auxiliary rules, see, e.g., \cite{ABO09}.
+\III
+
+\NI
+RULE \label{rul:conj} CONJUNCTION
+\[ 
+ \frac{ \HT{p_1}{S}{q_1}, \HT{p_2}{S}{q_2}     }
+      { \HT{p_1 \A p_2}{S}{q_1 \A q_2}         } 
+\]
+\NI
+RULE \label{rul:intro} $\te$-INTRODUCTION
+\[ 
+ \frac{ \HT{p}{S}{q}          }
+      { \HT{\te z:p}{S}{q}    }
+\]
+\NI
+where $z$ is a \emph{logical} variable that does not occur  in $\mathit{free}(q)$.
+\III
+
+To reason about the LOOP IV rule we adopt the following auxiliary
+rules that relate provability in two proof systems.
+\III
+
+\NI
+RULE PARTIAL CORRECTNESS
+\[
+ \begin{array}{l}
+   \HT{p}{S}{q}\\
+  [-\medskipamount]
+  \hrulefill                         \\
+  \vdash_{\rm{I}} \HT{p}{S}{q}
+  \end{array}
+\]
+
+\III
+
+\noindent
+RULE HYBRID CONJUNCTION
+\[
+ \begin{array}{l}
+  \vdash_{\rm{I}} \HT{p_1}{S}{q_1},   \\
+  \HT{p_2}{S}{q_2}                    \\
+  [-\medskipamount]
+  \hrulefill                          \\
+  \HT{p_1 \A p_2}{S}{q_1 \A q_2}
+ \end{array}
+\]
+
+This rule generalizes the following rule from \cite{ABO09}.
+\III
+
+\noindent
+RULE DECOMPOSITION
+\[
+ \begin{array}{l}
+  \vdash_{\rm{I}} \HT{p}{S}{q},      \\
+  \HT{p}{S}{\T}                      \\
+  [-\medskipamount]
+  \hrulefill                         \\
+  \HT{p}{S}{q}
+  \end{array}
+\]
+
+\III
+
+Finally, to reason about the LOOP V rule we use the following
+SUBSTITUTION rule, see, e.g., \cite{ABO09}.
+
+\III
+\NI
+RULE \label{rul:SUBST} SUBSTITUTION
+\[ 
+ \frac{ \HT{p}{S}{q}          }
+      { \HT{p[x:=t]}{S}{q[x:=t]}    }
+\]
+where $x$ is a logical or a program variable
+that does not occur in $S$ and $\mbox{\it var}(t)\cap \mbox{\it var}(S)=\emptyset$ ($t$ thus may contain logical variables).
+\III
+
+KRA: ADDED A SENTENCE
+
+Note that each of these auxiliary rules only \emph{adapts} the assertions without changing the program.
+In the context of Hoare's logic such rules are sometimes called \emph{adaptation rules}.
+
+KRA: I SUGGEST TO ADD HERE REFERENCES TO TWO PAPERS, OF Hoare AND OF Ernst.
+
+\subsection{Structure of the Proof}
+\label{subsec:structure}
+
+KRA: (29-01) NEW VERSION
+
+Theorem \ref{thm:abo} states six equivalences. However, thanks to the
+transitivity of the equivalence relation, it suffices to prove three
+of them. We found it most convenient to deal with the equivalence of
+the following three pairs of proof systems: (II, III), (III, IV), and
+(II, V).  To this end we invoke six times Lemma \ref{lem:equ}, each
+time establishing its assumptions for an appropriate pair of LOOP
+rules $R_1$ and $R_2$ and a specific set of rules $\AUX$ drawn from
+the set of auxiliary rules listed in the previous section, augmented
+with the CONSEQUENCE rule (that also is an adaptation rule).
+
+The proofs are given in Appendix~\ref{sec:aux}.
+
+BEGIN OPTIONAL (OTHERWISE THIS SUBSECTION IS TOO SHORT)
+
+To close this discussion note the following immediate consequence of Theorem \ref{thm:abo}
+and Lemma \ref{lem:AUX}.
+
+\begin{corollary} \label{corr:admiss}
+Each LOOP $\alpha$ rule is admissible in the proof system $\beta$, 
+        where $\alpha, \beta \in \{\mathrm{II, III, IV, V}\}$.
+\end{corollary}
+
+QUESTION: IF WE KEEP IT, SHOULD WE PROVE IT?
+
+END OPTIONAL
+
+\medskip
+
+\NI
+KRA: MY SUGGESTION: USE IN THIS AS BEGINNING OF THIS APPENDIX
+
+As explained in Subsection \ref{subsec:structure} to establish Theorem
+\ref{thm:abo} it suffices to prove six times the claims of Lemma
+\ref{lem:equ} for each pair of rules
+\[
+  (R_1, R_2) \in \C{(\mathrm{II}, \mathrm{III}),
+    (\mathrm{III},\mathrm{II}),
+    (\mathrm{III}, \mathrm{IV}),
+    (\mathrm{IV}, \mathrm{III}),
+    (\mathrm{II}, \mathrm{V}),
+    (\mathrm{V},  \mathrm{II})},
+\]
+each time for an appropriate set of rules $\AUX$.
+For convenience we group together the proofs of admissibility and the
+proofs of derivability. More specifically, we prove two lemmas stated
+below.
+
+...
+
+% Theorem \ref{thm:aux1} clarifies how closely related the LOOP II-V
+% rules are.  Theorem \ref{thm:aux2} shows that the applications of the
+% auxiliary rules can be eliminated.  When trying to extend Theorem
+% \ref{thm:abo} to other programming constructs we only need to adjust
+% the proof of Theorem \ref{thm:aux2}. In practice it means adding new
+% cases concerned with these constructs.
+
+END
+
+KRA: MATERIAL BELOW REMAINS UNCHANGED.
+APPENDICES HAVE TO BE PRODUCED FROM THE PREVIOUS MATERIAL.
+
+\section{Soundness and Completeness Matters}
+
+Assume now that some notion of semantics of programs and assertions is given 
+that includes the concept of a state, execution of a program,
+the notion of a state satisfying an assertion, and the truth of an assertion.
+We write then $\models \HT{p}{S}{q}$ to denote the fact that every execution of $S$ 
+that starts in a state satisfying $p$ terminates in a state satisfying $q$ 
+and say then that $\HT{p}{S}{q}$ is \bfe{true}.
+(Thus we are referring to \bfe{total correctness}.)
+Next, we say then that a proof rule
+\[
+  \frac{\varphi_1,\LL,\varphi_k}{\varphi}
+\]
+is \bfe{sound} if
+$\models \varphi_1,\LL, \models \varphi_k$ implies $\models \varphi$.
+
+In \cite{ABO09} we proved that the LOOP III rule is sound, while in \cite{Rey98} 
+it was proved that the LOOP II is sound. A natural question arises 
+whether soundness of one of these rules can be directly deduced from
+the soundness of the other rule. 
+
+\III
+\NI
+ADDED
+
+This deduction follows from the derivability results stated
+in the  main Theorem \ref{thm:main} and the soundness of the
+auxiliary rules.
+For example, suppose now that the LOOP II rule is sound.
+Since the LOOP III rule is derivable from the
+LOOP II rule, its soundness  follows directly from 
+ the soundness of the LOOP II rule and the soundness
+ of the auxiliary rules, in particular of
+ the 
+CONSEQUENCE rule.
+
+\NI
+END.
+
+
+% Further, we can derive for  soundness
+% of the LOOP II rule from the soundness of the LOOP V rule,
+% using the derivability result of clause (vI).
+% However, this approach breaks down for the soundness
+% of the LOOP V rule itself, because Theorem \ref{lem:main} does not
+% provide a corresponding derivability result.
+% The `invasive' notion of admissibility does not allow
+% such a reduction of the soundness of the LOOP V rule
+% to that of the LOOP II rule.
+% Note that the showstopper here is the restriction
+% on the term $t$ in the LOOP rule II,
+% which on the other hand is needed for ther admissibility
+% of the $\exists$-INTRODUCTION rule.
+
+% This can be accomplished by  modifying the claims of Lemma \ref{lem:1} as follows.
+
+% \begin{lemma} \label{lem:2}
+% Suppose that $z$ is an integer variable that
+% does not appear in $p,B,t$ or $S$.
+% Then
+%   \begin{enumerate} [(i)]
+%   \item 
+%     If $\models \HT{p \A B} {S}{p}$ and $\models \HT{p \A B \A t=z}{S}{t<z}$, \\ 
+%     then $\models \HT{p \A B \A t=z}{S}{p \A t<z}$.
+    
+%   \item
+%     If \ $\models \HT{p \A B \A t=z}{S}{p \A t<z}$, \\ 
+%     then $\models \HT{p \A B} {S}{p}$ and $\models \HT{p \A B \A t=z}{S}{t<z}$.
+
+%   \end{enumerate}
+% \end{lemma}
+
+% \begin{proof}
+%   It is a direct consequence of the fact that the proof rules used 
+%   in Lemma~\ref{lem:1} are sound. Thus each time one of these rules
+%   is applied, truth of the correctness formulas is preserved. 
+%   \HB
+% \end{proof}
+
+% Suppose now that the LOOP II rule is sound. To prove the soundness 
+% of the LOOP III rule assume that its premises are true. 
+% Then by Lemma \ref{lem:2}$(i)$ the premises of the LOOP II rule are true, 
+% so by its soundness the conclusion of both rules is true.
+% The same argument shows that soundness of the LOOP III rule 
+% implies soundness of the LOOP II rule.
+
+% Finally, for the rules LOOP II--IV we assumed that the bound function $t$ satisfies 
+% the restriction $var(t) \subseteq var(B) \cup var(S)$.
+% This allows for the proof of admissibility of the $\exists$-INTRODUCTION rule 
+% in Theorem~\ref{thm:aux}, which in turn is used via Lemma~\ref{lem:1} 
+% in the proof of Lemma~\ref{lem:main}
+% and thus in the proof of the equivalence result stated in Theorem~\ref{thm:main}.
+% In future we will investigate how to avoid this restriction.
+% We see that the equivalence of the different proof systems for total correctness
+% depends very subtly on the intricate interplay of the loop rules with 
+% the admissibility of standard auxiliary rules of Hoare's logic,
+% which requires further investigation.
+
+
+
+\subsection{Completeness}
+
+\NI 
+
+SECTION ON COMPLETENESS ADDED
+
+
+Next we discuss  \emph{completeness} of the proof systems II, III, IV, and V.
+Since these proof systems are equivalent, it 
+suffices to prove completeness for one of them.
+We opt here for the proof system V 
+for which
+we consider the standard notion of \emph{relative}
+completeness: For any first-order model $M$ of the assertion language
+we will show that  $M\models\HT{p}{S}{q}$
+implies  $T(M)\vdash_{\rm{V}}\HT{p}{S}{q}$, where
+$T(M)$ denotes the first-order theory of $M$,
+for use in the consequence rule.
+Here  $M\models\HT{p}{S}{q}$ defines the truth of 
+$\HT{p}{S}{q}$ in terms of the model $M$, that is,
+the basic notions of states, executions and satisfaction of the first-order formulas are defined in terms of the model $M$.
+
+We restrict to models $M$ for which 
+we can express in the assertion language
+the \emph{weakest precondition} $\mbox{\it wp}(S,q)$, for any statement
+$S$ and postcondition $q$.
+This weakest precondition $\mbox{\it wp}(S,q)$ denotes the set
+of initial states for which $S$ terminates in a final state
+satisfying $q$.
+We refer to Section \ref{sec:WP}
+for the standard weakest precondition calculus.
+Further, we restrict to models for which there exists
+% that these models include a well-founded
+% relation $<$ for the interpretation of the corresponding
+% relation symbol in the LOOP V rule, and 
+a parameterized extension $p(x)$
+ of  $\mbox{\it wp}(\WDD{B}{S},q)$, for some   fresh variable $x$
+ not appearing in $\WDD{B}{S}$ or $q$.
+This parameterized extension 
+implies $x\geq 0$ and
+satisfies 
+the following equivalences.
+
+% \begin{equation}\label{eq:wp1}
+% \mbox{\it wp}(\WDD{B}{S},q) \leftrightarrow
+% \exists x: \mbox{\it wp}(x,\WDD{B}{S},q)   
+% \end{equation}
+
+\begin{equation}\label{eq:wp1}
+(\exists x: p(x)) \leftrightarrow
+\mbox{\it wp}(\WDD{B}{S},q) 
+\end{equation}
+
+
+\begin{equation}\label{eq:wp2}
+p(x)\leftrightarrow
+(((\neg B)\wedge q)\vee (B\wedge \mbox{\it wp}(S, \exists y: p(y) \wedge y<x )))
+\end{equation}
+
+Instead of representing the bound function by a term $t$
+we thus use in the parameterized extension of the weakest precondition a variable $x$
+to denote an upper-bound of the number of iterations.
+
+
+
+
+\begin{theorem}\label{thm:comp}
+For any model $M$ for which there exists
+a parameterized extension 
+for every  weakest precondition of a loop statement
+and postcondition, we have that
+$M\models\HT{p}{S}{q}$ implies
+$T(M)\vdash_{\rm{V}}\HT{p}{S}{q}$.
+\end{theorem}
+
+\begin{proof}
+It suffices to show that
+$T(M)\vdash_{\rm{V}}\HT{\mbox{\it wp}(S,q)}{S}{q}$,
+for any $S$ and postcondition $q$, because $M\models\HT{p}{S}{q}$
+if and only if $p\rightarrow \mbox{\it wp}(S,q)\in T(M)$,
+by definition.
+The proof proceeds by induction on $S$.
+
+We treat the main case of a loop statement $\WDD{B}{S}$
+(the other cases follow directly from the induction hypotheses using the compositional characterization
+of the weakest precondition described in Section \ref{sec:WP}).
+% For notational convenience, let $p(x)$ abbreviate
+% $\mbox{\it wp}(x,\WDD{B}{S},q)$.
+Let $p(x)$ denote the parameterized extension of
+$\mbox{\it wp}(\WDD{B}{S},q)$.
+By the induction hypothesis
+we have
+\[
+\vdash_{\rm{V}}
+\HT{\mbox{\it wp}(S, \exists y: p(y) \wedge y<x )}{S}{\exists y: p(y) \wedge y<x }
+\]
+Applying the consequence rule, using Equivalence (\ref{eq:wp2}), then gives
+\[
+\vdash_{\rm{V}}
+\HT{p(x)\wedge B}{S}{\exists y: p(y) \wedge y<x }
+\]
+Now we can apply the LOOP V rule and obtain
+\[
+\vdash_{\rm{V}}
+\HT{\exists x:p(x)}{S}{\exists x:p(x)\wedge \neg B}
+\]
+By a final application of the consequence rule, using Equivalence
+(\ref{eq:wp1}) and that $\mbox{\it wp}(\WDD{B}{S},q)\wedge \neg B$ implies
+$q$,
+we obtain the desired result
+\[
+\vdash_{\rm{V}}
+\HT{\mbox{\it wp}(\WDD{B}{S},q)}{S}{q}
+\]
+
+\III
+\HB
+\end{proof}
+
+For a deterministic language,  for example the one considered in this paper, 
+the standard weakest precondition in fact amounts to the existence
+of a terminating computation.
+The  parameterized extension of the  standard weakest precondition 
+of a loop statement then additionally expresses
+the number of iterations of 
+the (outer) loop.
+Clearly in this case both the  Equivalences (\ref{eq:wp1})
+and (\ref{eq:wp2}) hold.
+Further, using standard coding techniques, we can show
+the expressibility of the standard weakest precondition and its parameterized
+extension for 
+the standard model of Peano arithmetic.
+
+\NI
+ADDED A DISCUSSION ON SKOLEM FUNCTIONS.
+
+Since the proof systems II-V are equivalent,
+completeness of the proof system~V implies completeness
+of the proof systems II-IV.
+However, the proof of this equivalence, i.e., the proof of Theorem
+\ref{thm:main},
+notably between the proof systems II and V, is based on the representation
+of the bound function by  a Skolem function.
+Therefore, to transfer the completeness result for
+the proof system V, we have to extend the notion of expressibility
+by further restricting to
+models which include for every assertion a corresponding
+Skolem function.
+
+
+\III
+\NI
+UNBOUNDED NONDETERMINISM: TO BE INCLUDED IN THE SECTION ON EXTENSIONS
+
+The  Equivalences (\ref{eq:wp1}) 
+and (\ref{eq:wp2}) also hold for  \emph{bounded} non-deterministic  extensions,
+for example, extensions with a non-deterministic choice statement
+$S_1+ S_2$ or Dijkstra's  guarded command language.
+For such languages the  additional parameter then 
+denotes  an \emph{upper-bound} of the number of iterations
+(of the loop statement).
+
+In programming languages which give rise to
+\emph{unbounded} non-determinism  such an upper-bound may not exist.
+For example
+when the programming language 
+features  a random assignment  which gives
+rise to \emph{countable} non-determinism (see \cite{AptP86}).
+To reason about termination of such programs it suffices
+to consider models which include the initial segment of the \emph{ordinals}
+consisting of all \emph{countable} ordinals.
+For such models the variable $x$ of the LOOP V rule ranges
+over this initial segment, $<$ denotes the membership relation,
+and $0$ denotes the empty set.
+A consequence of this generalization is that we cannot extend the usual coding techniques
+to  express  the standard weakest precondition and its parameterized extension 
+for loop statements, simply because
+the set of all countable ordinals is itself \emph{uncountable}.
+As with the general case of program correctness over 
+abstract data types, one needs more expressive
+assertion languages, e.g., quantification over finite sequences
+(as proposed in \cite{TZ88}).
+Here we resort to an extension of first-order logic
+with a \emph{least fix-point operator}.
+This allows to \emph{define} the weakest precondition $\mbox{\it wp}(S,q)$
+by induction on $S$ and define
+$\mbox{\it wp}(\WDD{B}{S},q)$ by 
+$\exists x: p(x)$, where
+$p(x)$ is defined by
+$$
+\mu R(x,\bar{z}):
+(\neg B)\wedge q)\vee (B\wedge \mbox{\it wp}(S, \exists y:R(y,\bar{z})  \wedge y<x ))
+$$
+Here $\bar{z}$ denote the (free) variables of $\WDD{B}{S}$ and $q$.
+This formula denotes the smallest interpretation of the relation
+$R$ which satisfies 
+$$(\neg B)\wedge q)\vee (B\wedge \mbox{\it wp}(S, \exists y:R(y,\bar{z})  \wedge y<x ))$$
+Such an interpretation exists because this latter formula
+defines a monotonic function on the complete lattice of all
+possible interpretations of $R$, which
+extends any interpretation
+of $R$ by evaluating this latter formula under  this interpretation,
+so that we can apply
+Knaster-Tarski Fixed Point Theorem.
+Further, $\exists x:p(x)$ indeed
+characterizes $\mbox{\it wp}(\WDD{B}{S},q)$
+because 
+we can associate
+with each node of  a terminating computation tree with
+a countable degree an ordinal
+which is bigger than all the ordinals associated with its child nodes.
+Note that the ordinals associated with the child nodes
+form a \emph{set} and therefore there exists an upper-bound
+(and the upper-bound of a countable set of countable ordinals is itself
+a countable ordinal).
+
+\NI
+END
+
+\section{Representing Proofs}
+
+\subsection{Proof outlines}
+
+Even though the LOOP rules for proving termination are equivalent in
+the sense of Theorem \ref{thm:main}, they lead to different proofs of
+total correctness of \textbf{while} programs.  This clearly holds for
+the LOOP V rule which does not involve an explicit bound function but
+uses the invariant for the specification of a bound.  But also the
+other rules lead to different proofs.  The idea behind the LOOP III
+rule is to establish that $p$ is a loop invariant and $t$ is a bound
+function separately, while in the LOOP II rule both facts are
+established simultaneously. So the LOOP III rule looks more convenient
+when we want to strengthen a proof of partial correctness to a proof
+of total correctness: it suffices to establish two new premises
+concerned with the bound function $t$.  In turn, the LOOP IV rule
+allows us to split the proof obligations even further, by identifying
+the property actually needed to be proved in terms of total
+correctness.  This, as already mentioned, allows one to support
+modular reasoning.
+
+However, matters change when we want to represent the proofs in the
+resulting proof systems  in a convenient form. Given
+that these proofs deal with structured programs, their most natural
+representation consists of so-called \bfe{proof outlines}, a notion
+introduced in \cite{OG76a}.  Informally, it is a proof representation
+in the form of a program annotated by the assertions arising from the
+appropriate rule applications. Such a representation is possible
+thanks to the fact that the proof rules are syntax directed. Proof
+outlines were introduced in \cite{OG76a} in order to reason about
+correctness of parallel programs, where they served to establish
+so-called interference freedom among the proofs of the component
+programs. However, they are also very useful as a representation of
+correctness proofs of sequential programs and, when some obvious
+assertions are deleted, as a program documentation.
+
+Now, given that the LOOP III and IV rules have more than one premise
+consisting of a correctness formula, it is difficult to employ
+a single proof outline to represent a proof involving any of these rules.
+This is not the case with the LOOP II and LOOP V rules. To illustrate this point
+recall first that the proof outlines are defined by induction on the program structure.
+We only focus on the crucial formation rule concerned with the \textbf{while} statement.
+For the proof system I the following formation rule was used in \cite{ABO09}:
+
+\[
+\frac{\raisebox{2mm}{$ \HT{p \A B}{S^*}{p}$}}
+            {\raisebox{-2mm}{$\HT{{\bf inv:}\ p}
+                 {\WDD{B}{\HT{p \A B}{S^*}{p}}}
+                 {p \A \neg B}$}}
+\]
+where $S^*$ is the program $S$ annotated with some assertions.
+\III
+
+For the proof system II we introduce the following formation rule:
+\III
+
+\NI
+\[
+\begin{array}{l}
+\HT{p \A B \A t=z}{S^{*}}{p \A t<z},                    \\
+p \ra t \geq 0                                          \\
+[-\medskipamount]
+\hrulefill                                              \\
+\C{{\bf inv:}\ p}
+\HT{{\bf bd:}\ t}
+   {\WDD{B}{\HT{p \A B \A t = z}{S^*}{p \A t<z}}}
+   {p \A \neg B}
+\end{array}
+\]
+
+\NI
+where $S^*$ and $S^{**}$ are annotations of
+the program $S$ with some assertions, 
+$t$ is an integer expression and $z$ is an integer variable
+not occurring in $p,t,B$ or $S^{*}$.\footnote{In \cite{ABO09}, in contrast to \cite{ABO90},
+there is a typo and $S^{**}$ is mentioned here instead of $S^{*}$.}
+\III
+
+
+% Finally, for the proof system III we introduce the following formation rule:
+% \III
+
+% \NI
+% \[
+% \begin{array}{l}
+% \HT{p \A B \A t=z}{S^{*}}{p \A t<z},                    \\
+% p \ra t \geq 0                                          \\
+% [-\medskipamount]
+% \hrulefill                                              \\
+% \C{{\bf inv:}\ p}
+% \HT{{\bf bd:}\ t}
+%    {\WDD{B}{\HT{p \A B \A t = z}{S^*}{p \A t<z}}}
+%    {p \A \neg B}
+% \end{array}
+% \]
+% %
+% \NI
+% where $t$ and $z$ are as above.
+% \III
+
+For a moment we defer the discussion of proof outlines for the proof
+system~IV.  One can easily prove by induction that each proof outline
+for the proof system~I corresponds to a proof in this proof
+system. For example, if by the induction hypothesis the proof outline
+$\HT{p \A B}{S^*}{p}$ corresponds to a proof of $\HT{p \A B}{S}{p}$ in
+I, then the proof outline
+\[
+  \HT{{\bf inv:}\ p}{\WDD{B}{\HT{p \A B}{S^*}{p}}}{p \A \neg B}
+\]
+corresponds to a proof of $\HT{p}{\WDD{B}{S}}{p \A \neg B}$ in I,
+which is obtained by applying to $\HT{p \A B}{S}{p}$ the LOOP I rule.
+
+However, this property fails to hold for the proof outlines for the proof
+system~III, because the second proof outline used in the premise of the
+formation rule is dropped. As a consequence, the proof outline for the
+\textbf{while} statement does not allow one to reconstruct the proof
+of $\HT{p}{\WDD{B}{S}}{p \A \neg B}$ in the proof system III.
+
+
+\subsection{Proofs using the LOOP II rule}
+
+By contrast, each proof outline for the proof system~II involving the LOOP~II rule
+does correspond to a proof in this proof system, because all assertions
+used are retained. In other words, from each proof outline for the
+proof system~II a proof in this system can be extracted.  
+
+To illustrate this point consider the following program $S_N$ involving nested
+loops, suggested to us by Tobias Nipkow (private communication):
+
+\begin{tabbing}
+\qquad\qquad
+$S_N \equiv$ \= $\WD{i < n}$           \\
+\> \qquad $j:=i; $                     \\
+\> \qquad $\WD{0 < j}$                 \\
+\> \qquad \qquad $j:=j-1$              \\
+\> \qquad \OD ;                        \\
+\> \qquad $i:=i+1$                     \\
+\> \OD                                               
+\end{tabbing}
+\noindent
+where $i, j, n$ are integer variables. 
+
+\III
+
+We would like to prove that it terminates
+for all initial states. To this end, we prove the correctness formula
+\HT{\T}{S_N}{\T} in the proof system II.
+In Fig.~\ref{fig:po}, we show the proof in the form of a proof outline,
+instantiating the corresponding formation rule for the \textbf{while} statement in proof system II
+with the following loop invariants and bound functions for the outer and the inner loop, respectively:                                                  \\
+\[
+  \mbox{$p \equiv \T$ and $t \equiv  \mbox{\it max}(n-i,0)$,}
+\]
+\[
+  \mbox{$p \equiv  n-i = z_1 \A z_1>0$ and $t \equiv \mbox{\it max}(j,0)$.}
+\]
+Note that in a proof outline adjacent assertions stand for implications
+according to an application of the CONSEQUENCE rule.
+For instance, the assertion in line~3 implies that of line~4.
+Assignments are treated by backward substitution according to the ASSIGNMENT axiom.
+For instance, the assignment $i:=i+1$ in line~18 is dealt with by 
+substituting $i$ by $i+1$ in the assertion in line~19, yielding
+the assertion in line~17.
+
+
+\begin{figure}[ht]
+
+\begin{tabbing}
+\ 1\qquad\qquad
+ \= \C{\textbf{inv} : \T } \C{\textbf{bd}: \mbox{\it max}(n-i,0)}    \\
+\ 2 \> $\WD{i < n}$                                                  \\
+\ 3 \> \qquad \C{\T \A i < n \A \mbox{\it max}(n-i,0) = z_1}         \\
+\ 4 \> \qquad \C{n-i = z_1 \A z_1>0 }                                \\
+\ 5 \> \qquad \ \ $j:=i; $                                           \\
+\ 6 \> \qquad \C{n-i = z_1 \A z_1>0}                                 \\
+\ 7 \> \qquad \C{\textbf{inv} : n-i = z_1 \A z_1>0} \C{\textbf{bd}: \mbox{\it max}(j,0)} \\
+\ 8\> \qquad $\WD{0 < j}$                                            \\
+\ 9\> \qquad \qquad \C{n-i = z_1 \A z_1>0 \A 0<j\A  \mbox{\it max}(j,0)= z_2}  \\
+10\> \qquad \qquad \C{n-i = z_1 \A z_1>0 \A  j = z_2 \A z_2>0 }      \\
+11\> \qquad \qquad \C{n-i = z_1 \A z_1>0 \A j-1 < z_2 \A z_2>0 }     \\
+12\> \qquad \qquad \ \ $j:=j-1$                                      \\
+13\> \qquad \qquad \C{n-i = z_1 \A z_1>0 \A j < z_2 \A z_2>0}        \\
+14\> \qquad \qquad \C{n-i = z_1 \A z_1>0 \A \mbox{\it max}(j,0) < z_2 }        \\
+15\> \qquad \OD ;                                                    \\
+16\> \qquad \C{n-i = z_1 \A z_1>0 \A \neg (0 < j)}                   \\
+17\> \qquad \C{n-(i+1) < z_1 \A z_1>0 }                              \\
+18\> \qquad \ \ $i:=i+1$                                             \\
+19\> \qquad \C{n-i < z_1 \A z_1>0}                                   \\
+20\> \qquad \C{\T \A \mbox{\it max}(n-i,0) < z_1 }                   \\
+21\> \OD                                                             \\
+22\> \C{\T \A \neg (i < n)}                                          \\
+23\> \C{\T}
+\end{tabbing}
+
+\caption{Proof outline for \HT{\T}{S_N}{\T} in the proof system II.
+The line numbers have been added for reference only.}
+\label{fig:po}
+
+\end{figure}
+
+
+
+\subsection{Proofs using the LOOP IV rule}
+
+Let us now move on to a discussion of the proofs involving the LOOP IV
+rule.  This rule, just like the LOOP III rule, uses more than one
+correctness formula as a premise. As a result, it shares with the LOOP
+III rule the problem that it is not clear how to faithfully represent
+correctness proofs using a single proof outline.
+Indeed, each of the first three premises calls for a separate proof
+outline.
+
+But it is not difficult to see that this would give rise to largely
+overlapping proof outlines.  So, instead, we propose an alternative
+approach in which we replace these overlapping proof outlines
+referring to the proof system~IV by an interrelated \emph{set} of
+proof outlines in the sense of \emph{partial correctness}, so
+referring to the proof system~I.
+
+For a given correctness formula $\HT{p}{S}{q}$ to be proved in the
+proof system~IV this set is defined as follows.  First, we have a
+proof outline $\HT{p}{S^*}{q}$ that employs the first formation rule
+given above and thus represents a proof of partial correctness of
+$\HT{p}{S}{q}$ in I.
+
+Next, for each occurrence of a loop $\WDD{B}{S_0}$ in $S$, we have a
+proof outline $\HT{p_0\wedge B \wedge t=z}{S^*_0}{t<z}$, which
+represents a proof of partial correctness of
+$\HT{p_0\wedge B \wedge t=z}{S_0}{t<z}$ in I. Here $p_0$ is the
+invariant associated with the occurrence of the loop $\WDD{B}{S_0}$ in
+the above proof outline $\HT{p}{S^*}{q}$ and $t$ is some bound
+function $t$ such that $p_0\to t\geq 0$.  We omit the proof that
+existence of such a set of proof outlines in the sense of partial
+correctness ensures a proof of the corresponding correctness formula
+in the proof system~IV.  Intuitively, the use of the above proof
+outlines for \emph{each} loop occurrence in $S$ ensures by structural
+induction the third premise of the LOOP~IV rule, so
+$\HT{p \A B}{S}{\mathbf{true}}$ in the sense of total correctness.
+
+We illustrate how such a set of proof outlines can be used to
+establish the proof of the correctness formula \HT{\T}{S_N}{\T} 
+for Nipkow's program $S_N$ in
+the proof system~IV.  We skip the trivial proof outline
+$\HT{\T}{S^*_N}{\T}$, which corresponds to a proof of partial
+correctness of $\HT{\T}{S_N}{\T}$.  Let $S_0$ denote the body of the
+outer loop of $S_N$.  Given the bound function
+$\mbox{\it max}(n-i,0)$, Fig.~\ref{fig:po2} shows the proof outline
+which corresponds to a proof of  partial correctness of
+$$\HT{\T\A i < n \A \mbox{\it max}(n-i,0) = z}{S_0}{\mbox{\it max}(n-i,0) < z},$$
+assuming that the trivial invariant $\T$ is associated with this loop
+in the proof outline $\HT{\T}{S^*_N}{\T}$.  Note that
+$\T\to \mbox{\it max}(n-i,0)\geq 0$.
+ 
+ \begin{figure}[ht]
+ \begin{tabbing}
+ \qquad\qquad                                       
+\= \C{\T\A i < n \A \mbox{\it max}(n-i,0) = z}  \\
+\>  \C{n-i = z \A z>0 }                         \\
+\>  \ \ $j:=i; $                                \\
+\>  \C{n-i = z \A z>0}                          \\
+\>  \C{\textbf{inv} : n-i = z \A z>0}           \\
+\> \qquad $\WD{0 < j}$                          \\
+\>  \qquad \C{n-i = z \A z>0 }                  \\
+\>  \qquad \ \ $j:=j-1$                         \\
+\> \qquad \C{n-i = z \A z>0}                    \\
+\>  \OD ;                                       \\
+\>  \C{n-i = z \A z>0 \A \neg (0 < j)}          \\
+\>  \C{n-(i+1) < z \A z>0 }                     \\
+\>  \ \ $i:=i+1$                                \\
+\> \C{n-i < z \A z>0}                           \\
+\> \C{\mbox{\it max}(n-i,0) < z }               \\
+[\bigskipamount]
+\end{tabbing}
+\caption{Proof outline for $\HT{\T\A i < n \A \mbox{\it max}(n-i,0) = z}{S_0}{\mbox{\it max}(n-i,0) < z}$  in the proof system I.}
+\label{fig:po2}
+
+\end{figure}
+
+Finally, the LOOP IV rule requires to prove termination of $S_0$.
+This boils down to establish the termination of the inner loop.
+% Next, we introduce for the inner loop the
+To this end, we introduce
+the bound function $\mbox{\it max}(j,0)$.
+Note that $\T\to \mbox{\it max}(j,0)\geq 0$. 
+Fig.~\ref{fig:po3} shows the proof outline
+which corresponds to a proof of  partial correctness of
+$$\HT{\T\A 0<j\A  \mbox{\it max}(j,0)= z}{j:=j-1}{\mbox{\it max}(j,0) < z}.$$
+
+ \begin{figure}[htbp]
+ \begin{tabbing}
+ \qquad\qquad    
+\=\C{\T\A 0<j\A  \mbox{\it max}(j,0)= z}       \\
+%\>  \C{j = z \A z>0 }                         \\
+\>  \C{j-1 < z \A z>0 }                        \\
+\>  \ \ $j:=j-1$                               \\
+\>  \C{j < z \A z>0}                           \\
+\> \C{\mbox{\it max}(j,0) < z }                \\
+\end{tabbing}
+\caption{Proof outline for $\HT{\T\A 0<j\A  \mbox{\it max}(j,0)= z}{j:=j-1}{\mbox{\it max}(j,0) < z}$  in the proof system I.}
+\label{fig:po3}
+
+\end{figure}
+
+\subsection{Proofs using the LOOP V rule}
+
+To conclude let us discuss proof outlines in presence of the LOOP V
+rule.  To obtain a proof outline for $\HT{\T}{S_N}{\T}$ in the
+proof system V it suffices to modify the loop invariants in the proof
+outline for the proof system II given in Figure \ref{fig:po} as in the
+proof of Theorem \ref{thm:main}$(vi)$, so by using, respectively,
+\[
+  \mbox{$p(z) \equiv max(n - i, 0) = z$,}
+\]
+\[
+  \mbox{$p(z) \equiv n - i = z_1 \land z_1 > 0 \land max(j, 0) = z$,}
+\]
+and to drop the references to the bound functions.
+
+
+\section{Practical Applications}
+
+Research on program verification has entered practice most visibly by
+the use of assertions as annotations of programs and program
+interfaces that remain to be implemented.  This can be seen in the
+paradigm of \emph{design by contract} introduced by Bertrand Meyer for
+his object-oriented programming language Eiffel~\cite{Mey97}: program
+design starts with a specification in terms of assertions, the
+contract, against which the program is to be checked either statically
+by means of a proof or dynamically at runtime.
+
+This paradigm has been adopted and extended to other programming
+languages, in particular to Java.
+The \emph{Java Modeling Language} (JML) enriches Java with facilities for 
+writing assertions (pre- and postconditions as well as 
+class invariants) but also with a concept of abstract state space 
+(using so-called model variables)~\cite{JML05}\footnote{See also
+  \texttt{https://www.cs.ucf.edu/$\sim$leavens/JML/index.shtml}}.
+For assertions, JML uses Java’s Boolean expressions extended by
+universal and existential quantifiers. 
+% \begin{verbatim}\forall\end{verbatim} and \begin{verbatim}\exists\end{verbatim}.
+They are directly written into the Java source code in the form of comments 
+starting with the symbols \texttt{//@}
+(so that the annotated source code may be processed by both an ordinary Java compiler 
+and a specialized JML tool). 
+
+JML is designed to deal with the specification of Java classes,
+but here we focus on loops.
+JML provides the designated keywords 
+\texttt{requires} for specifying the precondition,
+\texttt{ensures} for the postcondition,
+\texttt{loop\_invariant}, and 
+\texttt{loop\_decreases} for the bound function.
+To enhance readability, the pre- and postcondition as well as the loop invariant may be split into several
+assertions, each one stated after a separate repeated keyword\footnote{For an example, see 
+       \texttt{https://www.openjml.org/examples/binary-search.html}}.
+An annotated Java program corresponds to a proof outline as discussed here,
+but restricted to the essential assertions for each loop (pre- and postcondition,
+loop invariant and bound function).
+
+Also for the programming language C, a standardized specification language for C programs, 
+called ACSL and inspired by JML, has been designed, see for instance
+\cite{BBBCKKMPPS21}\footnote{See also
+       \texttt{https://frama-c.com/download/acsl-1.20.pdf}}.
+
+% \texttt{*** For ACSL I found only web pages.}
+
+\medskip
+
+In this paper, we have shown that  the rules LOOP II-V 
+for proving termination of loops are equivalent.
+With respect to the number of premises LOOP~II and LOOP V are clearly
+the simplest rules for proving termination.
+However,  a proof using these rules in general require more
+complex assertions because of the accumulation of the
+specifications of the bound functions of  inner loops.
+This can be seen in the proof outline given in Fig.~1, 
+in which the assertions inside the inner loop refer to both $z_1$ and $z_2$,
+where $z_1$ is the variable freezing the value of the bound function $max(n-i,0)$ of the outer loop
+and $z_2$ is the variable freezing the value of the bound function $max(j,0)$ of the inner loop.
+The reason is that in this proof outline we need to establish 
+that the value of the bound function of the outer loop is not affected 
+by the inner loop and that the value of the other bound function decreases.
+
+The LOOP IV rule allows for a separate proof of termination of  each loop,  
+which does not require the specification of  bound functions
+for the  inner loops.
+Thus we have a trade off between a single complex proof  and a number of simpler proofs,  where complexity is measured by
+the size of the assertions.
+What works best in practice depends on the particular program structure.
+
+
+
+
+\bibliographystyle{abbrv}
+\bibliography{term25}
+
+
+
+
+
+\appendix
+
+\section{Proof System I}
+\label{sec:I}
+
+The proof system I consists of the following axioms and rules:
+\VV
+
+\NI
+AXIOM \label{rul:skip} SKIP
+\[ \HT{p}{skip}{p} \]
+%
+\NI
+AXIOM \label{rul:assi} ASSIGNMENT
+\[ \HT{p[u:=t]}{u:=t}{p} \]
+%
+\NI
+RULE \label{rul:comp} COMPOSITION
+\[ \frac{ \HT{p}{S_1}{r}, \HT{r}{S_2}{q}                }
+        { \HT{p}{S_1;\ S_2}{q}                          }\]
+%
+\NI
+RULE \label{rul:cond} CONDITIONAL
+\[ \frac{ \HT{p \A B}{S_1}{q}, \HT{p \A \neg B}{S_2}{q}         }
+        { \HT{p}{\ITE{B}{S_1}{S_2}}{q}                          }\]
+%
+\NI
+RULE \label{rul:loop} LOOP I
+\[ \frac{ \HT{p \A B}{S}{p}                             }
+        { \HT{p}{\WDD{B}{S}}{p \A \neg B}               }\]
+%
+
+\NI
+RULE \label{rul:cons} CONSEQUENCE
+\[ \frac{ p \ra p_1, \HT{p_1}{S}{q_1}, q_1 \ra q        }
+        { \HT{p}{S}{q}                                  }\]
+%
+%\cb
+
+Additionally, given an interpretation $\mathcal{I}$ for the underlying first-order language, 
+we use as axioms all assertions that are true in $\mathcal{I}$. 
+These assertions are used as premises in the CONSEQUENCE rule. 
+
+\section{Weakest Precondition Calculus}\label{sec:WP}
+The calculus consist of the following axioms:
+\VV
+
+\NI
+AXIOM  SKIP
+\[ \mbox{\it wp}(skip,p)\leftrightarrow p \]
+%
+\NI
+AXIOM  ASSIGNMENT
+\[  \mbox{\it wp}(u:=t,p)\leftrightarrow p[u:=t] \]
+%
+\NI
+RULE COMPOSITION
+\[ \mbox{\it wp}(S_1;S_2,q)\leftrightarrow 
+         \mbox{\it wp}(S_1,\mbox{\it wp}(S_2,q))\]
+%
+\NI
+RULE  CONDITIONAL
+\[ \mbox{\it wp}(\ITE{B}{S_1}{S_2},q)\leftrightarrow
+(\mbox{\it wp}(S_1,q)\wedge B)\vee 
+(\mbox{\it wp}(S_2,q)\wedge \neg B)\]
+%
+\NI
+RULE  LOOP 
+\[ \mbox{\it wp}(\WDD{B}{S},q)\leftrightarrow
+(q\wedge \neg B)\vee (\mbox{\it wp}(S, \mbox{\it wp}(\WDD{B}{S},q))\wedge B)
+\]
+
+
+% \section{Unrestricted Bound Functions} \label{LOOPIIt}
+
+
+% % In \cite{ABO09}, to prove termination, we used the LOOP III rule
+% % without the stipulation that $var(t) \subseteq var(B) \cup var(S)$.
+% % %Call such a rule the LOOP II-$t$ rule.
+% % We call the LOOP rules II-IV without this stipulation \emph{unrestricted}.
+% % We now prove the following result.
+% % % \bigskip
+
+
+% % \NI
+% % RULE \label{rul:loop2} LOOP II-$t$
+% % \[
+% % \begin{array}{l}
+% % \HT{p \A B}{S}{p},                      \\
+% % \HT{p \A B \A t=z}{S}{t<z},             \\
+% % p \ra t \geq 0                         \\
+% % [-\medskipamount]
+% % \hrulefill                              \\
+% % \HT{p}{\WDD{B}{S}}{p \A \neg\ B}
+% % \end{array}
+% % \]
+% % %
+% % \NI
+% % where $t$ is an integer expression and $z$ is an integer variable
+% % that does not appear in $p,B,t$ or $S$.
+% % \III
+
+% \textbf{Proof of Theorem \ref{thm:book}.}
+
+% % \begin{theorem} \label{thm:book}
+% % \mbox{} \\
+% % The unrestricted  rules LOOP II, III, and IV, are  admissible in the proof system II, III, and IV, respectively.
+% % \end{theorem}
+
+% We begin by formulating a crucial lemma.
+% Given a list of distinct variables $\bar{x}$ and a list of terms
+% $\bar{t}$ of the same length, we denote by $[\bar{x} := \bar{t}]$ the
+% \emph{simultaneous substitution} of each variable in $\bar{x}$ by the
+% corresponding term in $\bar{t}$. The simultaneous substitution applied
+% to a term $t$ or an assertion $p$, written as $t[\bar{x} := \bar{z}]$
+% (respectively, $p[\bar{x} := \bar{z}]$), is defined in the usual way
+% by properly taking care of the bound variables (see, e.g.,
+% \cite[Subsection 2.7]{ABO09}).
+
+% Below, given a list of distinct constants $\bar{c}$ and a list of
+% terms $\bar{t}$ of the same length, we denote by
+% $[\bar{c} := \bar{t}]$ the \emph{simultaneous replacement} of each
+% constant in $\bar{c}$ by the corresponding term in $\bar{t}$, defined
+% in the expected way.
+
+% The following lemma formalizes the intuition that in the correctness
+% proofs variables that are not used in the analyzed program play the
+% same role as fresh constants. The first item concerns a simultaneous
+% substitution, while the second one deals with a simultaneous
+% replacement.
+
+% \begin{lemma} \label{lem:z}
+
+%   Let \it{PR} be one of the proof systems II, III or IV.  Suppose
+%   that $\vdash_{PR} \HT{p}{S}{q}$.
+
+% Assume that $\bar{x}$ and $\bar{c}$ are respectively a list of distinct variables and a list
+% of distinct constants of the same length, none of which appears in $S$.
+% Then
+% \begin{enumerate}[(i)]
+% \item $\vdash_{PR} \HT{p[\bar{x} := \bar{c}]}{S}{q[\bar{x} := \bar{c}]}$,
+
+% \item $\vdash_{PR} \HT{p[\bar{c} := \bar{x}]}{S}{q[\bar{c} := \bar{x}]}$.
+% \end{enumerate}
+
+% \end{lemma}
+
+% \begin{proof}
+%   (Sketch)
+
+% \NI
+% The proof proceeds by induction on the structure of $S$ and is straightforward. We illustrate it by presenting
+% just one case for $(ii)$, when
+% $S \equiv \WDD{B}{S_0}$ and the proof system II. 
+% %As in the proof of Theorem \ref{thm:1}$(i)$ [Theorem 2$(i)$ in our paper]
+% Let 
+% % \[
+% %  \vdash_{\rm{II}} \HT{p_{0} \A B}{S_0}{p_{0}},
+% % \]
+% \[
+%  \vdash_{\rm{II}} \HT{p_{0} \A B \A t = z}{S_0}{p_0\wedge  t < z},
+% \]
+% for some assertion $p_{0}$,  bound function $t$ and
+% variable~$z$ such that
+% the implications
+% $p \ra p_{0}$, $p_{0} \ra t \ge 0$ and  $(p_{0} \A \neg B) \ra q$
+% hold.
+
+% Denote $p[\bar{c} := \bar{x}]$ by $p'$ and similarly with
+% $p_{0}, B, q$ and $t$.  By the induction hypothesis the above 
+% statement holds when we replace each assertion or term by its primed
+% version and the primed versions of all three implications hold by
+% logic.  Note that by the assumption about the constants in $\bar{c}$
+% we have $B' \equiv B$.  Hence by the LOOP II rule
+% \[
+%   \vdash_{\rm II} \HT{p'_{0}}{\WDD{B}{S}}{p'_{0} \A \neg B},
+% \]
+% so by the CONSEQUENCE rule
+% \[
+%   \vdash_{\rm II} \HT{p'}{\WDD{B}{S}}{q'},
+% \]
+% as desired.
+% \HB
+% % The desired proof is obtained by performing, respectively, the simultaneous substitution
+% % $[\bar{x} := \bar{c}]$ or the simultaneous replacement
+% % $[\bar{c} := \bar{x}]$ on all assertions and integer expressions used
+% % in the proof of $\HT{p}{S}{q}$ in \emph{PR}.
+% \end{proof}
+
+% Below we shall use this lemma twice, first to simultaneously
+% substitute specific variables by (fresh) constants and then to
+% replace these constants by the original variables.
+
+% We can now establish Theorem \ref{thm:book}. We only treat the case of the unrestricted LOOP II rule that
+% was needed to prove item $(iv)$ of Lemma \ref{lem:main}.
+
+% Suppose
+% % \[
+% %   \vdash_{\rm{II}}  \HT{p \A B}{S}{p},
+% % \]
+% \[
+%   \vdash_{\rm{II}}  \HT{p \A B \A t=z}{S}{p\wedge t<z},
+% \]
+% and that
+% $p \ra t \geq 0$ holds,
+% where $t$ is an integer expression such that
+% $var(t) \not\subseteq var(B) \cup var(S)$ and $z$ is an integer variable
+% that does not appear in $p,B,S, t$ or $q$.
+
+% % \[
+% %   \vdash_{\rm{II}}    \HT{p}{\WDD{B}{S}}{p \A \neg\ B},
+% % \]
+% % where the last step in the proof consists of an application of the
+% % LOOP II rule.  We now show that this correctness formula can also be
+% % proved in the proof system II when in the LOOP II rule we additionally
+% % stipulate that $var(t) \subseteq var(B) \cup var(S)$.
+
+% Let $\bar{x}$ be a list formed by the variables from $var(t)$ that are
+% not elements of $var(B) \cup var(S)$ and let $\bar{c}$ be a list of
+% distinct constants of the same length as $\bar{x}$, none of which
+% appears in $p,B,t$ or $S$. Denote
+% $p[\bar{x} := \bar{c}]$ by $p'$ and $t[\bar{x} := \bar{c}]$ by $t'$.
+
+% Then we have by Lemma \ref{lem:z}$(i)$
+% % \[
+% %  \vdash_{\rm{II}} \HT{p' \A B}{S}{p'},
+% % \]
+% \[
+%  \vdash_{\rm{II}}  \HT{p' \A B \A t'=z}{S}{p'\wedge t'<z},         
+% \]
+% and
+% \[
+%   p' \ra t' \geq 0.
+% \]
+
+% Note that $var(t') \subseteq var(B) \cup var(S)$. So by an application of the LOOP II rule
+% we obtain
+% \[
+%  \vdash_{\rm{II}}    \HT{p'}{\WDD{B}{S}}{p' \A \neg\ B},
+% \]
+% from which we get by Lemma \ref{lem:z}$(ii)$
+% \[
+%  \vdash_{\rm{II}}    \HT{p}{\WDD{B}{S}}{p \A \neg\ B},
+% \]
+% since $p'[\bar{c} := \bar{x}] \equiv p$ and $B[\bar{c} := \bar{x}] \equiv B$.
+% \HB
+% \VV
+
+% % Analogous results hold for the same relaxations of the LOOP III and
+% % IV rules.
+% % Let us explain now the relevance of Theorem \ref{thm:book}.
+
+\section{Admissibility of the Auxiliary Rules}\label{sec:proof}
+
+\textbf{Proof of Theorem \ref{thm:aux}.}
+
+We establish only the following claims that are needed in the proof of Theorem
+\ref{thm:main}.
+
+%\begin{theorem} \label{thm:1}
+% The auxiliary rules $\te$-{\rm INTRODUCTION}, {\rm CONJUNCTION},
+% and {\rm HYBRID CONJUNCTION} are admissible in the following proof systems:
+
+ \begin{enumerate} [$(i)$] 
+    
+   \item The $\te$-{\rm INTRODUCTION} rule is admissible in the proof system {\rm II}. 
+        
+   \item The $\te$-{\rm INTRODUCTION} rule is admissible in the proof system {\rm III}.
+  
+   \item The {\rm CONJUNCTION} rule is admissible in the proof system {\rm II}.
+
+   \item The {\rm HYBRID CONJUNCTION} rule is admissible in the proof system {\rm III},
+         that is, \\
+         if $\vdash_{\rm{I}} \HT{p_1}{S}{q_1}$ and $\vdash_{\rm{III}} \HT{p_2}{S}{q_2}$, then
+         $\vdash_{\rm{III}} \HT{p_1 \A p_2}{S}{q_1 \A q_2}$.
+
+ \end{enumerate}
+
+% \end{theorem}
+
+To prove these claims we first establish two lemmas that provide additional
+information about the proofs in the considered proof systems.
+
+\begin{lemma} \label{lemma:1}
+Let $\mathit{PR}$ be one of the proof systems I, II, III, IV, or V.
+If $\mathit{PR} \vdash \varphi$, there exists a proof of $\varphi$ in $\mathit{PR}$ 
+with exactly one final application of the CONSEQUENCE rule.
+\end{lemma}
+
+\begin{proof}
+Since implication $\ra$ is reflexive, we can always add to a given proof in $\mathit{PR}$
+one final application of the CONSEQUENCE rule.
+Since implication is transitive, successive applications of the CONSEQUENCE rule in a proof in $\mathit{PR}$
+can be condensed into one application.
+\HB
+\end{proof} 
+
+\begin{lemma} \label{lem:useful}
+Let $\mathit{PR}$ be one of the proof systems I, II, III, IV, or V.
+  \begin{enumerate} [(i)] 
+  \item  Suppose that  $\vdash_{PR} \HT{p}{S_1; \ S_2}{q}$.
+    Then for some assertion $r$
+    \[
+ \vdash_{PR} \HT{p}{S_1}{r} \mbox{ and }
+ \vdash_{PR} \HT{r}{S_2}{q}.
+\]
+
+\item Suppose that  $\vdash_{PR} \HT{p}{\ITE{B}{S_1}{S_2}}{q}$.
+    Then 
+    \[
+ \vdash_{PR} \HT{p \A B}{S_1}{q} \mbox{ and }
+ \vdash_{PR} \HT{p \A \neg B}{S_2}{q}.
+\]
+ \end{enumerate}    
+\end{lemma}
+\begin{proof}
+  \mbox{} \\
+  $(i)$ By Lemma~\ref{lemma:1}, the considered correctness formula was proved using
+  the COMPOSITION rule followed by a single application of the CONSEQUENCE rule.
+  So for some assertions $p_1, r, q_1$, we have
+    \[
+ \vdash_{PR} \HT{p_1}{S_1}{r} \mbox{ and }
+ \vdash_{PR} \HT{r}{S_2}{q_1}
+\]
+and the implications $p \to p_1$ and $q_1 \to q$ hold.
+We now get the claim by the CONSEQUENCE rule.
+\III
+
+\NI
+$(ii)$ The argument is analogous as in $(ii)$. 
+\HB
+\end{proof}
+
+We now turn to the proof of the mentioned claims of Theorem
+\ref{thm:aux}, repeating each time the statement to be proved.
+
+\begin{proof}
+ \mbox{} \\
+\noindent
+$(i)$  The $\te$-{\rm INTRODUCTION} rule is admissible in the proof system {\rm II}.
+
+We proceed by induction on the structure of $S$
+and consider a proof of \HT{p}{S}{q} in the proof system \rm{II}, where 
+the last two steps involve an axiom or a rule of the proof system \rm{II} for 
+the top-level operator of the program $S$, 
+followed by one final application of the CONSEQUENCE rule
+according to Lemma~\ref{lemma:1}.
+In all cases we assume that $x \not\in var(S) \cup \mathit{free}(q)$.
+
+\III
+
+\NI
+$\bullet$ \emph{Case} $S \equiv u:=t$.
+Thus suppose $\vdash_{\rm{II}} \HT{p}{S}{q}$.
+Then for some assertion $q_1$,
+\[
+ \vdash_{\rm{II}} \HT{q_1[u:=t]}{S}{q_1}
+\]
+by the ASSIGNMENT axiom,
+and the implications 
+$p \ra q_1[u:=t]$ and $q_1 \ra q$ hold.
+We assumed that $x \not\in var(S)$,
+so $x \not \equiv u$. 
+By the assignment axiom, also
+\[
+ \HT{(\te x:q_1)[u:=t]}{S}{\te x:q_1}.
+\]
+Note that the implications 
+$\te x:p \ra \te x: (q_1[u:=t])$ and $\te x: q_1 \ra \te x: q$ hold.
+Since $x \not \equiv u$ and $x \not\in \mathit{free}(q)$, 
+also the implications 
+\[
+ \te x: (q_1[u:=t]) \ra (\te x:q_1)[u:=t] \ \mbox{ and }\  (\te x:q) \ra q
+\] 
+hold.
+So the CONSEQUENCE rule yields
+$\vdash_{\rm{II}}  \HT{\te x: p}{S}{q}$, as desired.
+
+\III
+
+\NI
+$\bullet$ \emph{Case} $S \equiv S_1 ;\ S_2$.
+Thus suppose $\vdash_{\rm{II}} \HT{p}{S}{q}$.
+By Lemma \ref{lem:useful}$(i)$
+for some assertion $r$, 
+\[
+ \vdash_{\rm{II}} \HT{p}{S_1}{r}  \mbox{ and }
+ \vdash_{\rm{II}} \HT{r}{S_2}{q}.
+\]
+Since $r \ra \te x:r$, the CONSEQUENCE rule yields
+$\vdash_{\rm{II}}  \HT{p}{S_1}{\te x: r}$.
+Since $x \not \in \mathit{free}(\te x: r)$, the induction hypothesis yields
+$\vdash_{\rm{II}}  \HT{\te x: p}{S_1}{\te x: r}$.
+Since $x \not\in \mathit{free}(q)$, 
+by the induction hypothesis, also $\vdash_{\rm{II}}  \HT{\te x: r}{S_2}{q}$.
+Thus by the COMPOSITION  rule, 
+$\vdash_{\rm{II}}  \HT{\te x: p}{S}{q}$, as desired.
+
+
+\III
+
+\NI
+$\bullet$ \emph{Case} $S \equiv \ITE{B}{S_1}{S_2}$.
+Thus suppose $\vdash_{\rm{II}} \HT{p}{S}{q}$.
+Then by Lemma \ref{lem:useful}$(ii)$,
+\[
+ \vdash_{\rm{II}} \HT{p \A B}{S_1}{q} \mbox{ and }
+ \vdash_{\rm{II}} \HT{p \A \neg B}{S_2}{q}.
+\]
+By the induction hypothesis,
+\[
+ \vdash_{\rm{II}} \HT{\te x: (p \A B)}{S_1}{q}  \mbox{ and }
+ \vdash_{\rm{II}} \HT{\te x: (p \A \neg B)}{S_2}{q}.
+\]
+Since $x \not\in var(B)$, the CONSEQUENCE rule yields
+\[
+ \vdash_{\rm{II}} \HT{(\te x: p) \A B}{S_1}{q}  \mbox{ and }
+ \vdash_{\rm{II}} \HT{(\te x: p) \A \neg B}{S_2}{q}.
+\]
+By the CONDITIONAL rule,
+$\vdash_{\rm{II}} \HT{\te x: p}{S}{q}$,
+as desired.
+
+\III
+
+\NI
+$\bullet$ \emph{Case} $S \equiv \WDD{B}{S_0}$.
+Thus suppose $\vdash_{\rm{II}} \HT{p}{S}{q}$.
+By the assumption about $t$, we have
+$x \not \in var(t)$ and without loss of generality we can assume $x \neq z$.
+Then for some assertion $p_{0}$ and an appropriate bound function $t$ and
+variable~$z$,
+\[
+ \vdash_{\rm{II}} \HT{p_{0} \A B \A t = z}{S_0}{p_0\wedge t < z},
+\]
+and the implications
+$p \ra p_{0}$, $p_{0} \ra t \ge 0$,  $(p_{0} \A \neg B) \ra q$
+hold.
+
+Since $(p_0\wedge t<z) \ra ((\te x: p_0)\wedge t<z) $, the CONSEQUENCE rule yields
+\[
+ \vdash_{\rm{II}} \HT{p_{0} \A B \A t=z}{S_0}{(\te x: p_{0})\wedge t<z }.
+\]
+By the induction hypothesis, the assumption about $x$,
+and the CONSEQUENCE rule 
+\[
+ \vdash_{\rm{II}} \HT{(\te x:p_0) \A B \A t = z}{S_0}{(\te x:p_0)\A t < z}.
+\]
+So the LOOP II rule yields 
+\[
+ \vdash_{\rm{II}} \HT{\te x:p_0}{S}{(\te x:p_0) \A \neg B}.
+\]
+Further, since $(p_{0} \A \neg B) \ra q$ holds and
+$x \not\in (\mathit{free(q)} \cup var(B))$, also the implication
+$((\te x:p_0) \A \neg B) \ra q$ holds.  So a final application of the
+CONSEQUENCE rule yields $\vdash_{\rm{II}} \HT{\te x:p}{S}{q}$, as
+desired.
+
+\III
+
+\noindent
+$(ii)$ The $\te$-{\rm INTRODUCTION} rule is admissible in the proof system {\rm III}.
+
+Again, we proceed by induction on the structure of $S$,
+but now consider a proof of \HT{p}{S}{q} in the proof system \rm{III}, where 
+the last two steps involve the axiom or rule of the proof system \rm{III} 
+for the top-level operator of the program $S$, 
+followed by one final application of the CONSEQUENCE rule
+according to Lemma~\ref{lemma:1}.
+
+Except for the \textbf{while} statement, all cases are analogous, 
+with $\vdash_{\rm{II}}$ replaced by $\vdash_{\rm{III}}$. 
+The case of the \textbf{while} statement differs from $(i)$ only 
+in that one now considers two correctness formulas in the premise 
+of the LOOP III rule instead of one. 
+As above, let $S \equiv \WDD{B}{S_0}$ and
+suppose $\vdash_{\rm{III}} \HT{p}{S}{q}$.
+By the assumption about $t$, we have
+$x \not \in var(t)$ and without loss of generality we can assume $x \neq z$.
+Then for some assertion $p_{0}$ and an appropriate bound function $t$ and
+variable~$z$,
+\[
+ \vdash_{\rm{III}} \HT{p_{0} \A B}{S_0}{p_{0}},
+\]
+\[
+ \vdash_{\rm{III}} \HT{p_{0} \A B \A t = z}{S_0}{t < z},
+\]
+and the implications
+$p \ra p_{0}$, $p_{0} \ra t \ge 0$,  $(p_{0} \A \neg B) \ra q$
+hold.
+
+Since $p_0 \ra \te x: p_0$, the CONSEQUENCE rule yields
+\[
+ \vdash_{\rm{III}} \HT{p_{0} \A B}{S_0}{\te x: p_{0}}.
+\]
+By the induction hypothesis, the assumption about $x$,
+and the CONSEQUENCE rule both
+\[
+ \vdash_{\rm{III}} \HT{(\te x:p_0) \A B}{S_0}{\te x: p_{0}}
+\]
+and
+\[
+ \vdash_{\rm{III}} \HT{(\te x:p_0) \A B \A t = z}{S_0}{t < z}.
+\]
+So the LOOP III rule yields 
+\[
+ \vdash_{\rm{III}} \HT{\te x:p_0}{S}{(\te x:p_0) \A \neg B}.
+\]
+Further, since $(p_{0} \A \neg B) \ra q$ holds and
+$x \not\in (\mathit{free(q)} \cup var(B))$, also the implication
+$((\te x:p_0) \A \neg B) \ra q$ holds.  So a final application of the
+CONSEQUENCE rule yields $\vdash_{\rm{III}} \HT{\te x:p}{S}{q}$, as
+desired.
+
+\III
+
+\NI
+$(iii)$ The {\rm CONJUNCTION} rule is admissible in the proof system {\rm II}.
+
+We proceed by induction on the structure of $S$
+and for $i=1,2$ consider proofs of \HT{p_i}{S}{q_i} in the proof system \rm{II}, where 
+the last two steps involve the axiom or rule of the proof system \rm{II} 
+for the top-level operator of the program $S$, 
+followed by one final application of the CONSEQUENCE rule
+according to Lemma~\ref{lemma:1}.
+
+\III
+
+\NI
+$\bullet$ \emph{Case} $S \equiv u:=t$.
+Thus suppose $\vdash_{\rm{II}} \HT{p_1}{S}{q_1}$ and
+$\vdash_{\rm{II}} \HT{p_2}{S}{q_2}$.
+Then for some assertions $q_{01}$ and $q_{02}$,
+by the ASSIGNMENT axiom, both
+\[
+ \vdash_{\rm{II}} \HT{q_{01}[u:=t]}{S}{q_{01}} \ \mbox{ and }\
+ \vdash_{\rm{II}} \HT{q_{02}[u:=t]}{S}{q_{02}},
+\]
+and the implications 
+$p_1 \ra q_{01}[u:=t]$, $q_{01} \ra q_1$ and
+$p_2 \ra q_{02}[u:=t]$, $q_{02} \ra q_2$ hold.
+The ASSIGNMENT axiom also yields
+\[
+ \HT{q_{01}[u:=t] \A q_{02}[u:=t]}{S}{q_{01} \A q_{02}}.
+\]
+By the implications 
+$(p_1 \A p_2) \ra (q_{01}[u:=t] \A q_{02}[u:=t])$ and 
+$(q_{01} \A q_{02}) \ra$ $(q_1 \A q_2)$,
+the CONSEQUENCE rule yields
+\[
+  \vdash_{\rm{II}} \HT{p_1 \A p_2}{S}{q_1 \A q_2},
+\]
+as desired.
+
+\III
+
+\NI
+$\bullet$ \emph{Case} $S \equiv S_1 ;\ S_2$.
+Thus suppose $\vdash_{\rm{II}} \HT{p_1}{S}{q_1}$ and
+$\vdash_{\rm{II}} \HT{p_2}{S}{q_2}$.
+Then by Lemma \ref{lem:useful}$(i)$ for some assertions $r_1$ and $r_2$
+\[
+ \vdash_{\rm{II}} \HT{p_{1}}{S_1}{r_1} \ \mbox{ and }\ 
+ \vdash_{\rm{II}} \HT{r_1}{S_2}{q_{1}},
+\]
+\[
+ \vdash_{\rm{II}} \HT{p_{2}}{S_1}{r_2} \ \mbox{ and }\
+ \vdash_{\rm{II}} \HT{r_2}{S_2}{q_{2}}.
+\]
+By the induction hypothesis,
+\[
+ \vdash_{\rm{II}} \HT{p_1 \A p_2}{S_1}{r_1 \A r_2} \ \mbox{ and }\
+ \vdash_{\rm{II}} \HT{r_1 \A r_2}{S_1}{q_1 \A q_2},
+\]
+so by the COMPOSITION rule,
+\[
+  \vdash_{\rm{II}} \HT{p_1 \A p_2}{S_1;\ S_2}{q_1 \A q_2},
+\]
+as desired.
+
+\III
+
+\NI
+$\bullet$ \emph{Case} $S \equiv \ITE{B}{S_1}{S_2}$.
+Thus suppose $\vdash_{\rm{II}} \HT{p_1}{S}{q_1}$ and
+$\vdash_{\rm{II}} \HT{p_2}{S}{q_2}$.
+Then by Lemma \ref{lem:useful}$(ii)$,
+\[
+ \vdash_{\rm{II}} \HT{p_{1}\A B}{S_1}{q_{1}} \ \mbox{ and }\
+ \vdash_{\rm{II}} \HT{p_{1}\A \neg B}{S_2}{q_{1}},
+\]
+\[
+ \vdash_{\rm{II}} \HT{p_{2} \A B}{S_1}{q_{2}} \ \mbox{ and }\
+ \vdash_{\rm{II}} \HT{p_{2} \A \neg B}{S_2}{q_{2}}.
+\]
+By the induction hypothesis,
+\[
+ \vdash_{\rm{II}} \HT{p_{1}\A p_{2} \A B}{S_1}{q_{1} \A q_{2}}
+\]
+and
+\[
+ \vdash_{\rm{II}} \HT{p_{1}\A p_{2} \A \neg B}{S_2}{q_{1} \A q_{2}}.
+\]
+So by the CONDITIONAL rule,
+\[
+  \vdash_{\rm{II}} \HT{p_1 \A p_2}{\ITE{B}{S_1}{S_2}}{q_1 \A q_2},
+\]
+as desired.
+
+\III
+
+\NI
+$\bullet$ \emph{Case} $S \equiv \WDD{B}{S_0}$.
+Suppose $\vdash_{\rm{II}} \HT{p_1}{S}{q_1}$ and
+$\vdash_{\rm{II}} \HT{p_2}{S}{q_2}$.
+Then for some assertions $p_{01},p_{02}$, appropriate bound functions $t_1, t_2$ and
+variables $z_1, z_2$,
+\[
+ \vdash_{\rm{II}} \HT{p_{01} \A B \A t_1 = z_1}{S_0}{p_{01} \A t_1 < z_1},
+\]
+\[
+ \vdash_{\rm{II}} \HT{p_{02} \A B \A t_2 = z_2}{S_0}{p_{02} \A t_2 < z_2},
+\]
+the implications
+$p_{01} \ra t_1 \ge 0, \, p_1 \ra p_{01}, \, (p_{01} \A \neg B) \ra q_1$
+and
+$p_{02} \ra t_2 \ge 0,$ $p_2 \ra p_{02}, \, (p_{02} \A \neg B) \ra q_2$
+hold.
+
+Without loss of generality we can assume that $z_2 \not \in \{z_1\} \cup \mathit{free}(p_{01})$.
+By the induction hypothesis,
+\[
+ \vdash_{\rm{II}} \HT{p_{01} \A p_{02} \A B \A t_1 = z_1 \A t_2 = z_2}{S_0}
+                     {p_{01} \A p_{02} \A t_1 < z_1 \A t_2 < z_2}.
+\]
+
+It suffices to consider one bound function, say $t_1$.
+Formally, we show this as follows.
+By the CONSEQUENCE rule,
+\[
+ \vdash_{\rm{II}} \HT{p_{01} \A p_{02} \A B \A t_1 = z_1 \A t_2 = z_2}{S_0}
+                     {p_{01} \A p_{02} \A t_1 < z_1}.
+\]
+Now, an application of the $\te$-INTRODUCTION rule, which is admissible
+in the proof system II according to part $(ii)$ of this theorem, followed by an application
+of the CONSEQUENCE rule yields
+\[
+ \vdash_{\rm{II}} \HT{p_{01} \A p_{02} \A B \A t_1 = z_1 \A \te z_2: t_2 = z_2}{S_0}
+                     {p_{01} \A p_{02} \A t_1 < z_1}.
+\]
+A further application of the CONSEQUENCE rule yields
+\[
+ \vdash_{\rm{II}} \HT{p_{01} \A p_{02} \A B \A t_1 = z_1}{S_0}
+                     {p_{01} \A p_{02} \A t_1 < z_1}.
+\]
+Then by the LOOP II rule,
+\[
+  \vdash_{\rm{II}} \HT{p_{01} \A p_{02}}{\WDD{B}{S_0}}{p_{01} \A p_{02} \A \neg B}.
+\]
+The implications above yield
+$(p_1 \A p_2) \ra (p_{01} \A p_{02})$ and
+$(p_{01} \A p_{02} \A \neg B) \ra$ $(q_1 \A q_2)$.
+Thus by the CONSEQUENCE rule,
+\[
+ \vdash_{\rm{II}} \HT{p_1 \A p_2}{\WDD{B}{S_0}}{q_1 \A q_2},
+\]
+as desired.
+\III
+
+\NI
+$(iv)$ The {\rm HYBRID CONJUNCTION} rule is admissible in the proof system {\rm III},
+that is,
+if $\vdash_{\rm{I}} \HT{p_1}{S}{q_1}$ and $\vdash_{\rm{III}} \HT{p_2}{S}{q_2}$, then
+$\vdash_{\rm{III}} \HT{p_1 \A p_2}{S}{q_1 \A q_2}$.
+
+The proof is analogous to the proof of $(iii)$. 
+The only case that is somewhat different is the one
+concerned with the \textbf{while} statement. 
+So we only deal with
+\III
+
+\NI
+$\bullet$ \emph{Case} $S \equiv \WDD{B}{S_0}$.
+Suppose $\vdash_{\rm{I}} \HT{p_1}{S}{q_1}$ and
+$\vdash_{\rm{III}} \HT{p_2}{S}{q_2}$.
+Then for some assertions $p_{01},p_{02}$ and an appropriate bound function $t$ and
+variable~$z$,
+\[
+ \vdash_{\rm{I}} \HT{p_{01} \A B}{S_0}{p_{01}},
+\]
+\[
+ \vdash_{\rm{III}} \HT{p_{02} \A B}{S_0}{p_{02}},
+\]
+\[
+ \vdash_{\rm{III}} \HT{p_{02} \A B \A t = z}{S_0}{t < z},
+\]
+and the implications
+\[
+  p_1 \ra p_{01}, \, (p_{01} \A \neg B) \ra q_1, \,
+  p_{02} \ra t \ge 0, \, p_2 \ra p_{02}, \, (p_{02} \A \neg B) \ra q_2
+\]
+hold. By the induction hypothesis,
+\[
+ \vdash_{\rm{III}} \HT{p_{01} \A p_{02} \A B}{S_0}
+                     {p_{01} \A p_{02}},
+\]
+and by the induction hypothesis combined with the CONSEQUENCE rule,
+\[
+ \vdash_{\rm{III}} \HT{p_{01} \A p_{02} \A B \A t = z}{S_0}
+                     {t < z}.
+\]
+
+So by the LOOP II rule,
+\[
+  \vdash_{\rm{III}} \HT{p_{01} \A p_{02}}{\WDD{B}{S_0}}{p_{01} \A p_{02} \A \neg B}.
+\]
+The implications above yield
+$(p_1 \A p_2) \ra (p_{01} \A p_{02})$ and
+$(p_{01} \A p_{02} \A \neg B) \ra$ $(q_1 \A q_2)$.
+Thus by the CONSEQUENCE rule,
+\[
+ \vdash_{\rm{III}} \HT{p_1 \A p_2}{\WDD{B}{S_0}}{q_1 \A q_2},
+\]
+as desired.
+\HB
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+\end{document}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+\section{Preliminaries}
+
+\III
+\NI
+INCLUDED DERIVABILITY IN THE SUBSECTION TITLE
+
+\subsection{Derivability, admissibility and equivalence}
+
+Assume a given language that is determined by its set of formulas.  In
+what follows we assume that all considered axioms, proof rules, and
+proof systems are concerned with the same language.
+
+Given a proof system \emph{PR} and two sequences of formulas
+$\phi_1, \LL, \phi_m$ and $\varphi_1, \LL, \varphi_n$ we write
+\[
+  \phi_1, \LL, \phi_m \vdash_{PR} \varphi_1, \LL, \varphi_n
+\]
+to denote the fact that each formula $\varphi_i$ can be proved in
+\emph{PR} using as additional axioms the formulas
+$\phi_1, \LL, \phi_m$.  We also use this notation when the sequence
+$\phi_1, \LL, \phi_m$ is empty and when \emph{PR} is a set of proof
+rules.
+
+\III
+
+A proof rule
+\[ 
+  (R) \qquad \frac{\varphi_1,\LL,\varphi_k}{\varphi}
+\]
+is called \bfe{derivable} in \emph{PR}  if
+\[
+ \varphi_1, \LL, \varphi_k \vdash_{\mathit{PR}} \varphi.
+\]
+\NI
+% A proof rule
+% \[ 
+%   (R) \qquad \frac{\varphi_1,\LL,\varphi_k}{\varphi}
+% \]
+Such a rule 
+is called \bfe{admissible in} \emph{PR} (see, e.g.~\cite[page 47]{Pla13}) if
+\[
+ \vdash_{\mathit{PR}} \varphi_1, \LL, \vdash_{\mathit{PR}} \varphi_k
+ \mbox{ implies }
+ \vdash_{\mathit{PR}} \varphi.
+\]
+MORE EXPLANATION \\
+By a derivable rule, a proof in the proof system \emph{PR} deducing the formula
+$\varphi$ from the formulas $\varphi_1, \LL, \varphi_k$ can be condensed
+into \emph{one step} deducing $\varphi$ from $\varphi_1, \LL, \varphi_k$.
+By an admissible rule, a proof of the formula $\varphi$ in the proof system PR
+that is manufactured by \emph{manipulating} $k$ given proofs of
+$\varphi_1, \LL, \varphi_k$ in the proof system \emph{PR} 
+can be condensed into \emph{one step} deducing $\varphi$ from $\varphi_1, \LL, \varphi_k$.
+Intuitively, if a rule is derivable or admissible in \emph{PR}
+it does not increase the power of the proof system \emph{PR} \cite{Pla13}, 
+but it serves as a lemma that simplifies proofs in \emph{PR} by condensing
+a detailed proof argument into one application of $(R)$.
+The application of a derivable rule can  be replaced locally without
+affecting the overall proof structure,  which in general is not the case
+with the application of an admissible rule.
+A derivable rule is also an admissible rule,  but in general the converse
+does not hold.
+
+\NI
+END
+
+We say that two proof systems $\it{PR}_1$ and $\it{PR}_2$ are \bfe{equivalent}
+if for all formulas $\varphi$
+\[
+ \mbox{$\vdash_{\mathit{PR}_1} \varphi$ iff $\vdash_{\mathit{PR}_2} \varphi$.}
+\]
+
+\III
+\NI
+SOME BASIC FACTS ADDED.
+
+Note that two proof systems 
+are equivalent if and only if any rule of  the one
+is admissible in  the other.
+
+Given a semantics,
+we denote by $\models \phi$ that the formula $\phi$ is
+\bfe{valid}.
+A proof rule 
+is \bfe{sound} if  validity of its premises implies that of its conclusion.
+A proof system \mbox{\it PR} is sound if $\vdash_{\mbox{\it PR}} \varphi$
+implies $\models \varphi$.
+A system \mbox{\it PR} is \bfe{complete} if 
+$\models \varphi$ implies
+$\vdash_{\mbox{\it PR}} \varphi$.
+Let \mbox{\it PR} be a sound and complete proof system.
+It follows that any sound rule is admissible in \mbox{\it PR}.
+
+To prove that the proof systems $\it{PR}_1$ and $\it{PR}_2$
+are equivalent it thus suffices to show that
+the rules of the one are admissible in the other or that both
+systems are sound and complete.The first approach in general requires
+tedious and complicated proofs by induction on the length of the derivation of the
+premises of the proof rules.
+The latter approach  in general relies on  certain assumptions
+about the underlying semantics.
+
+
+
+
+
+
+\NI
+END
+
+
+\NI 
+LEMMA 1 REFORMULATED AS THE GENERAL APPROACH.
+
+% The notions of derivability and equivalence are connected by the following simple observation.
+
+% \begin{lemma} \label{lem:equiv}
+% % Consider a proof system \it{PR} and proof rules $R_1$ and $R_2$.
+
+% % The proof systems $\mathit{PR} \cup \{R_1\}$ and
+% % $\mathit{PR} \cup \{R_2\}$ are equivalent iff $R_1$ is admissible in
+% % $\mathit{PR} \cup \{R_2\}$ and $R_2$ is admissible in
+% % $\mathit{PR} \cup \{R_1\}$.
+% Consider a proof system \it{PR} and proof rules $R$, $R_1$ and $R_2$.
+% \begin{itemize}
+% \item If $R$ is derivable  in
+% $\mathit{PR} \cup \{R_1\}$ and $R_1$ is derivable in
+% $\mathit{PR} \cup \{R_2\}$ then $R$ is derivable  in
+% $\mathit{PR} \cup \{R_2\}$.
+% \item
+% The proof systems $\mathit{PR} \cup \{R_1\}$ and
+% $\mathit{PR} \cup \{R_2\}$ are equivalent if $R_1$ is derivable  in
+% $\mathit{PR} \cup \{R_2\}$ and $R_2$ is derivable in
+% $\mathit{PR} \cup \{R_1\}$.
+
+
+% \end{itemize}
+
+% \end{lemma}
+Instead, the use of \bfe{ auxiliary rules}
+allows us to combine
+the notions of admissible and derivable rules in a structured way that 
+simplifies the proofs of equivalence between the proof systems
+which only differ in the  considered LOOP rules.
+More
+precisely, the following lemma 
+summarizes our general approach to proving that two systems
+$\mbox{\it PR}\cup\{R\}$
+and $\mbox{\it PR}\cup\{R'\}$ are equivalent.
+
+\begin{lemma}\label{lem:equiv}
+Given  sets \mbox{\it AUX1} and \mbox{\it AUX2} of \emph{auxiliary} rules,
+the proof systems $\mbox{\it PR}\cup\{R\}$
+and $\mbox{\it PR}\cup\{R'\}$ are equivalent if the following holds.
+\begin{itemize}
+\item $A\in \mbox{\it AUX1}$ ($A \in \mbox{\it AUX2} $)
+is \emph{admissible} in $\mbox{\it PR}\cup\{R\}$  ($\mbox{\it PR}\cup\{R'\}$).
+\item  $R$ ($R'$) is \emph{derivable}
+in the system $\mbox{\it PR}\cup \mbox{\it AUX1}\cup\{R'\}$ 
+($\mbox{\it PR}\cup \mbox{\it AUX2}\cup\{R\}$).
+\end{itemize}
+\end{lemma}
+
+\NI
+ERO: The PROOF does not use AUX1 and AUX2, but I understand that
+Krzysztof wants to reformulate it. Therefore I did not change it.
+
+\begin{proof}
+
+For any proof system \mbox{\it PR} and set of rules \mbox{\it AUX}
+we have that if any $A\in \mbox{\it AUX}$ is admissible in \mbox{\it PR} then \mbox{\it PR} and
+$\mbox{\it PR}\cup\mbox{\it AUX}$ are equivalent.
+So we derive from the first item  that the systems $\mbox{\it PR}\cup \{R\}$
+and $\mbox{\it PR}\cup \{R\} \cup \mbox{\it AUX1}$ are equivalent, and similarly, that $\mbox{\it PR}\cup \{R'\}$
+and $\mbox{\it PR}\cup \{R'\} \cup \mbox{\it AUX2}$ are equivalent.
+
+
+
+
+In general, we further have that if  $R$ is derivable in \mbox{\it PR} 
+and the proof systems \mbox{\it PR} and $\mbox{\it PR}'$ are equivalent
+then  $R$ is \emph{admissible} in $\mbox{\it PR}'$. 
+
+
+So we derive  that  $R$ is admissible in $\mbox{\it PR}\cup \{R'\}$
+and similarly, that $R'$ is admissible in $\mbox{\it PR}\cup \{R\}$.
+From this it follows that $\mbox{\it PR}\cup \{R'\}$ and
+$\mbox{\it PR}\cup \{R\}$ are equivalent.
+\HB
+\end{proof}
+
+\NI
+END 
+
+-------------------------------
+
+
+This  modification does not affect provability in
+the considered proof systems II-V. 
+The following example shows this for the modification of the LOOP II rule,
+and uses this case to illustrate our general approach.
+
+\begin{example}
+First we observe that the LOOP II rule is trivially derivable
+in the modified proof system II, which uses instead its  modified  version,
+because 
+$p \ra t \geq 0$ implies  $p \A B \ra t \geq 0$.
+However, the converse does \emph{not} hold:
+Let 
+$$
+ \HT{p \A B \A t=z}{S}{p \A t<z}
+$$
+and
+$p \A B \ra t \geq 0$.
+In order to apply the LOOP II rule
+suppose  that there exists a bound function $t'$
+such that $p  \ra t' \geq 0$.
+Since we can only apply the CONSEQUENCE rule to the above premise
+to derive
+$$
+ \HT{p \A B \A t'=z}{S}{p \A t'<z}
+$$
+we have that
+$(p \A B \A t'=z)\ra (p \A B \A t=z)$
+and $(p \A t<z) \ra (p \A t'<z)$.
+But the first implication implies that $t=t'$ which does not hold in general.
+Take for example $\ITE{B}{t+1}{0}$ for $t'$. 
+
+Instead, using
+the standard \emph{substitution} rule which allows to
+replace in the above premise $z$ by $z-1$,
+we  obtain
+% $$
+%  \HT{p \A B \A t=z-1}{S}{p \A t<z-1}
+% $$
+% that is,
+$$
+ \HT{p \A B \A t+1=z}{S}{p \A t+1<z}
+$$
+by a trivial application of the CONSEQUENCE rule.
+Another application of the  CONSEQUENCE rule then
+gives (as above, $t'\equiv \ITE{B}{t+1}{0}$)
+$$
+ \HT{p \A B \A t'=z}{S}{p \A t+1<z}.
+$$
+Next we
+apply the standard \emph{invariance} rule
+to obtain
+$$
+ \HT{p \A B \A t'=z\A 0< z}{S}{p \A t'<z \A 0<  z}.
+$$
+A final application of the CONSEQUENCE rule gives
+the desired premise 
+$$
+ \HT{p \A B \A t'=z}{S}{p \A t'<z},
+$$
+so that we finally can apply the original LOOP II rule.
+\HB
+
+
+
+
+% It follows that 
+% $p\ra \ITE{B}{t}{0}\geq 0$.
+% % Thus we only need to derive 
+% % $$
+% %  \HT{p \A B \A \ITE{B}{t}{0}=z}{S}{p \A \ITE{B}{t}{0}<z}
+% % $$
+% % from the above premise.
+% Clearly, $p \A B \A \ITE{B}{t}{0}=z$ implies
+% $p \A B \A t=z$. However  $p \A t<z$ does \emph{not} imply 
+% $p \A \ITE{B}{t}{0}<z$: if $B$ does not hold we should
+% have that $0<z$, instead we have $0\leq z$.
+% Therefore we try the bound function
+% $\ITE{B}{t+1}{0}$ which we denote by $t'$.
+% But clearly we still cannot 
+% derive the corresponding correctness formula
+% from the above premise using the  CONSEQUENCE rule.
+% In fact, the situation only seems more complicated
+% because we have now introduced an \emph{inconsistency} in the meaning
+% of the logical variable $z$: On the one hand, the above premise states that
+% $t=z$ holds initially, whereas the modified bound function requires
+% that $t+1=z$ holds initially.
+% To resolve this inconsistency we use
+% the standard \emph{substitution} rule which allows to
+% replace in the above premise $z$ by $z-1$
+% and  obtain
+% $$
+%  \HT{p \A B \A t=z-1}{S}{p \A t<z-1}
+% $$
+% that is,
+% $$
+%  \HT{p \A B \A t+1=z}{S}{p \A t+1<z}
+% $$
+% by a trivial application of the CONSEQUENCE rule.
+% Another application of the  CONSEQUENCE rule then
+% gives
+% $$
+%  \HT{p \A B \A t'=z}{S}{p \A t+1<z}.
+% $$
+% Still $p \A t+1<z$ does not imply
+% $p \A \ITE{B}{t+1}{0}<z$.
+% Therefore we
+% apply the standard \emph{invariance} rule
+% to obtain
+% $$
+%  \HT{p \A B \A t'=z\A 0< z}{S}{p \A t'<z \A 0<  z}.
+% $$
+% A final application of the CONSEQUENCE rule gives
+% the desired premise 
+% $$
+%  \HT{p \A B \A t'=z}{S}{p \A t'<z},
+% $$
+% so that we finally can apply the original LOOP II rule.
+\end{example}
+
+The above example thus shows that the modified LOOP II rule is derivable
+in the proof system II, using  auxiliary rules.
+In contrast to the \bfe{structural} rules in Hoare logics,
+e.g., the rules for the different programming constructs, these
+rules abstract from the program structure.
+Instead, these rules  allow to
+\emph{adapt}  pre- and postconditions in ways beyond
+the basic  weakening and strengthening of the CONSEQUENCE rule.
+As such these rules are  not simply derivable.
+To finally show that the proof system II is equivalent
+with the system consisting of  the modified LOOP rule II,
+as stated by Lemma \ref{lem:equiv} it therefore remains to show that these auxiliary rules
+are \emph{admissible} in the proof system II and its modified version.
+
+
+-----------------------
+
+
+
+
+\III
+\NI
+
+THE DISCUSSION OF THE UNRESTRICTED RULES IS CHANGED
+
+
+% However, it is inessential as the
+% following theorem shows, where we call the LOOP rules II-IV without
+% this stipulation \emph{unrestricted}.
+
+% \begin{theorem} \label{thm:book}
+%   \mbox{} \\
+%   The unrestricted rules LOOP II, III, and IV, are admissible in the
+%   proof system II, III, and IV, respectively.
+% \end{theorem}
+
+% The proof can be found in Appendix~\ref{LOOPIIt}.
+However, it is inessential as the unrestricted rules LOOP II, III, and IV, are admissible in the
+  proof systems II, III, and IV, respectively.
+This follows from Theorem \ref{thm:aux}
+and Lemma \ref{lem:unrestr} in the following Section
+\ref{subsec:aux}, using our general approach described above.
+
+\NI
+
+END
+
+
+
+\III
+\NI
+SLIGHTLY CHANGED
+
+We will restrict our proof-theoretic analysis to the LOOP rules
+II-V. As 
+the above  results already show,
+it is straightforward to apply our general approach to the discussed modifications of them.
+
+\NI
+END
