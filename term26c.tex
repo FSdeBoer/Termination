@@ -684,10 +684,11 @@ RULE \label{rul:conj} CONJUNCTION
       { \HT{p_1 \A p_2}{S}{q_1 \A q_2}         } 
 \]
 \NI
-RULE \label{rul:intro} $\te$-INTRODUCTION
+RULE \label{rul:intro} $\te$-INTRODUCTION \\
+*** ERO renamed $z$ into $z_0$ to avoid clashes with other $z$ in proofs
 \[ 
  \frac{ \HT{p}{S}{q}          }
-      { \HT{\te z:p}{S}{q}    }
+      { \HT{\te z_0:p}{S}{q}    }
 \]
 \NI
 where $z$ is a \emph{logical} variable that does not occur  in $\mathit{free}(q)$.
@@ -745,7 +746,7 @@ SUBSTITUTION rule, see, e.g., \cite{ABO09}.
 \III
 \NI
 RULE \label{rul:SUBST} SUBSTITUTION \\
-*** ERO: renamed $t$ into $t_0$ to avoid clashes with other $t$ in proofs
+*** ERO renamed $t$ into $t_0$ to avoid clashes with other $t$ in proofs
 
 \[ 
  \frac{ \HT{p}{S}{q}          }
@@ -2042,7 +2043,7 @@ Since the CONSEQUENCE rule is included in all these proof systems,
 its admissibility is trivial.
 
 
-\begin{lemma}[Admissibilty] \label{lem:admissibility}
+\begin{lemma}[Admissibility] \label{lem:admissibility}
 The following admissibility results hold:
 
 
@@ -2158,22 +2159,21 @@ Then for some assertion $q_1$,
 by the ASSIGNMENT axiom,
 and the implications 
 $p \ra q_1[u:=t]$ and $q_1 \ra q$ hold.
-We assumed that $x \not\in var(S)$,
-so $x \not \equiv u$. 
+Since $z \in lvar$, we have $z \not \equiv u$. 
 By the assignment axiom, also
 \[
- \HT{(\te x:q_1)[u:=t]}{S}{\te x:q_1}.
+ \HT{[\te z_0:q_1)[u:=t]}{S}{\te z_0:q_1}.
 \]
 Note that the implications 
-$\te x:p \ra \te x: (q_1[u:=t])$ and $\te x: q_1 \ra \te x: q$ hold.
-Since $x \not \equiv u$ and $x \not\in \mathit{free}(q)$, 
+$\te z_0:p \ra \te z_0: (q_1[u:=t])$ and $\te z_0: q_1 \ra \te z_0: q$ hold.
+Since $z \not \equiv u$ and $z \not\in \mathit{free}(q)$, 
 also the implications 
 \[
- \te x: (q_1[u:=t]) \ra (\te x:q_1)[u:=t] \ \mbox{ and }\  (\te x:q) \ra q
+ \te z_0: (q_1[u:=t]) \ra (\te z_0:q_1)[u:=t] \ \mbox{ and }\  (\te z_0:q) \ra q
 \] 
 hold.
 So the CONSEQUENCE rule yields
-$\vdash_{\rm{II}}  \HT{\te x: p}{S}{q}$, as desired.
+$\vdash_{\rm{II}}  \HT{\te z_0: p}{S}{q}$, as desired.
 
 \III
 
@@ -2186,14 +2186,14 @@ for some assertion $r$,
  \vdash_{\rm{II}} \HT{p}{S_1}{r}  \mbox{ and }
  \vdash_{\rm{II}} \HT{r}{S_2}{q}.
 \]
-Since $r \ra \te x:r$, the CONSEQUENCE rule yields
-$\vdash_{\rm{II}}  \HT{p}{S_1}{\te x: r}$.
-Since $x \not \in \mathit{free}(\te x: r)$, the induction hypothesis yields
-$\vdash_{\rm{II}}  \HT{\te x: p}{S_1}{\te x: r}$.
-Since $x \not\in \mathit{free}(q)$, 
-by the induction hypothesis, also $\vdash_{\rm{II}}  \HT{\te x: r}{S_2}{q}$.
+Since $r \ra \te z_0:r$, the CONSEQUENCE rule yields
+$\vdash_{\rm{II}}  \HT{p}{S_1}{\te z_0: r}$.
+Since $z \not \in \mathit{free}(\te z_0: r)$, the induction hypothesis yields
+$\vdash_{\rm{II}}  \HT{\te z_0: p}{S_1}{\te z_0: r}$.
+Since $z \not\in \mathit{free}(q)$, 
+by the induction hypothesis, also $\vdash_{\rm{II}}  \HT{\te z_0: r}{S_2}{q}$.
 Thus by the COMPOSITION  rule, 
-$\vdash_{\rm{II}}  \HT{\te x: p}{S}{q}$, as desired.
+$\vdash_{\rm{II}}  \HT{\te z_0: p}{S}{q}$, as desired.
 
 
 \III
@@ -2208,16 +2208,16 @@ Then by Lemma \ref{lem:useful}$(ii)$,
 \]
 By the induction hypothesis,
 \[
- \vdash_{\rm{II}} \HT{\te x: (p \A B)}{S_1}{q}  \mbox{ and }
- \vdash_{\rm{II}} \HT{\te x: (p \A \neg B)}{S_2}{q}.
+ \vdash_{\rm{II}} \HT{\te z_0: (p \A B)}{S_1}{q}  \mbox{ and }
+ \vdash_{\rm{II}} \HT{\te z_0: (p \A \neg B)}{S_2}{q}.
 \]
 Since $x \not\in var(B)$, the CONSEQUENCE rule yields
 \[
- \vdash_{\rm{II}} \HT{(\te x: p) \A B}{S_1}{q}  \mbox{ and }
- \vdash_{\rm{II}} \HT{(\te x: p) \A \neg B}{S_2}{q}.
+ \vdash_{\rm{II}} \HT{(\te z_0: p) \A B}{S_1}{q}  \mbox{ and }
+ \vdash_{\rm{II}} \HT{(\te z_0: p) \A \neg B}{S_2}{q}.
 \]
 By the CONDITIONAL rule,
-$\vdash_{\rm{II}} \HT{\te x: p}{S}{q}$,
+$\vdash_{\rm{II}} \HT{\te z_0: p}{S}{q}$,
 as desired.
 
 \III
@@ -2226,7 +2226,7 @@ as desired.
 $\bullet$ \emph{Case} $S \equiv \WDD{B}{S_0}$.
 Thus suppose $\vdash_{\rm{II}} \HT{p}{S}{q}$.
 By the assumption about $t$, we have
-$x \not \in var(t)$ and without loss of generality we can assume $x \neq z$.
+$z_0 \not \in var(t)$ and without loss of generality we can assume $z_0 \neq z$.
 Then for some assertion $p_{0}$ and an appropriate bound function $t$ and
 variable~$z$,
 \[
@@ -2236,23 +2236,23 @@ and the implications
 $p \ra p_{0}$, $p_{0} \ra t \ge 0$,  $(p_{0} \A \neg B) \ra q$
 hold.
 
-Since $(p_0\wedge t<z) \ra ((\te x: p_0)\wedge t<z) $, the CONSEQUENCE rule yields
+Since $(p_0\wedge t<z) \ra ((\te z_0: p_0)\wedge t<z) $, the CONSEQUENCE rule yields
 \[
- \vdash_{\rm{II}} \HT{p_{0} \A B \A t=z}{S_0}{(\te x: p_{0})\wedge t<z }.
+ \vdash_{\rm{II}} \HT{p_{0} \A B \A t=z}{S_0}{(\te z_0: p_{0})\wedge t<z }.
 \]
 By the induction hypothesis, the assumption about $x$,
 and the CONSEQUENCE rule 
 \[
- \vdash_{\rm{II}} \HT{(\te x:p_0) \A B \A t = z}{S_0}{(\te x:p_0)\A t < z}.
+ \vdash_{\rm{II}} \HT{(\te z_0:p_0) \A B \A t = z}{S_0}{(\te z_0:p_0)\A t < z}.
 \]
 So the LOOP II rule yields 
 \[
- \vdash_{\rm{II}} \HT{\te x:p_0}{S}{(\te x:p_0) \A \neg B}.
+ \vdash_{\rm{II}} \HT{\te z_0:p_0}{S}{(\te z_0:p_0) \A \neg B}.
 \]
 Further, since $(p_{0} \A \neg B) \ra q$ holds and
 $x \not\in (\mathit{free(q)} \cup var(B))$, also the implication
-$((\te x:p_0) \A \neg B) \ra q$ holds.  So a final application of the
-CONSEQUENCE rule yields $\vdash_{\rm{II}} \HT{\te x:p}{S}{q}$, as
+$((\te z_0:p_0) \A \neg B) \ra q$ holds.  So a final application of the
+CONSEQUENCE rule yields $\vdash_{\rm{II}} \HT{\te z_0:p}{S}{q}$, as
 desired.
 
 \III
@@ -2275,7 +2275,7 @@ of the LOOP III rule instead of one.
 As above, let $S \equiv \WDD{B}{S_0}$ and
 suppose $\vdash_{\rm{III}} \HT{p}{S}{q}$.
 By the assumption about $t$, we have
-$x \not \in var(t)$ and without loss of generality we can assume $x \neq z$.
+$z_0 \not \in var(t)$ and without loss of generality we can assume $z_0 \neq z$.
 Then for some assertion $p_{0}$ and an appropriate bound function $t$ and
 variable~$z$,
 \[
@@ -2288,27 +2288,27 @@ and the implications
 $p \ra p_{0}$, $p_{0} \ra t \ge 0$,  $(p_{0} \A \neg B) \ra q$
 hold.
 
-Since $p_0 \ra \te x: p_0$, the CONSEQUENCE rule yields
+Since $p_0 \ra \te z_0: p_0$, the CONSEQUENCE rule yields
 \[
- \vdash_{\rm{III}} \HT{p_{0} \A B}{S_0}{\te x: p_{0}}.
+ \vdash_{\rm{III}} \HT{p_{0} \A B}{S_0}{\te z_0: p_{0}}.
 \]
 By the induction hypothesis, the assumption about $x$,
 and the CONSEQUENCE rule both
 \[
- \vdash_{\rm{III}} \HT{(\te x:p_0) \A B}{S_0}{\te x: p_{0}}
+ \vdash_{\rm{III}} \HT{(\te z_0:p_0) \A B}{S_0}{\te z_0: p_{0}}
 \]
 and
 \[
- \vdash_{\rm{III}} \HT{(\te x:p_0) \A B \A t = z}{S_0}{t < z}.
+ \vdash_{\rm{III}} \HT{(\te z_0:p_0) \A B \A t = z}{S_0}{t < z}.
 \]
 So the LOOP III rule yields 
 \[
- \vdash_{\rm{III}} \HT{\te x:p_0}{S}{(\te x:p_0) \A \neg B}.
+ \vdash_{\rm{III}} \HT{\te z_0:p_0}{S}{(\te z_0:p_0) \A \neg B}.
 \]
 Further, since $(p_{0} \A \neg B) \ra q$ holds and
 $x \not\in (\mathit{free(q)} \cup var(B))$, also the implication
-$((\te x:p_0) \A \neg B) \ra q$ holds.  So a final application of the
-CONSEQUENCE rule yields $\vdash_{\rm{III}} \HT{\te x:p}{S}{q}$, as
+$((\te z_0:p_0) \A \neg B) \ra q$ holds.  So a final application of the
+CONSEQUENCE rule yields $\vdash_{\rm{III}} \HT{\te z_0:p}{S}{q}$, as
 desired.
 
 \III
@@ -2441,7 +2441,7 @@ By the CONSEQUENCE rule,
                      {p_{01} \A p_{02} \A t_1 < z_1}.
 \]
 Now, an application of the $\te$-INTRODUCTION rule, which is admissible
-in the proof system II according to part $(ii)$ of this theorem, followed by an application
+in the proof system II according to part $(i)$ of this lemma, followed by an application
 of the CONSEQUENCE rule yields
 \[
  \vdash_{\rm{II}} \HT{p_{01} \A p_{02} \A B \A t_1 = z_1 \A \te z_2: t_2 = z_2}{S_0}
