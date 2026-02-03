@@ -179,8 +179,6 @@ which are either first-order formulas, called \bfe{assertions}, or
 \bfe{correctness formulas}, which are constructs of the form $\HT{p}{S}{q}$,
 where $p$ and $q$ are assertions and $S$ is a \textbf{while} program.
 
-\NI KRA: (28-01) SLIGHTLY REFORMULATED
-
 We assume two disjoint sets of variables: a set \emph{lvar} of
 \bfe{logical} variables and a set \emph{pvar} of \bfe{program}
 variables. Programs refer only to program variables, while assertions
@@ -200,9 +198,9 @@ expression $t$, the Boolean expression $B$, and the program $S$, respectively.
 \NI
 ADDED NOTATION SUBSTITUTION
 
-\NI KRA (28-01): SLIGHTLY REWORDED. I WOULD LIKE TO SUGGEST TO DELETE
+\NI KRA (28-01): I WOULD LIKE TO SUGGEST TO DELETE
 THE SECOND SENTENCE: IT IS A STANDARD DEFINITION. ALSO WE NEVER HAVE
-TO PERFORM SUCH A RENAMING.
+TO PERFORM SUCH A RENAMING. *** ERO: ???
 
 We denote by $p[x:=t]$ the result of substituting all free occurrences
 of the variable $x$ in $p$ by the expression $t$. The standard
@@ -250,7 +248,7 @@ RULE LOOP II
 \III
 \NI
 KRA: (28-01) I WOULD LIKE TO SUGGEST TO DELETE BELOW 'free' (IT WAS '(free)'). NOTHING IS LOST
-BY SUCH A STRONGER REQUIREMENT.
+BY SUCH A STRONGER REQUIREMENT.  *** ERO: ???
 
 \NI
 where $t$ is an integer expression such that  $var(t)\subseteq \mbox{\it pvar}$
@@ -364,20 +362,19 @@ $x$ in $p(x)$ by the fresh integer variable $y$.
 
 Note that the outer brackets in $(\exists x:p(x))$ can be dropped thanks to the assumption about the variable $x$.
 
-KRA: ADDED (TILL THE END OF THIS SECTION)
 
 The main aim of this paper is to prove the following result.
 
-\begin{theorem} \label{thm:abo}
+\begin{theorem}[Equivalence] \label{thm:abo}
 The proof systems II-V are equivalent.  
 \end{theorem}
 
 Here, of course, equivalence of the proof systems means that the same
 formulas can be proved in each of them.
 
-\section{Discussion}
 
-KRA: ADDED THE FIRST SENTENCE
+
+\section{Discussion}
 
 Before we proceed with the proof of Theorem \ref{thm:abo} let us
 discuss the introduced rules and some of their variants.  It is
@@ -489,15 +486,17 @@ We shall return to these modifications in Appendix \ref{app:mod},
 where we prove that they are all inessential.
 
 
-\section{Proving Equivalence}
 
-NEW SECTION
+\section{Proving Equivalence}
 
 A direct proof of Theorem \ref{thm:abo} would require a detailed
 analysis of the shape of proofs. For example, in the case of the proof
 systems II and III we would have to construct in II a proof of the premise
 $ \HT{p \A B \A t=z}{S}{p \A t<z}$ of the LOOP II rule from the proofs
-of the premises $\HT{p \A B}{S}{p}$ and $\HT{p \A B \A t=z}{S}{t<z}$
+of the premises 
+\[
+ \HT{p \A B}{S}{p} \mbox{ and } \HT{p \A B \A t=z}{S}{t<z}
+\]
 of the LOOP III rule, which looks daunting.
 
 Therefore we proceed differently. First we introduce a set of
@@ -506,11 +505,10 @@ other and then we show how we get get rid of these auxiliary rules.
 To explain this approach we introduce first the relevant notions from
 proof theory.
 
+
 \subsection{Admissibility and Derivability}
 
-KRA: THIS IS THE PREVIOUS SUBSECTION 2.1, MODIFIED
 
-\NI
 KRA: (29-01): NEW VERSION OF THIS SUBSECTION; CHANGES STARTING WITH 'START'
 
 Assume a given language that is determined by its set of formulas.  In
@@ -670,8 +668,6 @@ from which the claim follows since
 \subsection{Auxiliary Rules}
 \label{subsec:aux}
 
-KRA: THE FIRST SENTENCE ADDED
-
 The next step consists of identifying the appropriate auxiliary rules. 
 In the proof-theoretic analysis of the LOOP II and III rules, we make
 use of the following two auxiliary rules, see, e.g., \cite{ABO09}.
@@ -768,7 +764,7 @@ In the context of Hoare's logic such rules are sometimes called \emph{adaptation
 
 KRA: (29-01) NEW VERSION
 
-Theorem \ref{thm:abo} states six equivalences. However, thanks to the
+Theorem \ref{thm:abo} comprises six equivalences. However, thanks to the
 transitivity of the equivalence relation, it suffices to prove three
 of them. We found it most convenient to deal with the equivalence of
 the following three pairs of proof systems: (II, III), (III, IV), and
@@ -783,7 +779,7 @@ and Appendix~\ref{sec:proof-admissibility}.
 
 BEGIN OPTIONAL (OTHERWISE THIS SUBSECTION IS TOO SHORT)
 
-To close this discussion note the following immediate consequence of Theorem \ref{thm:abo}
+To close this discussion note the following immediate consequence of Theorem~\ref{thm:abo}
 and Lemma \ref{lem:AUX}.
 
 \begin{corollary} \label{corr:admiss}
@@ -791,44 +787,17 @@ Each LOOP $\alpha$ rule is admissible in the proof system $\beta$,
         where $\alpha, \beta \in \{\mathrm{II, III, IV, V}\}$.
 \end{corollary}
 
-QUESTION: IF WE KEEP IT, SHOULD WE PROVE IT?  \\
-*** ERO: Detailed proof is too much tedious work. 
+QUESTION: IF WE KEEP IT, SHOULD WE PROVE IT?  
 
 
 END OPTIONAL
 
-% \medskip
-% 
-% \NI
-% KRA: MY SUGGESTION: USE IN THIS AS BEGINNING OF THIS APPENDIX
-% 
-% As explained in Subsection \ref{subsec:structure} to establish Theorem
-% \ref{thm:abo} it suffices to prove six times the claims of Lemma
-% \ref{lem:equ} for each pair of rules
-% \[
-%   (R_1, R_2) \in \C{(\mathrm{II}, \mathrm{III}),
-%     (\mathrm{III},\mathrm{II}),
-%     (\mathrm{III}, \mathrm{IV}),
-%     (\mathrm{IV}, \mathrm{III}),
-%     (\mathrm{II}, \mathrm{V}),
-%     (\mathrm{V},  \mathrm{II})},
-% \]
-% each time for an appropriate set of rules $\AUX$.
-% For convenience we group together the proofs of admissibility and the
-% proofs of derivability. More specifically, we prove two lemmas stated
-% below.
-% 
-% ...
-
-% Theorem \ref{thm:aux1} clarifies how closely related the LOOP II-V
-% rules are.  Theorem \ref{thm:aux2} shows that the applications of the
-% auxiliary rules can be eliminated.  When trying to extend Theorem
-% \ref{thm:abo} to other programming constructs we only need to adjust
-% the proof of Theorem \ref{thm:aux2}. In practice it means adding new
-% cases concerned with these constructs.
 
 END
 
+\III
+
+\NI
 KRA: MATERIAL BELOW REMAINS UNCHANGED.
 APPENDICES HAVE TO BE PRODUCED FROM THE PREVIOUS MATERIAL.
 
