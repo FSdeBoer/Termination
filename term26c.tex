@@ -691,7 +691,7 @@ RULE \label{rul:intro} $\te$-INTRODUCTION \\
       { \HT{\te z_0:p}{S}{q}    }
 \]
 \NI
-where $z$ is a \emph{logical} variable that does not occur  in $\mathit{free}(q)$.
+where $z_0$ is a \emph{logical} variable that does not occur  in $\mathit{free}(q)$.
 \III
 
 To reason about the LOOP IV rule we adopt the following auxiliary
@@ -772,13 +772,14 @@ Theorem \ref{thm:abo} states six equivalences. However, thanks to the
 transitivity of the equivalence relation, it suffices to prove three
 of them. We found it most convenient to deal with the equivalence of
 the following three pairs of proof systems: (II, III), (III, IV), and
-(II, V).  To this end we invoke six times Lemma \ref{lem:equ}, each
+(II, V).  To this end we, invoke six times Lemma~\ref{lem:equ}, each
 time establishing its assumptions for an appropriate pair of LOOP
 rules $R_1$ and $R_2$ and a specific set of rules $\AUX$ drawn from
 the set of auxiliary rules listed in the previous section, augmented
 with the CONSEQUENCE rule (that also is an adaptation rule).
 
-The proofs are given in Appendix~\ref{sec:aux}.
+The proofs are given in Appendix~\ref{sec:proof-derivability}
+and Appendix~\ref{sec:proof-admissibility}.
 
 BEGIN OPTIONAL (OTHERWISE THIS SUBSECTION IS TOO SHORT)
 
@@ -790,32 +791,34 @@ Each LOOP $\alpha$ rule is admissible in the proof system $\beta$,
         where $\alpha, \beta \in \{\mathrm{II, III, IV, V}\}$.
 \end{corollary}
 
-QUESTION: IF WE KEEP IT, SHOULD WE PROVE IT?
+QUESTION: IF WE KEEP IT, SHOULD WE PROVE IT?  \\
+*** ERO: Detailed proof is too much tedious work. 
+
 
 END OPTIONAL
 
-\medskip
-
-\NI
-KRA: MY SUGGESTION: USE IN THIS AS BEGINNING OF THIS APPENDIX
-
-As explained in Subsection \ref{subsec:structure} to establish Theorem
-\ref{thm:abo} it suffices to prove six times the claims of Lemma
-\ref{lem:equ} for each pair of rules
-\[
-  (R_1, R_2) \in \C{(\mathrm{II}, \mathrm{III}),
-    (\mathrm{III},\mathrm{II}),
-    (\mathrm{III}, \mathrm{IV}),
-    (\mathrm{IV}, \mathrm{III}),
-    (\mathrm{II}, \mathrm{V}),
-    (\mathrm{V},  \mathrm{II})},
-\]
-each time for an appropriate set of rules $\AUX$.
-For convenience we group together the proofs of admissibility and the
-proofs of derivability. More specifically, we prove two lemmas stated
-below.
-
-...
+% \medskip
+% 
+% \NI
+% KRA: MY SUGGESTION: USE IN THIS AS BEGINNING OF THIS APPENDIX
+% 
+% As explained in Subsection \ref{subsec:structure} to establish Theorem
+% \ref{thm:abo} it suffices to prove six times the claims of Lemma
+% \ref{lem:equ} for each pair of rules
+% \[
+%   (R_1, R_2) \in \C{(\mathrm{II}, \mathrm{III}),
+%     (\mathrm{III},\mathrm{II}),
+%     (\mathrm{III}, \mathrm{IV}),
+%     (\mathrm{IV}, \mathrm{III}),
+%     (\mathrm{II}, \mathrm{V}),
+%     (\mathrm{V},  \mathrm{II})},
+% \]
+% each time for an appropriate set of rules $\AUX$.
+% For convenience we group together the proofs of admissibility and the
+% proofs of derivability. More specifically, we prove two lemmas stated
+% below.
+% 
+% ...
 
 % Theorem \ref{thm:aux1} clarifies how closely related the LOOP II-V
 % rules are.  Theorem \ref{thm:aux2} shows that the applications of the
@@ -1153,7 +1156,7 @@ END
 \subsection{Proof outlines}
 
 Even though the LOOP rules for proving termination are equivalent in
-the sense of Theorem \ref{thm:main}, they lead to different proofs of
+the sense of Theorem \ref{thm:abo}, they lead to different proofs of
 total correctness of \textbf{while} programs.  This clearly holds for
 the LOOP V rule which does not involve an explicit bound function but
 uses the invariant for the specification of a bound.  But also the
@@ -1800,6 +1803,7 @@ RULE  LOOP
 % % IV rules.
 % % Let us explain now the relevance of Theorem \ref{thm:book}.
 
+\newpage
 
 \section{Derivability of the LOOP Rules}
 \label{sec:proof-derivability}
