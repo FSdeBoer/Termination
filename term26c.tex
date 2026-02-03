@@ -186,29 +186,24 @@ may refer to both types of variables.  Logical variables are the only
 variables that can be quantified over. They are used in assertions as
 \bfe{freeze} variables.
 
-\NI
-END
-
 Below we denote by $\mathit{free}(p)$
 the set of free variables of the assertion $p$ and by $var(t)$, $var(B)$, and $var(S)$ 
 the set of variables that appear in the
 expression $t$, the Boolean expression $B$, and the program $S$, respectively.
-
-\III
-\NI
-ADDED NOTATION SUBSTITUTION
-
-\NI KRA (28-01): I WOULD LIKE TO SUGGEST TO DELETE
-THE SECOND SENTENCE: IT IS A STANDARD DEFINITION. ALSO WE NEVER HAVE
-TO PERFORM SUCH A RENAMING. *** ERO: ???
-
+%
+% ADDED NOTATION SUBSTITUTION
+% 
+% \NI KRA (28-01): I WOULD LIKE TO SUGGEST TO DELETE
+% THE SECOND SENTENCE: IT IS A STANDARD DEFINITION. ALSO WE NEVER HAVE
+% TO PERFORM SUCH A RENAMING. 
+%
 We denote by $p[x:=t]$ the result of substituting all free occurrences
-of the variable $x$ in $p$ by the expression $t$. The standard
-definition takes care by means of renaming of bound variables that
-after the replacement no variable of $t$ becomes bound in $p$.
+of the variable $x$ in $p$ by the expression $t$. 
 
-\NI
-END
+% The standard
+% definition takes care by means of renaming of bound variables that
+% after the replacement no variable of $t$ becomes bound in $p$.
+
 
 We shall consider in total five proof systems concerned with the
 correctness formulas. They only differ in the used LOOP rule.
@@ -228,8 +223,6 @@ RULE LOOP I
 \III
 
 
-
-
 In the proof system II, this rule  is replaced by
 \III
 
@@ -244,17 +237,11 @@ RULE LOOP II
   \HT{p}{\WDD{B}{S}}{p \A \neg\ B}
  \end{array}
 \]
-
-\III
-\NI
-KRA: (28-01) I WOULD LIKE TO SUGGEST TO DELETE BELOW 'free' (IT WAS '(free)'). NOTHING IS LOST
-BY SUCH A STRONGER REQUIREMENT.  *** ERO: ???
-
-\NI
 where $t$ is an integer expression such that  $var(t)\subseteq \mbox{\it pvar}$
-and $z$ is a \emph{logical} integer variable that
-does not appear free in $p$.
+and $z$ is a \emph{logical} integer variable that does not appear in $p$.
 
+% KRA: (28-01) I WOULD LIKE TO SUGGEST TO DELETE 'free' (IT WAS '(free)'). NOTHING IS LOST
+% BY SUCH A STRONGER REQUIREMENT.  
 
 \III
 
@@ -461,14 +448,7 @@ reasoning about termination along the lines of LOOP IV rule.
 \III
 \NI
 
-% THE FOLLOWING  MODIFICATION USED UPFRONT TO EXPLAIN THE GENERAL APPROACH
-% AS DESCRIBED IN LEMMA 1.
 
-% ERO: I would prefer that these two versions of implications
-% are not discussed in the main flow of the paper, but in a section
-% on further variants of proof rules.
-
-% \medskip
 
 A careful reader will notice that in the LOOP II, III and IV rules we
 imposed the restriction $var(t) \subseteq \mbox{\it pvar}$ on the
@@ -479,11 +459,8 @@ Further, the last premise of each of the LOOP rules II-V and their
 variants can also be modified, by considering in each case the
 implication $p \A B \ra t \geq 0$ instead of $p \ra t \geq 0$. 
 
-KRA: ADDED SENTENCE. THE REST OF THE MATERIAL MOVED TO A LATER SECTION ON PROOFS OF THE RULES
-MODIFICATIONS.
-
 We shall return to these modifications in Appendix \ref{app:mod},
-where we prove that they are all inessential.
+where we prove that they are all inessential.  \texttt{*** ToDo ***}
 
 
 
@@ -508,9 +485,6 @@ proof theory.
 
 \subsection{Admissibility and Derivability}
 
-
-KRA: (29-01): NEW VERSION OF THIS SUBSECTION; CHANGES STARTING WITH 'START'
-
 Assume a given language that is determined by its set of formulas.  In
 what follows we assume that all considered axioms, proof rules, and
 proof systems are concerned with the same language.
@@ -525,9 +499,6 @@ $T$ using as additional axioms the formulas
 $\phi_1, \LL, \phi_m$.  We also use this notation when the sequence
 $\phi_1, \LL, \phi_m$ is empty and when $T$ is a set of proof
 rules.
-
-\NI
-'START'
 
 Given a proof system $T$ and a proof rule (in short: a rule) $R$ we
 abbreviate $T \cup \C{R}$ to $T \cup R$. Given two proof systems $T_1$
@@ -762,8 +733,6 @@ In the context of Hoare's logic such rules are sometimes called \emph{adaptation
 \subsection{Structure of the Proof}
 \label{subsec:structure}
 
-KRA: (29-01) NEW VERSION
-
 Theorem \ref{thm:abo} comprises six equivalences. However, thanks to the
 transitivity of the equivalence relation, it suffices to prove three
 of them. We found it most convenient to deal with the equivalence of
@@ -773,27 +742,30 @@ time establishing its assumptions for an appropriate pair of LOOP
 rules $R_1$ and $R_2$ and a specific set of rules $\AUX$ drawn from
 the set of auxiliary rules listed in the previous section, augmented
 with the CONSEQUENCE rule (that also is an adaptation rule).
+The details are given in Appendix~\ref{sec:proof}.
 
-The proofs are given in Appendix~\ref{sec:proof-derivability}
-and Appendix~\ref{sec:proof-admissibility}.
-
-BEGIN OPTIONAL (OTHERWISE THIS SUBSECTION IS TOO SHORT)
-
-To close this discussion note the following immediate consequence of Theorem~\ref{thm:abo}
+To close this discussion note the following consequence of Theorem~\ref{thm:abo}
 and Lemma \ref{lem:AUX}.
 
 \begin{corollary} \label{corr:admiss}
-Each LOOP $\alpha$ rule is admissible in the proof system $\beta$, 
+Each {\rm LOOP} $\alpha$ rule is admissible in the proof system $\beta$, 
         where $\alpha, \beta \in \{\mathrm{II, III, IV, V}\}$.
 \end{corollary}
 
-QUESTION: IF WE KEEP IT, SHOULD WE PROVE IT?  
+\NI
+KRA: IF WE KEEP IT, SHOULD WE PROVE IT?  \\
+*** ERO: PROOF ADDED.
 
 
-END OPTIONAL
+\begin{proof}
+We show this for the case $\alpha$ = II and $\beta$ = III.
+By Theorem~\ref{thm:abo}, proof system~II is equivalent to proof system~III,
+so: proof system III $\approx$ proof system~III $\cup$ LOOP II.
+By Lemma~\ref{lem:AUX}(i), LOOP II is admissible in proof system III.
+\HB
+\end{proof}
 
 
-END
 
 \III
 
@@ -827,7 +799,8 @@ the soundness of the other rule.
 ADDED
 
 This deduction follows from the derivability results stated
-in the  main Theorem \ref{thm:main} and the soundness of the
+in Lemma~\ref{lem:derivability} % the  main Theorem \ref{thm:main} 
+and the soundness of the
 auxiliary rules.
 For example, suppose now that the LOOP II rule is sound.
 Since the LOOP III rule is derivable from the
@@ -1772,14 +1745,17 @@ RULE  LOOP
 % % IV rules.
 % % Let us explain now the relevance of Theorem \ref{thm:book}.
 
+
+
 \newpage
 
-\section{Derivability of the LOOP Rules}
-\label{sec:proof-derivability}
+\section{Proof of the Equivalence Theorem~\ref{thm:abo}}
+\label{sec:proof}
 
-As explained in Subsection \ref{subsec:structure}, to establish Theorem
-\ref{thm:abo} (The proof systems II--V are equivalent.)
-it suffices to prove six times the claims of Lemma~\ref{lem:equ} for each pair of rules
+As explained in Subsection \ref{subsec:structure}, to prove 
+Theorem~\ref{thm:abo} (The proof systems II--V are equivalent.),
+it suffices to instantiate Lemma~\ref{lem:equ}, 
+for each of the six pair of rules
 \[
   (R_1, R_2) \in \C{(\mathrm{II}, \mathrm{III}),
     (\mathrm{III},\mathrm{II}),
@@ -1788,13 +1764,14 @@ it suffices to prove six times the claims of Lemma~\ref{lem:equ} for each pair o
     (\mathrm{II}, \mathrm{V}),
     (\mathrm{V},  \mathrm{II})},
 \]
-each time for an appropriate set of rules $\AUX$.
-We first deal with the derivability, instantiating item \emph{(i)} of Lemma~\ref{lem:equ}.
-%
-% KRAs desire:
-% For convenience we group together the proofs of admissibility and the
-% proofs of derivability. More specifically, we prove two lemmas stated
-% below.
+and each time for an appropriate set of rules $\AUX$.
+
+
+\subsection{Derivability of the LOOP Rules}
+\label{subsec:proof-derivability}
+
+We first deal with the derivability.
+% instantiating part (i) of Lemma~\ref{lem:equ}.
 
 
 \begin{lemma}[Derivability] \label{lem:derivability}
@@ -2004,14 +1981,14 @@ $\HT{p}{\WDD{B}{S}}{p \wedge \neg B}$.
 
 
 
+\subsection{Admissibility of the Auxiliary Rules}
+\label{subsec:proof-admissibility}
 
-
-\section{Admissibility of the Auxiliary Rules}
-\label{sec:proof-admissibility}
-
-We now instantiate item \emph{(ii)} of Lemma~\ref{lem:equ}.
+% We now instantiate part (ii) of Lemma~\ref{lem:equ}.
 We show the admissibility of each auxiliary rule in the proof system
 with the LOOP rule that used this auxiliary rule according to Lemma~\ref{lem:derivability}. 
+Additionally, we prove statement (i) of Lemma~\ref{lem:admissibility} 
+because it is needed in the proof of statement (iii).
 Since the CONSEQUENCE rule is included in all these proof systems,
 its admissibility is trivial.
 
@@ -2636,6 +2613,30 @@ By the CONSEQUENCE rule $\vdash_{\rm{II}} \HT{p[x:=t_0]}{S}{q[x:=t_0]}$, as
 desired.
 \HB
 \end{proof}
+
+
+\subsection{Instantiating Lemma~\ref{lem:equ}}
+\label{subsec:instantiate}
+
+We show how to obtain Theorem~\ref{thm:abo} by instantiating Lemma~\ref{lem:equ}
+using Lemma~\ref{lem:derivability} and Lemma~\ref{lem:admissibility}.
+We treat the following case: proof system II $\approx$ proof system III.
+
+Using Lemma~\ref{lem:derivability}(i) and Lemma~\ref{lem:admissibility}(ii), 
+we instantiate Lemma~\ref{lem:equ} with $T$ being the axiom and the proof rules of 
+Appendix~\ref{sec:I} without the LOOP I rule:
+\[
+ T \cup \mathrm{LOOP\ II}\ \preceq\ T \cup \mathrm{LOOP\ III},
+\]
+i.e., proof system II $\preceq$ proof system III.
+Using Lemma~\ref{lem:derivability}(ii) and Lemma~\ref{lem:admissibility}(iii), 
+we instantiate Lemma~\ref{lem:equ} with $T$ as above:
+\[
+ T \cup \mathrm{LOOP\ III}\ \preceq\ T \cup \mathrm{LOOP\ II},
+\]
+i.e., proof system III $\preceq$ proof system II.
+So altogether proof system II $\approx$ proof system III.
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
