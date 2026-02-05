@@ -1747,7 +1747,6 @@ RULE  LOOP
 
 
 
-\newpage
 
 \section{Proof of the Equivalence Theorem~\ref{thm:abo}}
 \label{sec:proof}
@@ -1824,21 +1823,22 @@ by the CONSEQUENCE rule
 both
 \[
  \HT{p \A B \A t=z}{S}{p} \quad \mbox{\rm and} \quad
-\HT{p \A B \A t=z}{S}{t<z}.
+\HT{p \A B \A t=z}{S}{t<z},
 \]
+which is the second premise of the LOOP III rule.
 Next, by the $\te$-INTRODUCTION rule, we derive 
 \[
- \HT{\te z: p \A B \A t=z}{S}{p}.
+ \HT{\te z: (p \A B \A t=z)}{S}{p}.
 \]
 from
 $\HT{p \A B \A t=z}{S}{p}$.
 Since $z$ is a logical variable that does not appear
-free in $p$ or $t$ (note that by assumption $\mbox{\it var}(t)\subseteq \mbox{\it pvar}$), we have
+in $p$ or $t$ (note that by assumption $\mbox{\it var}(t)\subseteq \mbox{\it pvar}$), we have
 \[
-  p \A B \to (p \A B \A \te z: t=z) \to  (\te z: p \A B \A t=z),
+  p \A B \to (p \A B \A \te z: t=z) \to  \te z: (p \A B \A t=z),
 \]
 (note that by definition also $\mbox{\it var}(B)\subseteq \mbox{\it pvar}$).
-By the CONSEQUENCE rule, we derive the premise
+By the CONSEQUENCE rule, we derive also the first premise
 $\HT{p \A B}{S}{p}$ of the LOOP III rule.
 
 Since by assumption $p \ra t \geq 0$ holds, we can apply
@@ -1878,9 +1878,10 @@ we derive
 $$\HT{p \A B}{S}{p} \quad
 \mbox{\rm and} \quad
 \HT{p \A B \A t=z}{S}{t<z}$$
-by two applications of the HYBRID CONJUNCTION rule.
+by two applications of the HYBRID CONJUNCTION rule
+and the CONSEQUENCE rule.
 Since by assumption $p \ra t \geq 0$ holds, we can apply
-the LOOP III rule to obtain the desired conclusion
+the LOOP~III rule to obtain the desired conclusion
 $\HT{p}{\WDD{B}{S}}{p \A \neg B}$.
 \III
 
@@ -1909,7 +1910,9 @@ $\HT{p}{\WDD{B}{S}}{p \A \neg B}$.
 \NI
 $(v)$ 
 Given the premises
-$$\HT{p(x)\wedge B}{S}{\exists y: p(y)\wedge y< x}$$
+\[
+ \HT{p(x)\wedge B}{S}{\exists y: p(y)\wedge y< x}
+\]
 and $p(x)\rightarrow x\geq 0$ of the LOOP V rule,
 we want to introduce a \emph{Skolem function}   $f(\bar{u})$,
 where $\bar{u}$ denotes the list of  free variables of $p(x)$,  the variable $x$ excluded,
@@ -1925,56 +1928,65 @@ However, in case $p(x)$ contains logical variables
 this representation does not satisfy the requirement
 that $\mbox{\it var}(t)\subseteq\mbox{\it pvar}$.
 Therefore we first apply the SUBSTITUTION rule to obtain
-$$\HT{p'(x)\wedge B}{S}{\exists y: p'(y)\wedge y< x}$$
-where $p'(x)$ results fro replacing every logical variable
+\[
+ \HT{p'(x)\wedge B}{S}{\exists y: p'(y)\wedge y< x}
+\]
+where $p'(x)$ results from replacing every logical variable
 in $p(x)$ (excluding $x$) by a fresh \emph{program} variable.
 Let $\bar{u}$ denote the list of free variables of $p'(x)$
 and $f(\bar{u})$ be a Skolem function such that
 $(\exists x:p'(x))\rightarrow p'(f(\bar{u}))$
 and $p'(x)\rightarrow f(\bar{u})\leq x $. 
 It follows that
-$$
+\[
 (\exists y: p'(y)\wedge y< x)\to
 ((\exists x:p'(x)) \wedge f(\bar{u})< x)
-$$
+\]
 and
-$$
+\[
 ((\exists x:p'(x)) \wedge f(\bar{u})=x)\to
 p'(x).
-$$
+\]
 An application of
 the CONSEQUENCE rule then
 gives
-$$\HT{(\exists x:p'(x))\wedge B\wedge f(\bar{u})=x}{S}{(\exists x:p'(x))\wedge f(\bar{u})<x}.$$
+\[
+ \HT{(\exists x:p'(x))\wedge B\wedge f(\bar{u})=x}{S}{(\exists x:p'(x))\wedge f(\bar{u})<x}.
+\]
 Further, we have $(\exists x:p'(x)) \rightarrow f(\bar{u})\geq 0$.
 So we can apply 
 the LOOP II rule with $t \equiv f(\bar{u})$ to obtain 
-$\HT{\exists x: p'}{\WDD{B}{S}}{\exists x:p'  \A \neg B}$.
+$\HT{\exists x: p'(x)}{\WDD{B}{S}}{\exists x:p'(x)  \A \neg B}$.
 Finally, we obtain the desired conclusion
-$\HT{\exists x: p}{\WDD{B}{S}}{\exists x:p  \A \neg B}$
+$\HT{\exists x: p(x)}{\WDD{B}{S}}{\exists x:p(x)  \A \neg B}$
 by an application of the SUBSTITUTION rule.
 \III
 
 \NI
 $(vi)$ Given the premises
-$$\HT{p\wedge B\wedge t=z}{S}{p\wedge t<z}$$
+\[
+ \HT{p\wedge B\wedge t=z}{S}{p\wedge t<z}
+\]
 and $p\rightarrow t\geq 0$ of the LOOP II rule.
 Let
 $p'(z)$ denote the assertion $p\wedge t=z$.
-
-Then for any fresh variable $y$ the implication
-$(p\wedge t<z)\rightarrow \exists y:p\wedge t=y \wedge y<z)$ holds.
-By the CONSEQUENCE rule we thus obtain
-$$\HT{p'(z)\wedge B}{S}{\exists y: p'(y)\wedge y< z}.$$
-
+For any fresh variable $y$ the implication
+\[
+ (p\wedge t<z)\rightarrow \exists y: (p\wedge t=y \wedge y<z)
+\]
+holds. By the CONSEQUENCE rule, we thus obtain
+\[
+ \HT{p'(z)\wedge B}{S}{\exists y: (p'(y)\wedge y< z)}.
+\]
 Further, $p\rightarrow t\geq 0$ implies
 $p'(z)\rightarrow z\geq 0$.
-So applying the LOOP V rule we obtain 
-$$\HT{\exists z:p'}{\WDD{B}{S}}{(\exists z:p') \wedge  \neg B}.$$
-
-But $(\exists z:p')\leftrightarrow p$, 
-so by a trivial  application of the CONSEQUENCE rule
-we derive the desired conclusion
+So applying the LOOP V rule, we obtain 
+\[
+ \HT{\exists z:p'(z)}{\WDD{B}{S}}{(\exists z:p'(z)) \wedge  \neg B}.
+\]
+Since  $(\exists z:p'(x))\leftrightarrow p$, 
+a trivial  application of the CONSEQUENCE rule
+yields the desired conclusion
 $\HT{p}{\WDD{B}{S}}{p \wedge \neg B}$.
 \HB
 \end{proof}
@@ -1984,9 +1996,9 @@ $\HT{p}{\WDD{B}{S}}{p \wedge \neg B}$.
 \subsection{Admissibility of the Auxiliary Rules}
 \label{subsec:proof-admissibility}
 
-% We now instantiate part (ii) of Lemma~\ref{lem:equ}.
 We show the admissibility of each auxiliary rule in the proof system
-with the LOOP rule that used this auxiliary rule according to Lemma~\ref{lem:derivability}. 
+with the version of the LOOP rule that used this auxiliary rule 
+according to Lemma~\ref{lem:derivability}. 
 Additionally, we prove statement (i) of Lemma~\ref{lem:admissibility} 
 because it is needed in the proof of statement (iii).
 Since the CONSEQUENCE rule is included in all these proof systems,
@@ -2011,10 +2023,10 @@ The following admissibility results hold:
    
     \vspace{2mm}
 
-   \item The {\rm HYBRID CONJUNCTION} rule is admissible in the proof system {\rm III},
-         that is, \\
-         if $\vdash_{\rm{I}} \HT{p_1}{S}{q_1}$ and $\vdash_{\rm{III}} \HT{p_2}{S}{q_2}$, then
-         $\vdash_{\rm{III}} \HT{p_1 \A p_2}{S}{q_1 \A q_2}$.
+   \item The {\rm HYBRID CONJUNCTION} rule is admissible in the proof system {\rm III}.
+%          that is, \\
+%          if $\vdash_{\rm{I}} \HT{p_1}{S}{q_1}$ and $\vdash_{\rm{III}} \HT{p_2}{S}{q_2}$, then
+%          $\vdash_{\rm{III}} \HT{p_1 \A p_2}{S}{q_1 \A q_2}$.
          
     \vspace{2mm}
          
@@ -2081,12 +2093,16 @@ $(ii)$ The argument is analogous as in $(ii)$.
 \HB
 \end{proof}
 
+
+
 We now turn to the proof of Lemma~\ref{lem:admissibility}, 
 repeating each time the statement to be proved.
 
 \begin{proof}
  \mbox{} \\
-\noindent
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\NI
 $(i)$  The $\te$-{\rm INTRODUCTION} rule is admissible in the proof system {\rm II}.
 
 We proceed by induction on the structure of $S$
@@ -2095,7 +2111,7 @@ the last two steps involve an axiom or a rule of the proof system \rm{II} for
 the top-level operator of the program $S$, 
 followed by one final application of the CONSEQUENCE rule
 according to Lemma~\ref{lemma:1}.
-In all cases we assume that $x \not\in var(S) \cup \mathit{free}(q)$.
+In all cases we assume that $z_0 \not\in var(S) \cup \mathit{free}(q)$.
 
 \III
 
@@ -2109,14 +2125,14 @@ Then for some assertion $q_1$,
 by the ASSIGNMENT axiom,
 and the implications 
 $p \ra q_1[u:=t]$ and $q_1 \ra q$ hold.
-Since $z \in lvar$, we have $z \not \equiv u$. 
+Since $z_0 \in lvar$, we have $z_0 \not \equiv u$. 
 By the assignment axiom, also
 \[
- \HT{[\te z_0:q_1)[u:=t]}{S}{\te z_0:q_1}.
+ \HT{(\te z_0:q_1)[u:=t]}{S}{\te z_0:q_1}.
 \]
 Note that the implications 
 $\te z_0:p \ra \te z_0: (q_1[u:=t])$ and $\te z_0: q_1 \ra \te z_0: q$ hold.
-Since $z \not \equiv u$ and $z \not\in \mathit{free}(q)$, 
+Since $z_0 \not \equiv u$ and $z_0 \not\in \mathit{free}(q)$, 
 also the implications 
 \[
  \te z_0: (q_1[u:=t]) \ra (\te z_0:q_1)[u:=t] \ \mbox{ and }\  (\te z_0:q) \ra q
@@ -2138,9 +2154,9 @@ for some assertion $r$,
 \]
 Since $r \ra \te z_0:r$, the CONSEQUENCE rule yields
 $\vdash_{\rm{II}}  \HT{p}{S_1}{\te z_0: r}$.
-Since $z \not \in \mathit{free}(\te z_0: r)$, the induction hypothesis yields
+Since $z_0 \not \in \mathit{free}(\te z_0: r)$, the induction hypothesis yields
 $\vdash_{\rm{II}}  \HT{\te z_0: p}{S_1}{\te z_0: r}$.
-Since $z \not\in \mathit{free}(q)$, 
+Since $z_0 \not\in \mathit{free}(q)$, 
 by the induction hypothesis, also $\vdash_{\rm{II}}  \HT{\te z_0: r}{S_2}{q}$.
 Thus by the COMPOSITION  rule, 
 $\vdash_{\rm{II}}  \HT{\te z_0: p}{S}{q}$, as desired.
@@ -2161,7 +2177,7 @@ By the induction hypothesis,
  \vdash_{\rm{II}} \HT{\te z_0: (p \A B)}{S_1}{q}  \mbox{ and }
  \vdash_{\rm{II}} \HT{\te z_0: (p \A \neg B)}{S_2}{q}.
 \]
-Since $x \not\in var(B)$, the CONSEQUENCE rule yields
+Since $z_0 \not\in var(B)$, the CONSEQUENCE rule yields
 \[
  \vdash_{\rm{II}} \HT{(\te z_0: p) \A B}{S_1}{q}  \mbox{ and }
  \vdash_{\rm{II}} \HT{(\te z_0: p) \A \neg B}{S_2}{q}.
@@ -2190,7 +2206,7 @@ Since $(p_0\wedge t<z) \ra ((\te z_0: p_0)\wedge t<z) $, the CONSEQUENCE rule yi
 \[
  \vdash_{\rm{II}} \HT{p_{0} \A B \A t=z}{S_0}{(\te z_0: p_{0})\wedge t<z }.
 \]
-By the induction hypothesis, the assumption about $x$,
+By the induction hypothesis, the assumption about $z_0$,
 and the CONSEQUENCE rule 
 \[
  \vdash_{\rm{II}} \HT{(\te z_0:p_0) \A B \A t = z}{S_0}{(\te z_0:p_0)\A t < z}.
@@ -2200,14 +2216,15 @@ So the LOOP II rule yields
  \vdash_{\rm{II}} \HT{\te z_0:p_0}{S}{(\te z_0:p_0) \A \neg B}.
 \]
 Further, since $(p_{0} \A \neg B) \ra q$ holds and
-$x \not\in (\mathit{free(q)} \cup var(B))$, also the implication
+$z_0 \not\in (\mathit{free(q)} \cup var(B))$, also the implication
 $((\te z_0:p_0) \A \neg B) \ra q$ holds.  So a final application of the
 CONSEQUENCE rule yields $\vdash_{\rm{II}} \HT{\te z_0:p}{S}{q}$, as
 desired.
 
 \III
 
-\noindent
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\NI
 $(ii)$ The $\te$-{\rm INTRODUCTION} rule is admissible in the proof system {\rm III}.
 
 Again, we proceed by induction on the structure of $S$,
@@ -2242,7 +2259,7 @@ Since $p_0 \ra \te z_0: p_0$, the CONSEQUENCE rule yields
 \[
  \vdash_{\rm{III}} \HT{p_{0} \A B}{S_0}{\te z_0: p_{0}}.
 \]
-By the induction hypothesis, the assumption about $x$,
+By the induction hypothesis, the assumption about $z_0$,
 and the CONSEQUENCE rule both
 \[
  \vdash_{\rm{III}} \HT{(\te z_0:p_0) \A B}{S_0}{\te z_0: p_{0}}
@@ -2256,13 +2273,14 @@ So the LOOP III rule yields
  \vdash_{\rm{III}} \HT{\te z_0:p_0}{S}{(\te z_0:p_0) \A \neg B}.
 \]
 Further, since $(p_{0} \A \neg B) \ra q$ holds and
-$x \not\in (\mathit{free(q)} \cup var(B))$, also the implication
+$z_0 \not\in (\mathit{free(q)} \cup var(B))$, also the implication
 $((\te z_0:p_0) \A \neg B) \ra q$ holds.  So a final application of the
 CONSEQUENCE rule yields $\vdash_{\rm{III}} \HT{\te z_0:p}{S}{q}$, as
 desired.
 
 \III
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \NI
 $(iii)$ The {\rm CONJUNCTION} rule is admissible in the proof system {\rm II}.
 
@@ -2416,6 +2434,7 @@ Thus by the CONSEQUENCE rule,
 as desired.
 \III
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \NI
 $(iv)$ The {\rm HYBRID CONJUNCTION} rule is admissible in the proof system {\rm III},
 that is,
@@ -2458,8 +2477,7 @@ and by the induction hypothesis combined with the CONSEQUENCE rule,
  \vdash_{\rm{III}} \HT{p_{01} \A p_{02} \A B \A t = z}{S_0}
                      {t < z}.
 \]
-
-So by the LOOP II rule,
+Since $p_{01} \A p_{02} \ra t \ge 0$, the LOOP III rule yields
 \[
   \vdash_{\rm{III}} \HT{p_{01} \A p_{02}}{\WDD{B}{S_0}}{p_{01} \A p_{02} \A \neg B}.
 \]
@@ -2474,6 +2492,7 @@ as desired.
 
 \III
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \NI
 $(v)$ The {\rm PARTIAL CORRECTNESS} rule is admissible in the proof system {\rm IV}.
 
@@ -2487,10 +2506,9 @@ LOOP IV rule, we obtain a proof of \HT{p}{S}{q} in the proof system I
 using only the LOOP I rule. Thus $\vdash_{\rm{I}} \HT{p}{S}{q}$. 
 
 
-\newpage
-
 \III
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \NI
 $(vi)$ The {\rm SUBSTITUTION} rule is admissible in the proof system {\rm II}.
 
@@ -2501,7 +2519,7 @@ the top-level operator of the program $S$,
 followed by one final application of the CONSEQUENCE rule
 according to Lemma~\ref{lemma:1}.
 In all cases we assume that $x$ is a logical variable with $x \not\in var(S)$
-and $var(t) \cap var(S) = \emptyset$.
+and $var(t_0) \cap var(S) = \emptyset$.
 \III
 
 \NI
