@@ -749,9 +749,6 @@ Each {\rm LOOP} $\alpha$ rule is admissible in the proof system $\beta$,
         where $\alpha, \beta \in \{\mathrm{II, III, IV}\}$.
 \end{corollary}
 
-\NI
-ERO: LAST LINE OF PROOF CHANGED
-
 
 \begin{proof}
   $T$ be the proof system from Appendix~\ref{sec:I} without the LOOP I
@@ -1731,14 +1728,12 @@ These assertions are used as premises in the CONSEQUENCE rule.
 As explained in Subsection \ref{subsec:structure}, to prove the
 Equivalence Theorem~\ref{thm:abo} (The proof systems II--V are equivalent.),
 it suffices to instantiate Lemma~\ref{lem:equ}, 
-for each of the six pair of rules
+for each of the four pair of rules
 \[
   (R_1, R_2) \in \C{(\mathrm{II}, \mathrm{III}),
     (\mathrm{III},\mathrm{II}),
     (\mathrm{III}, \mathrm{IV}),
-    (\mathrm{IV}, \mathrm{III}),
-    (\mathrm{II}, \mathrm{V}),
-    (\mathrm{V},  \mathrm{II})},
+    (\mathrm{IV}, \mathrm{III})}
 \]
 and each time for an appropriate set of rules $\AUX$.
 
@@ -2506,17 +2501,11 @@ using only the LOOP I rule. Thus $\vdash_{\rm{I}} \HT{p}{S}{q}$.
 \subsection{Instantiating Lemma~\ref{lem:equ}}
 \label{subsec:instantiate}
 
-
-ERO: SLIGHTLY SHORTENED AND MADE SIMILAR TO PROOF OF COR.~1
-
-\III
-
-\NI
 Finally, we explain how to obtain the Equivalence Theorem~\ref{thm:abo} by instantiating Lemma~\ref{lem:equ}
 using Lemma~\ref{lem:derivability} and Lemma~\ref{lem:admissibility}.
 We show one illustrative case: proof system II $\approx$ proof system III.
 
-Let $T$ being the proof system from Appendix~\ref{sec:I} without the LOOP I rule.
+Let $T$ be the proof system from Appendix~\ref{sec:I} without the LOOP I rule.
 Then, using Lemma~\ref{lem:derivability}(i) and Lemma~\ref{lem:admissibility}(ii), 
 instantiating Lemma~\ref{lem:equ} yields
 \[
