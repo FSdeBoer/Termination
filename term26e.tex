@@ -446,19 +446,124 @@ carried out in the case of the LOOP IV rule.
 
 \III
 
-KRA: TO REVISE
+
+\subsection{Restrictions on bound functions}
+
+ERO (27 Feb 2026): NEW DISCUSSION -- WHERE TO PLACE IT ?
+\III
+
 
 A careful reader will notice that in the LOOP II, III and IV rules we
 imposed the restriction $var(t) \subseteq \mbox{\it pvar}$ on the
 variables of the bound function $t$ that is absent in the publications
 that use the LOOP II and III rules.
+The reason for this restriction is of technical nature: to be able 
+to complete the proofs.
+For showing in Lemma~\ref{lem:derivability} that the LOOP~II rule can
+be derived from the LOOP~II rule, we need the auxiliary rule
+$\exists$-INTRODUCTION. In turn, in Lemma~\ref{lem:admissibility}
+we prove that this auxiliary rule is admissible in the proof system III.
+This proof is by induction on the structure of while programs.
+The crucial case is that of a while loop. By induction hypothesis,
+we can deduce from 
+\[
+ \vdash_{\rm{III}} \HT{p_{0} \A B \A t = z}{S_0}{t < z}
+\]
+that
+\[
+ \vdash_{\rm{III}} \HT{\te z_0: (p_{0} \A B \A t = z)}{S_0}{\te z_0: (t < z)}.
+\]
+Now, to proceed successfully, we wish to deduce further 
+\[
+ \vdash_{\rm{III}} \HT{(\te z_0:p_0) \A B \A t = z}{S_0}{t < z}.
+\]
+This is possible if $z_0 \not\in var(B) \cup var(t)$ and $z_0 \neq z$.
+While the last inequality can be assumed w.l.o.g., the first condition
+is restrictive.
+Since $z_0$ is a logical variable and $var(B) \subseteq \mbox{\it pvar}$,
+the imposed restriction $var(t) \subseteq \mbox{\it pvar}$ makes this reasoning
+possible.
+
+In a previous version of this paper~\cite{ABO25}, 
+without the distinction of logical and program variables,
+we required for the bound function $t$ that $var(t) \subseteq var(B) \cup var(S_0)$
+holds. For the $\exists$-INTRODUCTION rule it was then required that 
+$z_0 \not\in var(B) \cup var(S_0)$.
+So again,  $z_0 \not\in var(B) \cup var(t)$.
+However, the  $var(t) \subseteq var(B) \cup var(S_0)$ is too restrictive 
+for some applications. In~\cite{ABO09}, we treat in Section 3.9 the case study
+``Partitioning an Array''. The partitioning program {\it PART} has nested
+while loops. When proving the termination of the inner loops we needed
+bound functions that refer to a variable that occur outside of these loops
+(see p.110 of~\cite{ABO09}), so the restriction is not satisfied.
+
+In this paper, we distinguish disjoint sets $\mbox{\it lvar}$ and $\mbox{\it pvar}$
+of logical variables and program variables, respectively.
+A logical variable appears as $z$ to freeze the value of the bound function $t$.
+The variables inside programs are all program variables.
+A bound function $t$ could contain both logical and program variables.
+Our requirement $var(t) \subseteq \mbox{\it pvar}$ is therefore a restriction.
+It enables the proof of Lemma~\ref{lem:admissibility}, as explained above.
+The restriction is weak enough for performing the termination proof
+of the partitioning program {\it PART}.
+
+What about a LOOP rule without any restriction on the bound function $t$\,?
+By using the following auxiliary SUBSTITUTION rule, see, e.g., \cite{ABO09},
+we can get rid of the remaining restriction.
+
+\III
+\NI
+RULE \label{rul:SUBST} SUBSTITUTION 
+\[ 
+ \frac{ \HT{p}{S}{q}          }
+      { \HT{p[x:=t_0]}{S}{q[x:=t_0]}    }
+\]
+where $x$ is a logical or a program variable
+that does not occur in $S$ and 
+$\mbox{\it var}(t_0)\cap \mbox{\it var}(S)=\emptyset$ ($t_0$ thus may contain logical variables).
+\III
+
+The idea is as follows. Suppose a termination proof with LOOP III rule
+requires a bound function $t$ containing logical variables.
+Then apply the substitution rule to replace these variables by fresh program variables.
+This leads to a new bound function $t'$ satisfying the restriction 
+$var(t') \subseteq \mbox{\it pvar}$. Then apply the LOOP III rule as usual.
+At the end, apply the reverse substitution to replace the fresh program variables
+back to the original logical variables.
+What about the status of the SUBSTITUTION rule\,?
+Regrettably, we have not been able to show that it is an admissible in the proof system III
+in the same way that we show it for the other auxiliary rules in Lemma~\ref{lem:admissibility}.
+In an attempted inductive proof, when it comes to the case of the while loop,
+we face the same problems than outlined above that we circumvented by
+restricting the bound function.
+
+
+
+
+
+\vspace{5mm}
+
+\NI
+TO BE RESOLVED 
+\\
+KRA: TO REVISE
 
 Further, the last premise of each of the LOOP rules II-IV and their
 variants can also be modified, by considering in each case the
 implication $p \A B \ra t \geq 0$ instead of $p \ra t \geq 0$. 
 
+ERO: Frank's proof required both the substition rule and the
+invariance rule. The more auxiliary rule we use, the more open ends
+or proof obligations are generated. 
+
+\III
+
 We shall return to these modifications in Appendix \ref{app:mod},
-where we prove that they are all inessential.  \texttt{*** ToDo ***}
+where we prove that they are all inessential. 
+
+ERO: Inessantial\,?  The substitution rule appears to be problematic
+in terms of admissibility.
+
 
 KRA: END TO REVISE
 
