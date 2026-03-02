@@ -190,6 +190,12 @@ variables. Programs refer only to program variables, while assertions
 may refer to both types of variables.  Logical variables are the only
 variables that can be quantified over. They are used in assertions as
 \bfe{freeze} variables.
+To keep things simple we assume that all program variables are simple
+variables of  type \textbf{integer}.
+
+ERO: AND WHAT ABOUT THE TYPE OF LOGICAL VARIABLES ?
+
+\III
 
 Below we denote by $\mathit{free}(p)$
 the set of free variables of the assertion $p$ and by $var(t)$, $var(B)$, and $var(S)$ 
@@ -210,7 +216,7 @@ of the variable $x$ in $p$ by the expression $t$.
 % after the replacement no variable of $t$ becomes bound in $p$.
 
 
-We shall consider in total five proof systems concerned with the
+We shall consider in total four proof systems concerned with the
 correctness formulas. They only differ in the used LOOP rule.
 
 Proof system I denotes the customary proof system allowing us to prove 
@@ -459,99 +465,6 @@ $p \ra t \geq 0$.  We call the corresponding rules the LOOP $B$ rules.
 We shall clarify their proof-theoretic status in Appendix \ref{sec:B}.
 
 KRA: END 
-
-\subsection{Restrictions on bound functions}
-
-ERO (27 Feb 2026): NEW DISCUSSION -- WHERE TO PLACE IT ?
-
-\III
-
-
-A careful reader will notice that in the LOOP II, III and IV rules we
-imposed the restriction $var(t) \subseteq \mbox{\it pvar}$ on the
-variables of the bound function $t$ that is absent in the publications
-that use the LOOP II and III rules.
-The reason for this restriction is of technical nature: to be able 
-to complete the proofs.
-For showing in Lemma~\ref{lem:derivability} that the LOOP~II rule can
-be derived from the LOOP~II rule, we need the auxiliary rule
-$\exists$-INTRODUCTION. In turn, in Lemma~\ref{lem:admissibility}
-we prove that this auxiliary rule is admissible in the proof system III.
-This proof is by induction on the structure of while programs.
-The crucial case is that of a while loop. By induction hypothesis,
-we can deduce from 
-\[
- \vdash_{\rm{III}} \HT{p_{0} \A B \A t = z}{S_0}{t < z}
-\]
-that
-\[
- \vdash_{\rm{III}} \HT{\te z_0: (p_{0} \A B \A t = z)}{S_0}{\te z_0: (t < z)}.
-\]
-Now, to proceed successfully, we wish to deduce further 
-\[
- \vdash_{\rm{III}} \HT{(\te z_0:p_0) \A B \A t = z}{S_0}{t < z}.
-\]
-This is possible if $z_0 \not\in var(B) \cup var(t)$ and $z_0 \neq z$.
-While the last inequality can be assumed w.l.o.g., the first condition
-is restrictive.
-Since $z_0$ is a logical variable and $var(B) \subseteq \mbox{\it pvar}$,
-the imposed restriction $var(t) \subseteq \mbox{\it pvar}$ makes this reasoning
-possible.
-
-In a previous version of this paper~\cite{ABO25}, 
-without the distinction of logical and program variables,
-we required for the bound function $t$ that $var(t) \subseteq var(B) \cup var(S_0)$
-holds. For the $\exists$-INTRODUCTION rule it was then required that 
-$z_0 \not\in var(B) \cup var(S_0)$.
-So again,  $z_0 \not\in var(B) \cup var(t)$.
-However, the  $var(t) \subseteq var(B) \cup var(S_0)$ is too restrictive 
-for some applications. In~\cite{ABO09}, we treat in Section 3.9 the case study
-``Partitioning an Array''. The partitioning program {\it PART} has nested
-while loops. When proving the termination of the inner loops we needed
-bound functions that refer to a variable that occur outside of these loops
-(see p.110 of~\cite{ABO09}), so the restriction is not satisfied.
-
-In this paper, we distinguish disjoint sets $\mbox{\it lvar}$ and $\mbox{\it pvar}$
-of logical variables and program variables, respectively.
-A logical variable appears as $z$ to freeze the value of the bound function $t$.
-The variables inside programs are all program variables.
-A bound function $t$ could contain both logical and program variables.
-Our requirement $var(t) \subseteq \mbox{\it pvar}$ is therefore a restriction.
-It enables the proof of Lemma~\ref{lem:admissibility}, as explained above.
-The restriction is weak enough for performing the termination proof
-of the partitioning program {\it PART}.
-
-What about a LOOP rule without any restriction on the bound function $t$\,?
-By using the following auxiliary SUBSTITUTION rule, see, e.g., \cite{ABO09},
-we can get rid of the remaining restriction.
-
-\III
-\NI
-RULE \label{rul:SUBST} SUBSTITUTION 
-\[ 
- \frac{ \HT{p}{S}{q}          }
-      { \HT{p[x:=t_0]}{S}{q[x:=t_0]}    }
-\]
-where $x$ is a logical or a program variable
-that does not occur in $S$ and 
-$\mbox{\it var}(t_0)\cap \mbox{\it var}(S)=\emptyset$ ($t_0$ thus may contain logical variables).
-\III
-
-The idea is as follows. Suppose a termination proof with LOOP III rule
-requires a bound function $t$ containing logical variables.
-Then apply the substitution rule to replace these variables by fresh program variables.
-This leads to a new bound function $t'$ satisfying the restriction 
-$var(t') \subseteq \mbox{\it pvar}$. Then apply the LOOP III rule as usual.
-At the end, apply the reverse substitution to replace the fresh program variables
-back to the original logical variables.
-What about the status of the SUBSTITUTION rule\,?
-Regrettably, we have not been able to show that it is an admissible in the proof system III
-in the same way that we show it for the other auxiliary rules in Lemma~\ref{lem:admissibility}.
-In an attempted inductive proof, when it comes to the case of the while loop,
-we face the same problems than outlined above that we circumvented by
-restricting the bound function.
-
-
 
 
 
@@ -857,6 +770,124 @@ Each {\rm LOOP} $\alpha$ rule is admissible in the proof system $\beta$,
 % By Lemma~\ref{lem:AUX}(i), LOOP II is admissible in proof system III.
 \HB
 \end{proof}
+
+
+
+\subsection{Restrictions on Bound Functions}
+
+A careful reader will notice that in the LOOP II, III and IV rules we
+imposed the restriction $var(t) \subseteq \mbox{\it pvar}$ on the
+variables of the bound function $t$ that is absent in the publications
+that use the LOOP II and III rules.
+The reason for this restriction is of technical nature: to be able 
+to complete the proofs.
+For showing in Lemma~\ref{lem:derivability} that the LOOP~II rule can
+be derived from the LOOP~III rule, we need the auxiliary rule
+$\exists$-INTRODUCTION. In turn, in Lemma~\ref{lem:admissibility}
+we prove that this auxiliary rule is admissible in the proof system III.
+This proof is by induction on the structure of {\bf while} programs.
+The crucial case is that of a {\bf while} loop. By induction hypothesis,
+we can deduce from 
+\[
+ \vdash_{\rm{III}} \HT{p_{0} \A B \A t = z}{S_0}{t < z}
+\]
+that
+\[
+ \vdash_{\rm{III}} \HT{\te z_0: (p_{0} \A B \A t = z)}{S_0}{\te z_0: (t < z)}.
+\]
+Now, to proceed successfully, we wish to deduce further 
+\[
+ \vdash_{\rm{III}} \HT{(\te z_0:p_0) \A B \A t = z}{S_0}{t < z}.
+\]
+This is possible if $z_0 \not\in var(B) \cup var(t)$ and $z_0 \neq z$.
+While the last inequality can be assumed w.l.o.g., the first condition
+is restrictive.
+Since $z_0$ is a logical variable and $var(B) \subseteq \mbox{\it pvar}$,
+the imposed restriction $var(t) \subseteq \mbox{\it pvar}$ makes this reasoning
+possible.
+
+In a previous version of this paper~\cite{ABO25}, 
+without the distinction of logical and program variables,
+we required for the bound function $t$ that $var(t) \subseteq var(B) \cup var(S_0)$
+holds. For the $\exists$-INTRODUCTION rule it was then required that 
+$z_0 \not\in var(B) \cup var(S_0)$.
+So again,  $z_0 \not\in var(B) \cup var(t)$.
+However, the  condition $var(t) \subseteq var(B) \cup var(S_0)$ is too restrictive 
+for some applications. For example, in~\cite{ABO09}, we treat in Section 3.9 the case study
+``Partitioning an Array'' and consider a program {\it PART} that corresponds to
+the program {\it Partition} in~\cite{FH71}, where Foley and Hoare prove the partial correctness
+of Hoare's Quicksort algorithm~\cite{Hoa61b}.
+This program has nested while loops. When proving the termination of the inner loops we needed
+bound functions that refer to a variable that occurs outside these {\bf while} loops
+(see p.110 of~\cite{ABO09}), so the restriction is not satisfied.
+
+In this paper, we distinguish disjoint sets $\mbox{\it lvar}$ and $\mbox{\it pvar}$
+of logical variables and program variables, respectively.
+A logical variable appears as $z$ to freeze the value of the bound function $t$.
+The variables inside programs are all program variables.
+A bound function $t$ could contain both logical and program variables.
+Our requirement $var(t) \subseteq \mbox{\it pvar}$ is therefore a restriction.
+It enables the proof of Lemma~\ref{lem:admissibility}, as explained above.
+The restriction is weak enough for performing the termination proof
+of the partitioning program {\it PART}.
+
+What about a LOOP rule without any restriction on the bound function $t$\,?
+To prove the Equivalence Theorem \ref{thm:abo} in this setting we
+reason at the level proofs instead of at the level of proof rules.
+
+Consider a proof of a correctness formula $\phi$ in a proof system
+$\alpha \in \{\mathrm{II, III, IV}\}$ in which no distinction is made
+between the logical and program variables and in which in the
+corresponding LOOP rule no restriction is imposed on the bound
+function $t$. First, replace all occurrences of the $z$ variables by
+distinct fresh variables that do not occur in the considered program
+or in the used bound functions $t$. Clearly, this remains a proof of
+$\phi$ in $\alpha$.
+
+Next, let the set of logical variables \emph{lvar} consist of these
+fresh variables and let \emph{pvar} be the set of remaining variables.
+Then all applications of the corresponding LOOP rule obey the
+restriction used in this paper. So by the Equivalence Theorem
+\ref{thm:abo} the correctness formula $\phi$ can also be proved in any
+other proof system $\beta \in \{\mathrm{II, III, IV}\}$ and hence,
+a fortiori in the proof system $\beta$ in which in the corresponding
+LOOP rule no restriction on the bound function $t$ is used.
+
+
+% ****
+% 
+% By using the following auxiliary SUBSTITUTION rule, see, e.g., \cite{ABO09},
+% we can get rid of the remaining restriction.
+% 
+% \III
+% \NI
+% RULE \label{rul:SUBST} SUBSTITUTION 
+% \[ 
+%  \frac{ \HT{p}{S}{q}          }
+%       { \HT{p[x:=t_0]}{S}{q[x:=t_0]}    }
+% \]
+% where $x$ is a logical or a program variable
+% that does not occur in $S$ and 
+% $\mbox{\it var}(t_0)\cap \mbox{\it var}(S)=\emptyset$ ($t_0$ thus may contain logical variables).
+% \III
+% 
+% The idea is as follows. Suppose a termination proof with LOOP III rule
+% requires a bound function $t$ containing logical variables.
+% Then apply the substitution rule to replace these variables by fresh program variables.
+% This leads to a new bound function $t'$ satisfying the restriction 
+% $var(t') \subseteq \mbox{\it pvar}$. Then apply the LOOP III rule as usual.
+% At the end, apply the reverse substitution to replace the fresh program variables
+% back to the original logical variables.
+% What about the status of the SUBSTITUTION rule\,?
+% Regrettably, we have not been able to show that it is an admissible in the proof system III
+% in the same way that we show it for the other auxiliary rules in Lemma~\ref{lem:admissibility}.
+% In an attempted inductive proof, when it comes to the case of the while loop,
+% we face the same problems than outlined above that we circumvented by
+% restricting the bound function.
+% 
+% ****
+
+
 
 
 % \section{Soundness and Completeness Matters}
@@ -1501,8 +1532,6 @@ $$\HT{\T\A 0<j\A  \mbox{\it max}(j,0)= z}{j:=j-1}{\mbox{\it max}(j,0) < z}.$$
 
 \section{Practical Applications}
 
-KRA (1-03-26): NEW SECTION
-
 Research on program verification has entered practice most visibly by
 the use of assertions as annotations of programs and program
 interfaces that remain to be implemented.  This can be seen in the
@@ -1573,17 +1602,22 @@ the size of the assertions.  What works best in practice depends on
 the particular program structure.
 
 
-\section{Proofs from assumptions}
+
+
+\section{Proofs from Assumptions}
+
+KRA (1-03-26): NEW SECTION
+\III
 
 Admittedly, the equivalence of the proof systems II-IV is a limited
-result, since it concerns on the class of \textbf{while}
-programs. Here we consider how to extend the Equivalence
+result, since it concerns only the class of \textbf{while}
+programs. Here we show how to extend the Equivalence
 Theorem~\ref{thm:abo} to a more realistic class of programs.
 
-To this end consider a situation in which programs can access a library of
+To this end, consider a situation in which programs can access a library of
 procedures each of which is specified by means of a correctness
 formula. The access is provided by means of procedure calls.  For
-simplicity we assume that procedures do not have global veriables and
+simplicity we assume that procedures do not have global variables and
 that Pascal's call by variable mechanism is used.
 
 KRA: SHOULD WE COMMENT ON IT, SO ADD STH LIKE THIS: 
@@ -1603,8 +1637,8 @@ procedure \emph{swap(x,y)}:
 \[
 \GCD \equiv \WDD{x \neq q}{\IT{x < y}{swap(x,y)}; x:= x-y}.
 \]
-
-KRA: OR SHOULD WE USE PARAMETERS HERE, so $\GCD(x,y)$ ?
+KRA: OR SHOULD WE USE PARAMETERS HERE, so $\GCD(x,y)$ ? \\
+ERO: I WOULD LEAVE GCD W/O PARAMETERS.
 
 We use in it the statement $\IT{B}{S}$ 
 with the corresponding proof rule
@@ -1647,7 +1681,7 @@ RULE \label{rul:inv} INVARIANCE
  \frac{ \HT{p}{S}{q} }
       { \HT{p \A r}{S}{q \A r}         } 
 \]
-where no variable in $\mathit{free}(r)$ can change in $S$.
+where no variable in $\mathit{free}(r)$ can be changed in $S$.
 \III
 
 Applying it to the assumption
@@ -1791,16 +1825,22 @@ prove the premise
   \end{array}    
 \]
 of the LOOP II rule. (Such a proof would in fact show that in the
-proof system I the LOOP II rule is derivable from the LOOP III rule,
+proof system~I the LOOP II rule is derivable from the LOOP III rule,
 which is not the case.)  Note, however, that this premise directly
 follows proved using the CONJUNCTION rule.
 In fact, the following counterpart of the Equivalence Theorem~\ref{thm:abo}
 holds.
 
+ERO: I DON'T UNDERSTAND THE DIFFERENCE HERE. To prove the Equivalence Theorem~\ref{thm:abo}, we also use auxiliary
+rule in the Derivability Lemma~\ref{lem:derivability} and then show that
+these auxiliary rules are admissible in Lemma~\ref{lem:admissibility}.
+Why does this two-step approach not work here as well ?
+
+
 KRA: CLARIFY THE SET $\AUX$
 
 \begin{theorem} \label{thm:main2}
-  The proof systems CII $\cup \AUX$ - CIV $\cup \AUX$  are equivalent.  
+  The proof systems CII $\cup \AUX$ -- CIV $\cup \AUX$  are equivalent.  
 \end{theorem}
 
 \begin{proof}
