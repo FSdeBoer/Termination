@@ -1,4 +1,3 @@
-
 % \documentclass[acmsmall]{acmart}
 \documentclass[manuscript, screen, review]{acmart}
 
@@ -59,10 +58,11 @@
 
 \usepackage{enumerate}
 
-% \usepackage{graphicx,color}
-
 \input NEW-commands-FAC.tex
+
 \newcommand{\AUX}{\mathit{AUX}}
+
+\newtheorem{note}{Note}
 
 
 \begin{document}
@@ -122,41 +122,6 @@
 \renewcommand{\shortauthors}{K.R. Apt, F.S. de Boer and E.-R. Olderog}
 
 
-%\documentclass[runningheads]{./llncs/llncs} % version in the git
-
-
-% \author{
-% Krzysztof R. Apt \inst{1} \and
-% Frank S. de Boer \inst{2} \and
-% Ernst-R\"udiger Olderog \inst{3}
-% }
-% 
-% \authorrunning{K.R. Apt, F.S. de Boer and E.-R. Olderog} 
-% % First names are abbreviated in the running head.
-% % If there are more than two authors, 'et al.' is used.
-% 
-% \institute{
-% CWI, Amsterdam, The Netherlands\\
-% MIMUW, University of Warsaw, Poland\\
-% \email{apt@cwi.nl} 
-% \and
-% CWI, Amsterdam, The Netherlands\\
-% \email{F.S.de.Boer@cwi.nl}
-% \and
-% Carl von Ossietzky University of Oldenburg, Oldenburg, Germany\\
-% \email{olderog@informatik.uni-oldenburg.de}
-% }
-% 
-% 
-% \title{Proof Rules for Termination of Loops:\\
-%        A Comprehensive Analysis}
-
-% \titlerunning{Termination of Loops}
-% 
-% \begin{document}
-% 
-% \maketitle
-
 \begin{abstract}
   We provide a comparative analysis of different proof rules for
   proving termination of \textbf{while} programs and show their
@@ -202,6 +167,7 @@
 %% This command processes the author and affiliation and title
 %% information and builds the first part of the formatted document.
 \maketitle
+
 
 
 
@@ -322,12 +288,13 @@ assertions, differs. We illustrate this by analyzing a termination
 proof of a program with nested loops. We also address applications in
 the context of assertions used as annotations in the design by
 contract paradigm.
-Finally, we show how to extend the equivalence results to a larger class of programs.
+Finally, we show how to extend the equivalence result to a larger class of programs
+that access a library of procedures.
 
 \III
 
 \NI
-KRA (1-03-26): THE LAST SENTENCE ABOVE WAS ADDED
+KRA (5-03-26): THE LAST SENTENCE ABOVE WAS ADDED
 
 \section{LOOP rules}
 
@@ -342,11 +309,11 @@ variables. Programs refer only to program variables, while assertions
 may refer to both types of variables.  Logical variables are the only
 variables that can be quantified over. They are used in assertions as
 \bfe{freeze} variables.
-To keep things simple we assume that all program variables are simple
-variables of  type \textbf{integer}.
+To keep things simple we assume that all program and logical variables
+are simple variables of  type \textbf{integer}.
 
 ERO: AND WHAT ABOUT THE TYPE OF LOGICAL VARIABLES ?
-
+KRA: (5-03-26) ADDED ABOVE 'and logical'
 \III
 
 Below we denote by $\mathit{free}(p)$
@@ -607,12 +574,14 @@ carried out in the case of the LOOP IV rule.
 % \]
 
 
-KRA (1-03-26):BEGIN REVISED (and moved here)
+KRA (6-03-26):BEGIN REVISED (and moved here)
 
 Further, the last premise of each of the LOOP rules II-IV and their
 variants can also be modified, by considering in each case the easier
 to establish implication $p \A B \ra t \geq 0$ instead of
-$p \ra t \geq 0$.  We call the corresponding rules the LOOP $B$ rules.
+$p \ra t \geq 0$.  In fact, in \cite[page 64]{Rey98} and in \cite[page
+151]{Almeida11} this variant of the LOOP II is used. We call the
+corresponding rules the LOOP $B$ rules.
 
 We shall clarify their proof-theoretic status in Appendix \ref{sec:B}.
 
@@ -748,7 +717,6 @@ $\varphi_1, \LL, \varphi_k \vdash_T \varphi$, or equivalently
 $\vdash_{T \cup U} \varphi$, where $U$ consists of the set of axioms
 $\C{\varphi_1,\LL,\varphi_k}$.  But the latter claim holds since
 $\vdash_{T \cup U \cup \AUX} \varphi$.
-% \HB
 \end{proof}
 
 Below we shall need only the left-to-right implications.  In what
@@ -788,7 +756,6 @@ from which the claim follows since
 \[
   T \cup R_1 \preceq T \cup R_1 \cup R_2 \cup \AUX.
 \]
-% \HB  
 \end{proof}
 
 
@@ -888,16 +855,96 @@ In the context of Hoare's logic such rules are sometimes called \emph{adaptation
 \subsection{Structure of the Proof}
 \label{subsec:structure}
 
-Equivalence Theorem \ref{thm:abo} comprises six equivalences. However,
-thanks to the transitivity of the equivalence relation, it suffices to
-prove three of them. We found it most convenient to deal with the
-equivalence of the following two pairs of proof systems: (II, III) and
-(III, IV). To this end we, invoke four times
-Lemma~\ref{lem:equ}, each time establishing its assumptions for an
-appropriate pair of LOOP rules $R_1$ and $R_2$ and a specific set of
-rules $\AUX$ drawn from the set of auxiliary rules listed in the
-previous section, augmented with the CONSEQUENCE rule (that also is an
-adaptation rule).  The details are given in Appendix~\ref{sec:proof}.
+Equivalence Theorem \ref{thm:abo} comprises three equivalences, but
+thanks to the transitivity it suffices to prove two of them. We found
+it most convenient to deal with the equivalence of the following two
+pairs of proof systems: (II, III) and (III, IV). To this end we,
+invoke Lemma~\ref{lem:equ} four times, each time establishing its
+assumptions for an appropriate pair of LOOP rules $R_1$ and $R_2$ and
+a specific set of rules $\AUX$ drawn from the set of auxiliary rules
+listed in the previous section, augmented with the CONSEQUENCE rule
+(that also is an adaptation rule).
+
+More specifically, we establish the following two lemmas.
+
+\begin{lemma}[Derivability]
+  \label{lem:derivability}
+The following derivability results hold:
+
+\begin{enumerate} [(i)]
+   \item The {\rm LOOP II} rule can be derived from the {\rm LOOP III} rule, using \\
+   the  $\exists$-{\rm INTRODUCTION} rule and the {\rm CONSEQUENCE} rule.
+   
+    \vspace{2mm}
+
+   \item The {\rm LOOP III} rule can be derived from the {\rm LOOP II} rule, using \\
+   the {\rm CONJUNCTION} rule and the {\rm CONSEQUENCE} rule.
+   
+    \vspace{2mm}
+
+   \item The {\rm LOOP IV} rule can be derived from {\rm LOOP III} rule, using \\
+   the  {\rm HYBRID CONJUNCTION} rule and the {\rm CONSEQUENCE} rule.
+   
+    \vspace{2mm}
+
+   \item The {\rm LOOP III} rule can be derived from the {\rm LOOP IV} rule, using \\
+   the {\rm PARTIAL CORRECTNESS} rule and the {\rm CONSEQUENCE} rule.
+   
+%    \vspace{2mm}
+
+   % \item The {\rm LOOP V} rule can be derived from the {\rm LOOP II} rule, using \\
+   % the  {\rm SUBSTITUTION} rule and the {\rm CONSEQUENCE} rule.
+   
+   %  \vspace{2mm}
+
+   % \item The {\rm LOOP II} can be derived from the {\rm LOOP V} rule, using \\
+   % the {\rm CONSEQUENCE} rule.
+   
+\end{enumerate}
+
+\end{lemma}
+
+
+
+\begin{lemma}[Admissibility] \label{lem:admissibility}
+The following admissibility results hold:
+
+
+ \begin{enumerate} [$(i)$] 
+    
+   \item The $\te$-{\rm INTRODUCTION} rule is admissible in the proof system {\rm II}. 
+   
+    \vspace{2mm}
+        
+   \item The $\te$-{\rm INTRODUCTION} rule is admissible in the proof system {\rm III}.
+   
+    \vspace{2mm}
+  
+   \item The {\rm CONJUNCTION} rule is admissible in the proof system {\rm II}.
+   
+    \vspace{2mm}
+
+   \item The {\rm HYBRID CONJUNCTION} rule is admissible in the proof system {\rm III}.
+%          that is, \\
+%          if $\vdash_{\rm{I}} \HT{p_1}{S}{q_1}$ and $\vdash_{\rm{III}} \HT{p_2}{S}{q_2}$, then
+%          $\vdash_{\rm{III}} \HT{p_1 \A p_2}{S}{q_1 \A q_2}$.
+         
+    \vspace{2mm}
+         
+   \item The {\rm PARTIAL CORRECTNESS} rule is admissible in the proof system {\rm IV}.
+   
+   %  \vspace{2mm}
+   
+   % \item The {\rm SUBSTITUTION} rule is admissible in the proof system {\rm II}.
+
+ \end{enumerate}
+
+\end{lemma}
+
+The proofs are given in
+Appendix~\ref{sec:proof}.
+
+
 
 To close this discussion note the following consequence of the Equivalence Theorem~\ref{thm:abo}
 and Lemma \ref{lem:AUX}.
@@ -920,7 +967,6 @@ Each {\rm LOOP} $\alpha$ rule is admissible in the proof system $\beta$,
 % By the Equivalence~\ref{thm:abo}, proof system~II is equivalent to proof system~III,
 % so: proof system III $\approx$ proof system~III $\cup$ LOOP II.
 % By Lemma~\ref{lem:AUX}(i), LOOP II is admissible in proof system III.
-% \HB
 \end{proof}
 
 
@@ -1758,7 +1804,7 @@ the particular program structure.
 
 \section{Proofs from Assumptions}
 
-KRA (1-03-26): NEW SECTION
+KRA (5-03-26): NEW SECTION
 \III
 
 Admittedly, the equivalence of the proof systems II-IV is a limited
@@ -1807,48 +1853,50 @@ We want to prove
 \begin{equation}
  \begin{array}{l}  
 \HT{x=x_0 \wedge y=y_0}{swap(x,y)}{y=x_0 \wedge x=y_0} \vdash  \\
-   \HT{x=x_0 \wedge y=y_0 \wedge x>0 \wedge y>0}{\GCD}{x=y=gcd(x_0, y_0}.
+   \HT{x=x_0 \wedge y=y_0 \wedge x>0 \wedge y>0}{\GCD}{x=y=gcd(x_0, y_0},
  \end{array}
  \label{equ:gcd}
 \end{equation}
-That is, we want to establish total correctness of the $\GCD$ program
-under the stated assumption about the procedure call \emph{swap(x,y)}.
-It is clear how to prove the above claim in any of the proof systems
-II-V: in the proof we can simply use the assumed property of
-\emph{swap(x,y)} as an additional axiom. However, care has to be
-exercised because some auxiliary rules are needed.
+where $x_0$ and $y_0$ are logical variables and $x$ and $y$ are
+program variables.  That is, we want to establish total correctness of
+the $\GCD$ program under the stated assumption about the procedure
+call \emph{swap(x,y)}.  It is clear how to prove the above claim in
+any of the proof systems II-IV: in the proof we can simply use the
+assumed property of \emph{swap(x,y)} as an additional axiom. However,
+care has to be exercised because some auxiliary rules are needed.
 
 The reason is that we need first to derive a more general property of
 \emph{swap(x,y)}, namely the correctness formula
 $\HT{p(x,y}{swap(x,y)}{p(y,x)}$, where $p$ is an assertion with free
 variables including $x$ and $y$ and which we shall use for a specific
-$p$.  To establish it we need another auxiliary rule (see \cite[page
-468]{ABO09}):
+$p$.  To establish it we need the following auxiliary axiom \emph{for
+  partial correctness} (see \cite[page 98]{ABO09}):
 
 \III
 
 \NI
-RULE \label{rul:inv} INVARIANCE
+AXIOM INVARIANCE
 \[ 
- \frac{ \HT{p}{S}{q} }
-      { \HT{p \A r}{S}{q \A r}         } 
+\vdash_{\mathrm{I}} \HT{r}{S}{r}
 \]
 where no variable in $\mathit{free}(r)$ can be changed in $S$.
 \III
 
-Applying it to the assumption
+
+Using it for the assertion $p(x_0,y_0)$
+together with the assumption
 \[
   \HT{x=x_0 \wedge y=y_0}{swap(x,y)}{y=x_0 \wedge x=y_0}
 \]
-we obtain first
+we obtain first by the HYBRID CONJUNCTION rule
 \[
-  \HT{x=x_0 \wedge y=y_0 \wedge p(x_0,y_0)}{swap(x,y)}{y=x_0 \wedge x=y_0 \wedge p(x_0,y_0)},
+  \HT{p(x_0,y_0) \wedge x=x_0 \wedge y=y_0}{swap(x,y)}{p(x_0,y_0) \wedge y=x_0 \wedge x=y_0},
 \]
 from which by the CONSEQUENCE rule and two applications of
 the $\te$-INTRODUCTION rule (we assume here that $x_0$ and $y_0$ are logical variables)
 we get
 \[
-  \HT{\te x_0, y_0: (x=x_0 \wedge y=y_0 \wedge p(x_0,y_0))}{swap(x,y)}{p(y,x)},
+  \HT{\te x_0, y_0: (p(x_0,y_0) \wedge x=x_0 \wedge y=y_0)}{swap(x,y)}{p(y,x)},
 \]
 from which  by the CONSEQUENCE rule $\HT{p(x,y}{swap(x,y)}{p(y,x)}$ follows.
 
@@ -1900,7 +1948,6 @@ system II that at the relevant place uses the just established property of
 
 \end{figure}
 
-
 To extend our study of the LOOP rules to such a setting we
 begin by allowing uninterpreted procedure calls, so program statements
 of the form $P(\bar{t})$. This leads to a larger class of programs to
@@ -1909,14 +1956,13 @@ which we are referring below. Next, we consider \emph{conditional
 \[
 \phi_1, \dots, \phi_n \vdash \HT{p}{S}{q},
 \]
-where each $\phi_i$ is an assertion or a correctness formula referring
-to a procedure call and $S$ is a program that may contain any of the
-procedure calls appearing in some $\phi_i$.
+where $n \geq 0$, each $\phi_i$ is an assertion or a correctness
+formula referring to a procedure call and $S$ is a program that may
+contain any of the procedure calls appearing in some $\phi_i$.
 
 It is clear how to modify all considered proof rules to deal with the
-conditional correctness formulas: it suffices to append each
-correctness formula by `$\phi_1, \dots, \phi_n \vdash$'.  This yields
-the proof systems CI-CIV.
+conditional correctness formulas: it suffices to prefix each
+correctness formula by `$\phi_1, \dots, \phi_n \vdash$'.  
 % In the case of non-recursive procedures we
 % can recover in this setting `unconditional’ correctness formulas by
 % adding to each proof system the following proof rules.
@@ -1949,11 +1995,36 @@ the proof systems CI-CIV.
 % formal parameters.
 % \III
 
-Additionally, we could add an appropriate rule that allows us to
+Additionally, we add the INVARIANCE axiom
+\III
+
+\NI
+SELECT AXIOM
+\[
+\phi_1, \dots, \phi_n \vdash \phi_i,
+\]
+where $i \in \{1, \dots, n\}$.
+\III
+
+This yields the proof systems CI-CIV.
+Optionally, we could add an appropriate rule that allows us to
 derive from assumptions about generic procedure calls adjusted
 assumptions about procedure calls with actual parameters.  For details
 see the INSTANTIATION rule in \cite[page 159]{ABO09} which lists the
 appropriate conditions on formal and actual parameters.
+
+Note that for the \textbf{while} programs the INVARIANCE axiom is admissible in the proof system I, that is the following
+observation holds.
+
+\begin{note} \label{note:1}
+  For every \textbf{while} program $S$ we have
+  $\vdash_{\mathrm{I}} \HT{r}{S}{r}$, where no variable in
+  $\mathit{free}(r)$ can be changed in $S$.
+
+\end{note}
+
+However, this axiom cannot be dispensed with for uninterpreted procedure calls, which explains why we
+need to retain it.
 
 We would like to extend the Equivalence Theorem~\ref{thm:abo} to the
 proof systems CI-CIV, that is to prove their equivalence.  However,
@@ -1966,46 +2037,78 @@ example.  For a procedure call $S$ we clearly can prove in CIII
   \end{array}
 \]
 Indeed, it just suffices to apply the LOOP III rule.
-
 However, this conditional correctness formula cannot be proved in CII
-for the simple reason that in this proof system there is no way to
-prove the premise
+because in this proof system there is no way to prove the premise
 \[
   \begin{array}{l}  
-    \HT{p \A B}{S}{p}, \HT{p \A B \A t=z}{S}{t<z}, p \ra t \geq 0 \vdash  \\
+    \HT{p \A B}{S}{p}, \ \HT{p \A B \A t=z}{S}{t<z}, \ p \ra t \geq 0 \vdash  \\
     \HT{p \A B \A t=z}{S}{p \A t<z}
   \end{array}    
 \]
-of the LOOP II rule. (Such a proof would in fact show that in the
-proof system~I the LOOP II rule is derivable from the LOOP III rule,
-which is not the case.)  Note, however, that this premise directly
-follows proved using the CONJUNCTION rule.
-In fact, the following counterpart of the Equivalence Theorem~\ref{thm:abo}
-holds.
+of the LOOP II rule.
 
-ERO: I DON'T UNDERSTAND THE DIFFERENCE HERE. To prove the Equivalence Theorem~\ref{thm:abo}, we also use auxiliary
-rule in the Derivability Lemma~\ref{lem:derivability} and then show that
-these auxiliary rules are admissible in Lemma~\ref{lem:admissibility}.
-Why does this two-step approach not work here as well ?
+It is worthwhile to note that this premise can be directly proved
+using the CONJUNCTION rule.  Now, the Admissibility Lemma
+\ref{lem:admissibility}$(iii)$ states that this rule is admissible in
+the proof system II, so one might think that such an application of
+this rule can be eliminated.  However, in this extended setting this
+cannot be done, because we deal with uninterpreted procedure calls.
+More specifically, the extended correctness formula
+\[
+  \HT{p_1}{S}{q_1}, \HT{p_2}{S}{q_2}  \vdash \HT{p_1 \A p_2}{S}{q_1 \A q_2}         
+\]
+can be proved by applying first the SELECT axiom twice to get 
+\[
+  \HT{p_1}{S}{q_1}, \HT{p_2}{S}{q_2}  \vdash \HT{p_1}{S}{q_1} 
+\]
+and
+\[
+  \HT{p_1}{S}{q_1}, \HT{p_2}{S}{q_2}  \vdash \HT{p_2}{S}{q_2}
+\]
+and then by applying the CONJUNCTION rule.  If this last rule
+application could be eliminated we would establish that the
+CONJUNCTION rule is derivable in the proof system II, which is not the
+case.
 
+Consequently, only the following counterpart of the Equivalence Theorem~\ref{thm:abo}
+holds, where $\AUX$ denotes the set of auxiliary rules introduced in Subection \ref{subsec:aux}.
 
-KRA: CLARIFY THE SET $\AUX$
+ERO: I DON'T UNDERSTAND THE DIFFERENCE HERE. To prove the Equivalence
+Theorem~\ref{thm:abo}, we also use auxiliary rule in the Derivability
+Lemma~\ref{lem:derivability} and then show that these auxiliary rules
+are admissible in Lemma~\ref{lem:admissibility}.  Why does this
+two-step approach not work here as well ?
+
+KRA (5-03-26): BECAUSE THE CASE OF PROCEDURE CALLS DOES NOT GO THROUGH
+IN THE INDUCTIVE PROOF: IT WOULD BE ONE OF THE BASE CASES OF SUCH A
+PROOF AND THERE IS NO WAY TO ESTABLISH IT.
 
 \begin{theorem} \label{thm:main2}
   The proof systems CII $\cup \AUX$ -- CIV $\cup \AUX$  are equivalent.  
 \end{theorem}
 
 \begin{proof}
-KRA:  TO EXPAND
-
-  It is easy to see check that the proof of Theorem~\ref{thm:abo} remains valid after replacing each
-  correctness formula by a conditional one.
-% \HB
+  We only need to deal with the applications of the LOOP rules. To this end it
+  is sufficient to invoke a straightforward modification of the
+  Derivability Lemma~\ref{lem:derivability} to the conditional
+  correctness formulas obtained by prefixing each correctness formula
+  by `$\phi_1, \dots, \phi_n \vdash$'.  By items $(i)$ and $(ii)$ of
+  this lemma we get that CII $\cup \AUX$ and CIII $\cup \AUX$ are
+  equivalent and by items $(iii)$ and $(iv)$ we get that CIII
+  $\cup \AUX$ and CIV $\cup \AUX$ are equivalent. This concludes the
+  proof.
 \end{proof}
 
+This result underlies, yet again, the importance of auxiliary rules in this comparative study of
+the LOOP rules.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
 \bibliographystyle{ACM-Reference-Format}
 % \bibliographystyle{abbrv}
 \bibliography{term25}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \appendix
 
@@ -2254,52 +2357,57 @@ and each time for an appropriate set of rules $\AUX$.
 \subsection{Derivability of the LOOP Rules}
 \label{subsec:proof-derivability}
 
-We first deal with the derivability.
-% instantiating part (i) of Lemma~\ref{lem:equ}.
+We provide the proof of the Derivability Lemma~\ref{lem:derivability}, 
+repeating each time the statement to be proved.
 
 
-\begin{lemma}[Derivability] \label{lem:derivability}
-The following derivability results hold:
+%\begin{lemma}[Derivability] \label{lem:derivability}
 
-\begin{enumerate} [(i)]
-   \item The {\rm LOOP II} rule can be derived from the {\rm LOOP III} rule, using \\
-   the  $\exists$-{\rm INTRODUCTION} rule and the {\rm CONSEQUENCE} rule.
+% The following derivability results hold:
+
+% \begin{enumerate}% [(i)]
+%    \item The {\rm LOOP II} rule can be derived from the {\rm LOOP III} rule, using \\
+%    the  $\exists$-{\rm INTRODUCTION} rule and the {\rm CONSEQUENCE} rule.
    
-    \vspace{2mm}
+%     \vspace{2mm}
 
-   \item The {\rm LOOP III} rule can be derived from the {\rm LOOP II} rule, using \\
-   the {\rm CONJUNCTION} rule and the {\rm CONSEQUENCE} rule.
+%    \item The {\rm LOOP III} rule can be derived from the {\rm LOOP II} rule, using \\
+%    the {\rm CONJUNCTION} rule and the {\rm CONSEQUENCE} rule.
    
-    \vspace{2mm}
+%     \vspace{2mm}
 
-   \item The {\rm LOOP IV} rule can be derived from {\rm LOOP III} rule, using \\
-   the  {\rm HYBRID CONJUNCTION} rule and the {\rm CONSEQUENCE} rule.
+%    \item The {\rm LOOP IV} rule can be derived from {\rm LOOP III} rule, using \\
+%    the  {\rm HYBRID CONJUNCTION} rule and the {\rm CONSEQUENCE} rule.
    
-    \vspace{2mm}
+%     \vspace{2mm}
 
-   \item The {\rm LOOP III} rule can be derived from the {\rm LOOP IV} rule, using \\
-   the {\rm PARTIAL CORRECTNESS} rule and the {\rm CONSEQUENCE} rule.
+%    \item The {\rm LOOP III} rule can be derived from the {\rm LOOP IV} rule, using \\
+%    the {\rm PARTIAL CORRECTNESS} rule and the {\rm CONSEQUENCE} rule.
    
-%    \vspace{2mm}
+% %    \vspace{2mm}
 
-   % \item The {\rm LOOP V} rule can be derived from the {\rm LOOP II} rule, using \\
-   % the  {\rm SUBSTITUTION} rule and the {\rm CONSEQUENCE} rule.
+%    % \item The {\rm LOOP V} rule can be derived from the {\rm LOOP II} rule, using \\
+%    % the  {\rm SUBSTITUTION} rule and the {\rm CONSEQUENCE} rule.
    
-   %  \vspace{2mm}
+%    %  \vspace{2mm}
 
-   % \item The {\rm LOOP II} can be derived from the {\rm LOOP V} rule, using \\
-   % the {\rm CONSEQUENCE} rule.
+%    % \item The {\rm LOOP II} can be derived from the {\rm LOOP V} rule, using \\
+%    % the {\rm CONSEQUENCE} rule.
    
-\end{enumerate}
+% \end{enumerate}
 
-\end{lemma}
 
+%\end{lemma}
 
 \begin{proof}
 The proofs have the same shape given that the last premise of all LOOP rules is the same.
   
 \NI
-$(i)$ It suffices to show how to derive from the premise
+$(i)$ The {\rm LOOP II} rule can be derived from the {\rm LOOP III} rule, using
+   the  $\exists$-{\rm INTRODUCTION} rule and the {\rm CONSEQUENCE} rule.
+   
+
+It suffices to show how to derive from the premise
 \[
   \HT{p \A B \A t=z}{S}{p \A t<z}
 \]
@@ -2330,7 +2438,10 @@ $\HT{p \A B}{S}{p}$ of the LOOP III rule.
 \III
 
 \NI
-$(ii)$ It suffices to note that from the first two premises 
+$(ii)$ The {\rm LOOP III} rule can be derived from the {\rm LOOP II} rule, using
+   the {\rm CONJUNCTION} rule and the {\rm CONSEQUENCE} rule.
+   
+It suffices to note that from the first two premises 
 \[
   \HT{p \A B} {S}{p}\quad \mbox{\rm and} \quad
    \HT{p \A B \A t=z}{S}{t<z}
@@ -2344,6 +2455,9 @@ of the LOOP II rule by the CONJUNCTION and CONSEQUENCE rules.
 
 \NI
 $(iii)$ 
+The {\rm LOOP IV} rule can be derived from {\rm LOOP III} rule, using
+the  {\rm HYBRID CONJUNCTION} rule and the {\rm CONSEQUENCE} rule.
+
 It suffices to note that from the first three premises 
 \[
   \vdash_{\rm{I}}  \HT{p \A B}{S}{p},\quad
@@ -2363,6 +2477,9 @@ CONSEQUENCE rules.
 
 \NI
 $(iv)$
+The {\rm LOOP III} rule can be derived from the {\rm LOOP IV} rule, using 
+   the {\rm PARTIAL CORRECTNESS} rule and the {\rm CONSEQUENCE} rule.
+
 From the first two premises
 \[
   \HT{p \A B}{S}{p}
@@ -2382,7 +2499,7 @@ The third premise
   \HT{p \A B}{S}{\mathbf{true}}
 \]
 of the LOOP IV rule is obtained by the CONSEQUENCE rule.
-% \HB
+\end{proof}
 % \NI
 % $(v)$ This is the only involved case in the proof. It assumes that in the underlying first-order
 % language for all assertions appropriate \emph{Skolem functions} exist. More precisely, we postulate
@@ -2395,7 +2512,7 @@ of the LOOP IV rule is obtained by the CONSEQUENCE rule.
 % \[
 %   p_{\min}(x) \equiv p(x) \land \fa y: (p(y) \ra x \leq y).
 % \]
-% 
+
 % Then given the premises
 % \[
 %  \HT{p(x)\wedge B}{S}{\exists y: p(y)\wedge y< x}
@@ -2411,7 +2528,7 @@ of the LOOP IV rule is obtained by the CONSEQUENCE rule.
 % Intuitively, $t$ denotes the minimal witness for $p(x)$, which exists
 % because by the second premise of the rule the implication
 % $p(x) \ra \te y: p_{\min}(y)$ holds.
-% 
+
 % However, some of the variables in $\bar{u}$ may be logical, so this
 % definition of $t$ does not satisfy the condition
 % $\mbox{\it var}(t)\subseteq\mbox{\it pvar}$ imposed on $t$.  Therefore
@@ -2423,7 +2540,7 @@ of the LOOP IV rule is obtained by the CONSEQUENCE rule.
 % $p(x)$ (excluding $x$) by a fresh \emph{program} variable.  Let
 % $x, \bar{u}$ denote the list of free variables of $p'(x)$ and let
 % $f(\bar{u})$ be the Skolem function for $p'_{\min}(x)$.
-% 
+
 % Because of the second premise of the LOOP V rule and the definitions
 % of $p'_{\min}(x)$ and of the Skolem function, the following two strings of implications hold:
 % \[
@@ -2460,10 +2577,10 @@ of the LOOP IV rule is obtained by the CONSEQUENCE rule.
 % \]
 % now follows by an application of the SUBSTITUTION rule.
 % \III
-% 
+
 % \NI
 % KRA: (13-02-26) SLIGHTLY REWRITTEN
-% 
+
 % \NI
 % $(vi)$ Given the premises
 % \[
@@ -2492,7 +2609,7 @@ of the LOOP IV rule is obtained by the CONSEQUENCE rule.
 %   \HT{p}{\WDD{B}{S}}{p \wedge \neg B}.
 % \]
 % \HB
-\end{proof}
+
 
 
 
@@ -2502,48 +2619,48 @@ of the LOOP IV rule is obtained by the CONSEQUENCE rule.
 We show the admissibility of each auxiliary rule in the proof system
 with the version of the LOOP rule that used this auxiliary rule 
 according to Lemma~\ref{lem:derivability}. 
-Additionally, we prove statement (i) of Lemma~\ref{lem:admissibility} 
-because it is needed in the proof of statement (iii).
+Additionally, we prove statement $(i)$ of Lemma~\ref{lem:admissibility} 
+because it is needed in the proof of statement $(iii)$.
 Since the CONSEQUENCE rule is included in all these proof systems,
 its admissibility is trivial.
 
 
-\begin{lemma}[Admissibility] \label{lem:admissibility}
-The following admissibility results hold:
+% \begin{lemma}[Admissibility] \label{lem:admissibility}
+% The following admissibility results hold:
 
 
- \begin{enumerate} [$(i)$] 
+%  \begin{enumerate} [$(i)$] 
     
-   \item The $\te$-{\rm INTRODUCTION} rule is admissible in the proof system {\rm II}. 
+%    \item The $\te$-{\rm INTRODUCTION} rule is admissible in the proof system {\rm II}. 
    
-    \vspace{2mm}
+%     \vspace{2mm}
         
-   \item The $\te$-{\rm INTRODUCTION} rule is admissible in the proof system {\rm III}.
+%    \item The $\te$-{\rm INTRODUCTION} rule is admissible in the proof system {\rm III}.
    
-    \vspace{2mm}
+%     \vspace{2mm}
   
-   \item The {\rm CONJUNCTION} rule is admissible in the proof system {\rm II}.
+%    \item The {\rm CONJUNCTION} rule is admissible in the proof system {\rm II}.
    
-    \vspace{2mm}
+%     \vspace{2mm}
 
-   \item The {\rm HYBRID CONJUNCTION} rule is admissible in the proof system {\rm III}.
-%          that is, \\
-%          if $\vdash_{\rm{I}} \HT{p_1}{S}{q_1}$ and $\vdash_{\rm{III}} \HT{p_2}{S}{q_2}$, then
-%          $\vdash_{\rm{III}} \HT{p_1 \A p_2}{S}{q_1 \A q_2}$.
+%    \item The {\rm HYBRID CONJUNCTION} rule is admissible in the proof system {\rm III}.
+% %          that is, \\
+% %          if $\vdash_{\rm{I}} \HT{p_1}{S}{q_1}$ and $\vdash_{\rm{III}} \HT{p_2}{S}{q_2}$, then
+% %          $\vdash_{\rm{III}} \HT{p_1 \A p_2}{S}{q_1 \A q_2}$.
          
-    \vspace{2mm}
+%     \vspace{2mm}
          
-   \item The {\rm PARTIAL CORRECTNESS} rule is admissible in the proof system {\rm IV}.
+%    \item The {\rm PARTIAL CORRECTNESS} rule is admissible in the proof system {\rm IV}.
    
-   %  \vspace{2mm}
+%    %  \vspace{2mm}
    
-   % \item The {\rm SUBSTITUTION} rule is admissible in the proof system {\rm II}.
+%    % \item The {\rm SUBSTITUTION} rule is admissible in the proof system {\rm II}.
 
- \end{enumerate}
+%  \end{enumerate}
 
-\end{lemma}
+% \end{lemma}
 
-To prove these claims we first establish two lemmas that provide additional
+We first establish two lemmas that provide additional
 information about the proofs in the considered proof systems.
 
 \begin{lemma} \label{lemma:1}
@@ -2557,7 +2674,6 @@ Since implication $\ra$ is reflexive, we can always add to a given proof in $\ma
 one final application of the CONSEQUENCE rule.
 Since implication is transitive, successive applications of the CONSEQUENCE rule in a proof in $\mathit{PR}$
 can be condensed into one application.
-% \HB
 \end{proof} 
 
 \begin{lemma} \label{lem:useful}
@@ -2593,12 +2709,9 @@ We now get the claim by the CONSEQUENCE rule.
 
 \NI
 $(ii)$ The argument is analogous as in $(ii)$. 
-% \HB
 \end{proof}
 
-
-
-We now turn to the proof of Lemma~\ref{lem:admissibility}, 
+We now turn to the proof of the Admissibility Lemma~\ref{lem:admissibility}, 
 repeating each time the statement to be proved.
 
 \begin{proof}
@@ -3007,7 +3120,6 @@ depends on. If we eliminate in the given proof of \HT{p}{S}{q} in system \rm{IV}
 all parts establishing the last three premises in each application of the
 LOOP IV rule, we obtain a proof of \HT{p}{S}{q} in the proof system I 
 using only the LOOP I rule. Thus $\vdash_{\rm{I}} \HT{p}{S}{q}$. 
-% \HB
 \end{proof}
 
 
@@ -3015,7 +3127,7 @@ using only the LOOP I rule. Thus $\vdash_{\rm{I}} \HT{p}{S}{q}$.
 \label{subsec:instantiate}
 
 Finally, we explain how to obtain the Equivalence Theorem~\ref{thm:abo} by instantiating Lemma~\ref{lem:equ}
-using Lemma~\ref{lem:derivability} and Lemma~\ref{lem:admissibility}.
+using the Derivability Lemma~\ref{lem:derivability} and the Admissibility Lemma~\ref{lem:admissibility}.
 We show one illustrative case: proof system II $\approx$ proof system III.
 
 Let $T$ be the proof system from Appendix~\ref{sec:I} without the LOOP I rule.
@@ -3060,8 +3172,8 @@ proof-theoretic status of the $B$ versions of the LOOP rules.
 and
 $p \A B \ra t \geq 0$.
 
-A straightforward proof by induction on the structure of $S$
-shows that
+By the admissibility of the INVARIANCE axiom in the proof system I (see Note \ref{note:1})
+we have
 \[
 \vdash_{\rm{I}}  \HT{z' = z+1 \A 0 < z'}{S}{z' = z+1 \A 0 < z'},
 \]
@@ -3118,7 +3230,6 @@ This allows us to apply the LOOP III rule to establish
 \[
 \vdash_{\rm{III}}  \HT{p}{\WDD{B}{S}}{p \wedge \neg B}.
 \]
-% \HB  
 \end{proof}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -3129,380 +3240,3 @@ This allows us to apply the LOOP III rule to establish
 
 
 
-
-\section{Preliminaries}
-
-\III
-\NI
-INCLUDED DERIVABILITY IN THE SUBSECTION TITLE
-
-\subsection{Derivability, admissibility and equivalence}
-
-Assume a given language that is determined by its set of formulas.  In
-what follows we assume that all considered axioms, proof rules, and
-proof systems are concerned with the same language.
-
-Given a proof system \emph{PR} and two sequences of formulas
-$\phi_1, \LL, \phi_m$ and $\varphi_1, \LL, \varphi_n$ we write
-\[
-  \phi_1, \LL, \phi_m \vdash_{PR} \varphi_1, \LL, \varphi_n
-\]
-to denote the fact that each formula $\varphi_i$ can be proved in
-\emph{PR} using as additional axioms the formulas
-$\phi_1, \LL, \phi_m$.  We also use this notation when the sequence
-$\phi_1, \LL, \phi_m$ is empty and when \emph{PR} is a set of proof
-rules.
-
-\III
-
-A proof rule
-\[ 
-  (R) \qquad \frac{\varphi_1,\LL,\varphi_k}{\varphi}
-\]
-is called \bfe{derivable} in \emph{PR}  if
-\[
- \varphi_1, \LL, \varphi_k \vdash_{\mathit{PR}} \varphi.
-\]
-\NI
-% A proof rule
-% \[ 
-%   (R) \qquad \frac{\varphi_1,\LL,\varphi_k}{\varphi}
-% \]
-Such a rule 
-is called \bfe{admissible in} \emph{PR} (see, e.g.~\cite[page 47]{Pla13}) if
-\[
- \vdash_{\mathit{PR}} \varphi_1, \LL, \vdash_{\mathit{PR}} \varphi_k
- \mbox{ implies }
- \vdash_{\mathit{PR}} \varphi.
-\]
-MORE EXPLANATION \\
-By a derivable rule, a proof in the proof system \emph{PR} deducing the formula
-$\varphi$ from the formulas $\varphi_1, \LL, \varphi_k$ can be condensed
-into \emph{one step} deducing $\varphi$ from $\varphi_1, \LL, \varphi_k$.
-By an admissible rule, a proof of the formula $\varphi$ in the proof system PR
-that is manufactured by \emph{manipulating} $k$ given proofs of
-$\varphi_1, \LL, \varphi_k$ in the proof system \emph{PR} 
-can be condensed into \emph{one step} deducing $\varphi$ from $\varphi_1, \LL, \varphi_k$.
-Intuitively, if a rule is derivable or admissible in \emph{PR}
-it does not increase the power of the proof system \emph{PR} \cite{Pla13}, 
-but it serves as a lemma that simplifies proofs in \emph{PR} by condensing
-a detailed proof argument into one application of $(R)$.
-The application of a derivable rule can  be replaced locally without
-affecting the overall proof structure,  which in general is not the case
-with the application of an admissible rule.
-A derivable rule is also an admissible rule,  but in general the converse
-does not hold.
-
-\NI
-END
-
-We say that two proof systems $\it{PR}_1$ and $\it{PR}_2$ are \bfe{equivalent}
-if for all formulas $\varphi$
-\[
- \mbox{$\vdash_{\mathit{PR}_1} \varphi$ iff $\vdash_{\mathit{PR}_2} \varphi$.}
-\]
-
-\III
-\NI
-SOME BASIC FACTS ADDED.
-
-Note that two proof systems 
-are equivalent if and only if any rule of  the one
-is admissible in  the other.
-
-Given a semantics,
-we denote by $\models \phi$ that the formula $\phi$ is
-\bfe{valid}.
-A proof rule 
-is \bfe{sound} if  validity of its premises implies that of its conclusion.
-A proof system \mbox{\it PR} is sound if $\vdash_{\mbox{\it PR}} \varphi$
-implies $\models \varphi$.
-A system \mbox{\it PR} is \bfe{complete} if 
-$\models \varphi$ implies
-$\vdash_{\mbox{\it PR}} \varphi$.
-Let \mbox{\it PR} be a sound and complete proof system.
-It follows that any sound rule is admissible in \mbox{\it PR}.
-
-To prove that the proof systems $\it{PR}_1$ and $\it{PR}_2$
-are equivalent it thus suffices to show that
-the rules of the one are admissible in the other or that both
-systems are sound and complete.The first approach in general requires
-tedious and complicated proofs by induction on the length of the derivation of the
-premises of the proof rules.
-The latter approach  in general relies on  certain assumptions
-about the underlying semantics.
-
-
-
-
-
-
-\NI
-END
-
-
-\NI 
-LEMMA 1 REFORMULATED AS THE GENERAL APPROACH.
-
-% The notions of derivability and equivalence are connected by the following simple observation.
-
-% \begin{lemma} \label{lem:equiv}
-% % Consider a proof system \it{PR} and proof rules $R_1$ and $R_2$.
-
-% % The proof systems $\mathit{PR} \cup \{R_1\}$ and
-% % $\mathit{PR} \cup \{R_2\}$ are equivalent iff $R_1$ is admissible in
-% % $\mathit{PR} \cup \{R_2\}$ and $R_2$ is admissible in
-% % $\mathit{PR} \cup \{R_1\}$.
-% Consider a proof system \it{PR} and proof rules $R$, $R_1$ and $R_2$.
-% \begin{itemize}
-% \item If $R$ is derivable  in
-% $\mathit{PR} \cup \{R_1\}$ and $R_1$ is derivable in
-% $\mathit{PR} \cup \{R_2\}$ then $R$ is derivable  in
-% $\mathit{PR} \cup \{R_2\}$.
-% \item
-% The proof systems $\mathit{PR} \cup \{R_1\}$ and
-% $\mathit{PR} \cup \{R_2\}$ are equivalent if $R_1$ is derivable  in
-% $\mathit{PR} \cup \{R_2\}$ and $R_2$ is derivable in
-% $\mathit{PR} \cup \{R_1\}$.
-
-
-% \end{itemize}
-
-% \end{lemma}
-Instead, the use of \bfe{ auxiliary rules}
-allows us to combine
-the notions of admissible and derivable rules in a structured way that 
-simplifies the proofs of equivalence between the proof systems
-which only differ in the  considered LOOP rules.
-More
-precisely, the following lemma 
-summarizes our general approach to proving that two systems
-$\mbox{\it PR}\cup\{R\}$
-and $\mbox{\it PR}\cup\{R'\}$ are equivalent.
-
-\begin{lemma}\label{lem:equiv}
-Given  sets \mbox{\it AUX1} and \mbox{\it AUX2} of \emph{auxiliary} rules,
-the proof systems $\mbox{\it PR}\cup\{R\}$
-and $\mbox{\it PR}\cup\{R'\}$ are equivalent if the following holds.
-\begin{itemize}
-\item $A\in \mbox{\it AUX1}$ ($A \in \mbox{\it AUX2} $)
-is \emph{admissible} in $\mbox{\it PR}\cup\{R\}$  ($\mbox{\it PR}\cup\{R'\}$).
-\item  $R$ ($R'$) is \emph{derivable}
-in the system $\mbox{\it PR}\cup \mbox{\it AUX1}\cup\{R'\}$ 
-($\mbox{\it PR}\cup \mbox{\it AUX2}\cup\{R\}$).
-\end{itemize}
-\end{lemma}
-
-\NI
-ERO: The PROOF does not use AUX1 and AUX2, but I understand that
-Krzysztof wants to reformulate it. Therefore I did not change it.
-
-\begin{proof}
-
-For any proof system \mbox{\it PR} and set of rules \mbox{\it AUX}
-we have that if any $A\in \mbox{\it AUX}$ is admissible in \mbox{\it PR} then \mbox{\it PR} and
-$\mbox{\it PR}\cup\mbox{\it AUX}$ are equivalent.
-So we derive from the first item  that the systems $\mbox{\it PR}\cup \{R\}$
-and $\mbox{\it PR}\cup \{R\} \cup \mbox{\it AUX1}$ are equivalent, and similarly, that $\mbox{\it PR}\cup \{R'\}$
-and $\mbox{\it PR}\cup \{R'\} \cup \mbox{\it AUX2}$ are equivalent.
-
-
-
-
-In general, we further have that if  $R$ is derivable in \mbox{\it PR} 
-and the proof systems \mbox{\it PR} and $\mbox{\it PR}'$ are equivalent
-then  $R$ is \emph{admissible} in $\mbox{\it PR}'$. 
-
-
-So we derive  that  $R$ is admissible in $\mbox{\it PR}\cup \{R'\}$
-and similarly, that $R'$ is admissible in $\mbox{\it PR}\cup \{R\}$.
-From this it follows that $\mbox{\it PR}\cup \{R'\}$ and
-$\mbox{\it PR}\cup \{R\}$ are equivalent.
-\HB
-\end{proof}
-
-\NI
-END 
-
--------------------------------
-
-
-This  modification does not affect provability in
-the considered proof systems II-V. 
-The following example shows this for the modification of the LOOP II rule,
-and uses this case to illustrate our general approach.
-
-\begin{example}
-First we observe that the LOOP II rule is trivially derivable
-in the modified proof system II, which uses instead its  modified  version,
-because 
-$p \ra t \geq 0$ implies  $p \A B \ra t \geq 0$.
-However, the converse does \emph{not} hold:
-Let 
-$$
- \HT{p \A B \A t=z}{S}{p \A t<z}
-$$
-and
-$p \A B \ra t \geq 0$.
-In order to apply the LOOP II rule
-suppose  that there exists a bound function $t'$
-such that $p  \ra t' \geq 0$.
-Since we can only apply the CONSEQUENCE rule to the above premise
-to derive
-$$
- \HT{p \A B \A t'=z}{S}{p \A t'<z}
-$$
-we have that
-$(p \A B \A t'=z)\ra (p \A B \A t=z)$
-and $(p \A t<z) \ra (p \A t'<z)$.
-But the first implication implies that $t=t'$ which does not hold in general.
-Take for example $\ITE{B}{t+1}{0}$ for $t'$. 
-
-Instead, using
-the standard \emph{substitution} rule which allows to
-replace in the above premise $z$ by $z-1$,
-we  obtain
-% $$
-%  \HT{p \A B \A t=z-1}{S}{p \A t<z-1}
-% $$
-% that is,
-$$
- \HT{p \A B \A t+1=z}{S}{p \A t+1<z}
-$$
-by a trivial application of the CONSEQUENCE rule.
-Another application of the  CONSEQUENCE rule then
-gives (as above, $t'\equiv \ITE{B}{t+1}{0}$)
-$$
- \HT{p \A B \A t'=z}{S}{p \A t+1<z}.
-$$
-Next we
-apply the standard \emph{invariance} rule
-to obtain
-$$
- \HT{p \A B \A t'=z\A 0< z}{S}{p \A t'<z \A 0<  z}.
-$$
-A final application of the CONSEQUENCE rule gives
-the desired premise 
-$$
- \HT{p \A B \A t'=z}{S}{p \A t'<z},
-$$
-so that we finally can apply the original LOOP II rule.
-\HB
-
-
-
-
-% It follows that 
-% $p\ra \ITE{B}{t}{0}\geq 0$.
-% % Thus we only need to derive 
-% % $$
-% %  \HT{p \A B \A \ITE{B}{t}{0}=z}{S}{p \A \ITE{B}{t}{0}<z}
-% % $$
-% % from the above premise.
-% Clearly, $p \A B \A \ITE{B}{t}{0}=z$ implies
-% $p \A B \A t=z$. However  $p \A t<z$ does \emph{not} imply 
-% $p \A \ITE{B}{t}{0}<z$: if $B$ does not hold we should
-% have that $0<z$, instead we have $0\leq z$.
-% Therefore we try the bound function
-% $\ITE{B}{t+1}{0}$ which we denote by $t'$.
-% But clearly we still cannot 
-% derive the corresponding correctness formula
-% from the above premise using the  CONSEQUENCE rule.
-% In fact, the situation only seems more complicated
-% because we have now introduced an \emph{inconsistency} in the meaning
-% of the logical variable $z$: On the one hand, the above premise states that
-% $t=z$ holds initially, whereas the modified bound function requires
-% that $t+1=z$ holds initially.
-% To resolve this inconsistency we use
-% the standard \emph{substitution} rule which allows to
-% replace in the above premise $z$ by $z-1$
-% and  obtain
-% $$
-%  \HT{p \A B \A t=z-1}{S}{p \A t<z-1}
-% $$
-% that is,
-% $$
-%  \HT{p \A B \A t+1=z}{S}{p \A t+1<z}
-% $$
-% by a trivial application of the CONSEQUENCE rule.
-% Another application of the  CONSEQUENCE rule then
-% gives
-% $$
-%  \HT{p \A B \A t'=z}{S}{p \A t+1<z}.
-% $$
-% Still $p \A t+1<z$ does not imply
-% $p \A \ITE{B}{t+1}{0}<z$.
-% Therefore we
-% apply the standard \emph{invariance} rule
-% to obtain
-% $$
-%  \HT{p \A B \A t'=z\A 0< z}{S}{p \A t'<z \A 0<  z}.
-% $$
-% A final application of the CONSEQUENCE rule gives
-% the desired premise 
-% $$
-%  \HT{p \A B \A t'=z}{S}{p \A t'<z},
-% $$
-% so that we finally can apply the original LOOP II rule.
-\end{example}
-
-The above example thus shows that the modified LOOP II rule is derivable
-in the proof system II, using  auxiliary rules.
-In contrast to the \bfe{structural} rules in Hoare logics,
-e.g., the rules for the different programming constructs, these
-rules abstract from the program structure.
-Instead, these rules  allow to
-\emph{adapt}  pre- and postconditions in ways beyond
-the basic  weakening and strengthening of the CONSEQUENCE rule.
-As such these rules are  not simply derivable.
-To finally show that the proof system II is equivalent
-with the system consisting of  the modified LOOP rule II,
-as stated by Lemma \ref{lem:equiv} it therefore remains to show that these auxiliary rules
-are \emph{admissible} in the proof system II and its modified version.
-
-
------------------------
-
-
-
-
-\III
-\NI
-
-THE DISCUSSION OF THE UNRESTRICTED RULES IS CHANGED
-
-
-% However, it is inessential as the
-% following theorem shows, where we call the LOOP rules II-IV without
-% this stipulation \emph{unrestricted}.
-
-% \begin{theorem} \label{thm:book}
-%   \mbox{} \\
-%   The unrestricted rules LOOP II, III, and IV, are admissible in the
-%   proof system II, III, and IV, respectively.
-% \end{theorem}
-
-% The proof can be found in Appendix~\ref{LOOPIIt}.
-However, it is inessential as the unrestricted rules LOOP II, III, and IV, are admissible in the
-  proof systems II, III, and IV, respectively.
-This follows from Theorem \ref{thm:aux}
-and Lemma \ref{lem:unrestr} in the following Section
-\ref{subsec:aux}, using our general approach described above.
-
-\NI
-
-END
-
-
-
-\III
-\NI
-SLIGHTLY CHANGED
-
-We will restrict our proof-theoretic analysis to the LOOP rules
-II-V. As 
-the above  results already show,
-it is straightforward to apply our general approach to the discussed modifications of them.
-
-\NI
-END
