@@ -291,10 +291,6 @@ contract paradigm.
 Finally, we show how to extend the equivalence result to a larger class of programs
 that access a library of procedures.
 
-\III
-
-\NI
-KRA (5-03-26): THE LAST SENTENCE ABOVE WAS ADDED
 
 \section{LOOP rules}
 
@@ -311,10 +307,6 @@ variables that can be quantified over. They are used in assertions as
 \bfe{freeze} variables.
 To keep things simple we assume that all program and logical variables
 are simple variables of  type \textbf{integer}.
-
-ERO: AND WHAT ABOUT THE TYPE OF LOGICAL VARIABLES ?
-KRA: (5-03-26) ADDED ABOVE 'and logical'
-\III
 
 Below we denote by $\mathit{free}(p)$
 the set of free variables of the assertion $p$ and by $var(t)$, $var(B)$, and $var(S)$ 
@@ -2072,16 +2064,11 @@ case.
 
 Consequently, only the following counterpart of the Equivalence Theorem~\ref{thm:abo}
 holds, where $\AUX$ denotes the set of auxiliary rules introduced in Subection \ref{subsec:aux}.
-
-ERO: I DON'T UNDERSTAND THE DIFFERENCE HERE. To prove the Equivalence
+To prove the Equivalence
 Theorem~\ref{thm:abo}, we also use auxiliary rule in the Derivability
 Lemma~\ref{lem:derivability} and then show that these auxiliary rules
 are admissible in Lemma~\ref{lem:admissibility}.  Why does this
 two-step approach not work here as well ?
-
-KRA (5-03-26): BECAUSE THE CASE OF PROCEDURE CALLS DOES NOT GO THROUGH
-IN THE INDUCTIVE PROOF: IT WOULD BE ONE OF THE BASE CASES OF SUCH A
-PROOF AND THERE IS NO WAY TO ESTABLISH IT.
 
 \begin{theorem} \label{thm:main2}
   The proof systems CII $\cup \AUX$ -- CIV $\cup \AUX$  are equivalent.  
@@ -3148,15 +3135,149 @@ which means proof system II $\approx$ proof system III.
 \section{Admissibility of the LOOP $B$ versions}
 \label{sec:B}
 
+*** ERO: NEW VERSION -- FIRST EQUIVALENCE ***
+
 We establish here the following result that clarifies the
 proof-theoretic status of the $B$ versions of the LOOP rules.
+Let us mark the proof systems using these versions with a $B$ in the end.
+
+\begin{theorem}\label{thm:B}
+  Each proof system $\alpha B$ is equivalent to the proof system
+  $\alpha$, where $\alpha \in \{{\rm II, III, IV}\}$.
+\end{theorem}
+
+\begin{corollary}
+  Each {\em LOOP $\alpha B$} rule is admissible in the proof system
+  $\alpha$, where $\alpha \in \{{\rm II, III, IV}\}$.
+\end{corollary}
+
+We prove Theorem~\ref{thm:B} in detail for the case $\alpha=$ III.
+First we show:
+
+\begin{lemma}\label{lem:IIIB}
+  The {\rm LOOP III} B rule can be derived from the {\rm LOOP III} using
+  the {\rm HYBRID CONJUNCTION} rule,
+  the {\rm $\exists$-INTRODUCTION} rule, and the {\rm CONSEQUENCE} rule.
+\end{lemma}
+
+\begin{proof}
+%   We prove the claim for the LOOP III $B$ rule. The proofs for the
+%   other two proof rules are analogous, though they require proving
+%   that the HYBRID CONJUNCTION and $\te$-INTRODUCTION rules are
+%   admissible in the proof systems II and IV.
+%
+Suppose that for some loop invariant $p$ and bound function $t$
+\begin{equation} \label{eq:inv}
+\HT{p \A B}{S}{p},
+\end{equation}
+\begin{equation} \label{eq:bd}
+\HT{p \A B \A t=z}{S}{t<z}
+\end{equation}
+and
+$p \A B \ra t \geq 0$.
+By the INVARIANCE axiom in the proof system I (see Note \ref{note:1})
+we have
+\[
+\vdash_{\rm{I}}  \HT{z' = z+1 \A 0 < z'}{S}{z' = z+1 \A 0 < z'},
+\]
+where $z'$ is a fresh logical variable.
+Applying the HYBRID CONJUNCTION rule to this correctness formula and (\ref{eq:bd}),
+we obtain
+\begin{equation}\label{eq:bd-hc}
+ \HT{z' = z+1 \A 0 < z' \A p \A B \A t=z}{S}{z' = z+1 \A 0 < z' \A t<z}.
+\end{equation}
+
+Next, note that for the bound function $t' \equiv \ITE{B}{t+1}{0}$
+the following implications hold:
+\[
+  z' = z+1 \A 0 < z' \A p \A B \A t'=z' \ra
+    z' = z+1 \A 0 < z' \A p \A B \A t=z
+\]
+and
+\[
+  z' = z+1 \A 0 < z' \A t<z \ra t' < z',
+\]
+so applying the CONSEQUENCE rule to (\ref{eq:bd-hc}) we obtain
+\[
+  \HT{z' = z+1 \A 0 < z' \A p \A B \A t'=z'}{S}{t'<z'}.
+\]
+
+Applying next the $\te$-INTRODUCTION rule,  we get
+\begin{equation}\label{eq:bd-te}
+  \HT{\te z: (z' = z+1 \A 0 < z' \A p \A B \A t'=z')}{S}{t'<z'}.
+\end{equation}
+
+Note now the following sequence of implications:
+\[
+  \begin{array}{l}
+    p \A B \A t'=z' \ra \\
+    0 \leq t \A p \A B \A t'=z' \ra \\
+    0 \leq t \A t' = t+1 \A p \A B \A t'=z' \ra \\
+    0 < z' \A p \A B \A t'=z' \ra \\
+    (\te z: z' = z+1) \A 0 < z' \A p \A B \A t'=z'  \ra \\
+    \te z: (z' = z+1 \A 0 < z' \A p \A B \A t'=z'). 
+  \end{array}
+\]
+
+An application of the CONSEQUENCE rule to (\ref{eq:bd-te}) then yields
+\begin{equation}\label{eq:bd-new}
+  \HT{p \A B \A t'=z'}{S}{t'<z'},
+\end{equation}
+Further, we have $p \A B \ra t \geq 0 \A t' = t+1$ and 
+$p \A \neg B \ra t' = 0$, so 
+$p \ra t' \geq 0$ holds.
+This allows us to apply the LOOP III rule to (\ref{eq:inv}), (\ref{eq:bd-new}),
+and the last implication to establish
+\[
+ \HT{p}{\WDD{B}{S}}{p \wedge \neg B}.
+\]
+\end{proof}
+
+By Lemma~\ref{lem:admissibility}, the auxiliary rules needed in Lemma~\ref{lem:IIIB}
+are admissible in proof system III. The converse of Lemma~\ref{lem:IIIB}
+is immediate.
+
+\begin{lemma}\label{lem:III}
+  The {\rm LOOP III} rule can be derived from the {\rm LOOP III B}. 
+\end{lemma}
+
+\begin{proof}
+Suppose that for some loop invariant $p$ and bound function $t$
+\[
+\HT{p \A B}{S}{p}, \
+\HT{p \A B \A t=z}{S}{t<z}, \mbox{  and }  p \ra t \geq 0.
+\]
+Since the last condition implies $p \A B \ra t \geq 0$,
+an application of the LOOP III B rule yields
+\[
+ \HT{p}{\WDD{B}{S}}{p \wedge \neg B}.
+\]
+\end{proof}
+
+Finally, by instantiating Lemma~\ref{lem:equ} with the 
+Lemmas~\ref{lem:IIIB}, \ref{lem:III}, and \ref{lem:admissibility}, 
+we obtain that the proof system III B is equivalent to the proof system III.
+For the cases II and IV, the equivalence proofs require
+lemmas corresponding to Lemma~\ref{lem:IIIB} and Lemma~\ref{lem:III},
+which can be proven analogously,
+though it has to be shown along the lines of Lemma~\ref{lem:admissibility}
+that the HYBRID CONJUNCTION rule is admissible in the proof systems II and IV,
+and that the $\te$-INTRODUCTION rule is admissible in the proof system IV.
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\III
+
+*** PREVIOUS VERSION: ONLY ADMISSIBILTY ***
 
 \begin{theorem}
   Each LOOP $\alpha B$ rule is admissible in the proof system
   $\alpha$, where $\alpha \in \{II, III, IV\}$.
 \end{theorem}
 
-\begin{proof}
+\begin{proof} of the Theorem
   We prove the claim for the LOOP III$B$ rule. The proofs for the
   other two proof rules are analogous, though they require proving
   that the HYBRID CONJUNCTION and $\te$-INTRODUCTION rules are
