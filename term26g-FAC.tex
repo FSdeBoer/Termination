@@ -62,7 +62,7 @@
 
 \newcommand{\AUX}{\mathit{AUX}}
 
-\newtheorem{note}{Note}
+\newtheorem{note}{Note}  % was not present in ACM style
 
 
 \begin{document}
@@ -626,7 +626,7 @@ $\phi_1, \LL, \phi_m$ is empty and when $T$ is a set of proof
 rules.
 
 Given a proof system $T$ and a proof rule (in short: a rule) $R$ we
-abbreviate $T \cup \C{R}$ to $T \cup R$. Given two proof systems $T_1$
+abbreviate $T \cup \Cu{R}$ to $T \cup R$. Given two proof systems $T_1$
 and $T_2$ we abbreviate the statement that they are equivalent to
 $T_1 \approx T_2$ and the statement that every formula provable in
 $T_1$ is also provable in $T_2$ to $T_1 \preceq T_2$.
@@ -715,7 +715,7 @@ $(\Leftarrow)$ Choose a rule $R$ from $\AUX$.
 We need to show that
 $\varphi_1, \LL, \varphi_k \vdash_T \varphi$, or equivalently
 $\vdash_{T \cup U} \varphi$, where $U$ consists of the set of axioms
-$\C{\varphi_1,\LL,\varphi_k}$.  But the latter claim holds since
+$\Cu{\varphi_1,\LL,\varphi_k}$.  But the latter claim holds since
 $\vdash_{T \cup U \cup \AUX} \varphi$.
 \end{proof}
 
@@ -1471,7 +1471,7 @@ For the proof system II we introduce the following formation rule:
 p \ra t \geq 0                                          \\
 [-\medskipamount]
 \hrulefill                                              \\
-\C{{\bf inv:}\ p}
+\Cu{{\bf inv:}\ p}
 \HT{{\bf bd:}\ t}
    {\WDD{B}{\HT{p \A B \A t = z}{S^*}{p \A t<z}}}
    {p \A \neg B}
@@ -1497,7 +1497,7 @@ there is a typo and $S^{**}$ is mentioned here instead of $S^{*}$.}
 % p \ra t \geq 0                                          \\
 % [-\medskipamount]
 % \hrulefill                                              \\
-% \C{{\bf inv:}\ p}
+% \Cu{{\bf inv:}\ p}
 % \HT{{\bf bd:}\ t}
 %    {\WDD{B}{\HT{p \A B \A t = z}{S^*}{p \A t<z}}}
 %    {p \A \neg B}
@@ -1577,29 +1577,29 @@ the assertion in line~17.
 
 \begin{tabbing}
 \ 1\qquad\qquad
- \= \C{\textbf{inv} : \T } \C{\textbf{bd}: \mbox{\it max}(n-i,0)}    \\
+ \= \Cu{\textbf{inv} : \T } \Cu{\textbf{bd}: \mbox{\it max}(n-i,0)}    \\
 \ 2 \> $\WD{i < n}$                                                  \\
-\ 3 \> \qquad \C{\T \A i < n \A \mbox{\it max}(n-i,0) = z_1}         \\
-\ 4 \> \qquad \C{n-i = z_1 \A z_1>0 }                                \\
+\ 3 \> \qquad \Cu{\T \A i < n \A \mbox{\it max}(n-i,0) = z_1}         \\
+\ 4 \> \qquad \Cu{n-i = z_1 \A z_1>0 }                                \\
 \ 5 \> \qquad \ \ $j:=i; $                                           \\
-\ 6 \> \qquad \C{n-i = z_1 \A z_1>0}                                 \\
-\ 7 \> \qquad \C{\textbf{inv} : n-i = z_1 \A z_1>0} \C{\textbf{bd}: \mbox{\it max}(j,0)} \\
+\ 6 \> \qquad \Cu{n-i = z_1 \A z_1>0}                                 \\
+\ 7 \> \qquad \Cu{\textbf{inv} : n-i = z_1 \A z_1>0} \Cu{\textbf{bd}: \mbox{\it max}(j,0)} \\
 \ 8\> \qquad $\WD{0 < j}$                                            \\
-\ 9\> \qquad \qquad \C{n-i = z_1 \A z_1>0 \A 0<j\A  \mbox{\it max}(j,0)= z_2}  \\
-10\> \qquad \qquad \C{n-i = z_1 \A z_1>0 \A  j = z_2 \A z_2>0 }      \\
-11\> \qquad \qquad \C{n-i = z_1 \A z_1>0 \A j-1 < z_2 \A z_2>0 }     \\
+\ 9\> \qquad \qquad \Cu{n-i = z_1 \A z_1>0 \A 0<j\A  \mbox{\it max}(j,0)= z_2}  \\
+10\> \qquad \qquad \Cu{n-i = z_1 \A z_1>0 \A  j = z_2 \A z_2>0 }      \\
+11\> \qquad \qquad \Cu{n-i = z_1 \A z_1>0 \A j-1 < z_2 \A z_2>0 }     \\
 12\> \qquad \qquad \ \ $j:=j-1$                                      \\
-13\> \qquad \qquad \C{n-i = z_1 \A z_1>0 \A j < z_2 \A z_2>0}        \\
-14\> \qquad \qquad \C{n-i = z_1 \A z_1>0 \A \mbox{\it max}(j,0) < z_2 }        \\
+13\> \qquad \qquad \Cu{n-i = z_1 \A z_1>0 \A j < z_2 \A z_2>0}        \\
+14\> \qquad \qquad \Cu{n-i = z_1 \A z_1>0 \A \mbox{\it max}(j,0) < z_2 }        \\
 15\> \qquad \OD ;                                                    \\
-16\> \qquad \C{n-i = z_1 \A z_1>0 \A \neg (0 < j)}                   \\
-17\> \qquad \C{n-(i+1) < z_1 \A z_1>0 }                              \\
+16\> \qquad \Cu{n-i = z_1 \A z_1>0 \A \neg (0 < j)}                   \\
+17\> \qquad \Cu{n-(i+1) < z_1 \A z_1>0 }                              \\
 18\> \qquad \ \ $i:=i+1$                                             \\
-19\> \qquad \C{n-i < z_1 \A z_1>0}                                   \\
-20\> \qquad \C{\T \A \mbox{\it max}(n-i,0) < z_1 }                   \\
+19\> \qquad \Cu{n-i < z_1 \A z_1>0}                                   \\
+20\> \qquad \Cu{\T \A \mbox{\it max}(n-i,0) < z_1 }                   \\
 21\> \OD                                                             \\
-22\> \C{\T \A \neg (i < n)}                                          \\
-23\> \C{\T}
+22\> \Cu{\T \A \neg (i < n)}                                          \\
+23\> \Cu{\T}
 \end{tabbing}
 
 \caption{Proof outline for \HT{\T}{S_N}{\T} in the proof system II.
@@ -1664,21 +1664,21 @@ $\T\to \mbox{\it max}(n-i,0)\geq 0$.
  \begin{figure}[ht]
  \begin{tabbing}
  \qquad\qquad                                       
-\= \C{\T\A i < n \A \mbox{\it max}(n-i,0) = z}  \\
-\>  \C{n-i = z \A z>0 }                         \\
+\= \Cu{\T\A i < n \A \mbox{\it max}(n-i,0) = z}  \\
+\>  \Cu{n-i = z \A z>0 }                         \\
 \>  \ \ $j:=i; $                                \\
-\>  \C{n-i = z \A z>0}                          \\
-\>  \C{\textbf{inv} : n-i = z \A z>0}           \\
+\>  \Cu{n-i = z \A z>0}                          \\
+\>  \Cu{\textbf{inv} : n-i = z \A z>0}           \\
 \>  $\WD{0 < j}$                          \\
-\>  \qquad \C{n-i = z \A z>0 }                  \\
+\>  \qquad \Cu{n-i = z \A z>0 }                  \\
 \>  \qquad \ \ $j:=j-1$                         \\
-\> \qquad \C{n-i = z \A z>0}                    \\
+\> \qquad \Cu{n-i = z \A z>0}                    \\
 \>  \OD ;                                       \\
-\>  \C{n-i = z \A z>0 \A \neg (0 < j)}          \\
-\>  \C{n-(i+1) < z \A z>0 }                     \\
+\>  \Cu{n-i = z \A z>0 \A \neg (0 < j)}          \\
+\>  \Cu{n-(i+1) < z \A z>0 }                     \\
 \>  \ \ $i:=i+1$                                \\
-\> \C{n-i < z \A z>0}                           \\
-\> \C{\mbox{\it max}(n-i,0) < z }               \\
+\> \Cu{n-i < z \A z>0}                           \\
+\> \Cu{\mbox{\it max}(n-i,0) < z }               \\
 [\bigskipamount]
 \end{tabbing}
 \caption{Proof outline for $\HT{\T\A i < n \A \mbox{\it max}(n-i,0) = z}{S_0}{\mbox{\it max}(n-i,0) < z}$  in the proof system I.}
@@ -1699,12 +1699,12 @@ $$\HT{\T\A 0<j\A  \mbox{\it max}(j,0)= z}{j:=j-1}{\mbox{\it max}(j,0) < z}.$$
  \begin{figure}[htbp]
  \begin{tabbing}
  \qquad\qquad    
-\=\C{\T\A 0<j\A  \mbox{\it max}(j,0)= z}       \\
-%\>  \C{j = z \A z>0 }                         \\
-\>  \C{j-1 < z \A z>0 }                        \\
+\=\Cu{\T\A 0<j\A  \mbox{\it max}(j,0)= z}       \\
+%\>  \Cu{j = z \A z>0 }                         \\
+\>  \Cu{j-1 < z \A z>0 }                        \\
 \>  \ \ $j:=j-1$                               \\
-\>  \C{j < z \A z>0}                           \\
-\> \C{\mbox{\it max}(j,0) < z }                \\
+\>  \Cu{j < z \A z>0}                           \\
+\> \Cu{\mbox{\it max}(j,0) < z }                \\
 \end{tabbing}
 \caption{Proof outline for $\HT{\T\A 0<j\A  \mbox{\it max}(j,0)= z}{j:=j-1}{\mbox{\it max}(j,0) < z}$  in the proof system I.}
 \label{fig:po3}
@@ -1907,12 +1907,12 @@ from which  by the CONSEQUENCE rule $\HT{p(x,y}{swap(x,y)}{p(y,x)}$ follows.
 
 % \begin{tabbing}
 % \qquad\qquad                                       
-% \= \C{p(x,y)} \\
-% \> \C{\te x_0, y_0: x=x_0 \wedge y=y_0 \wedge p(x_0,y_0)} \\
-% \> \C{x=x_0 \wedge y=y_0 \wedge p(x_0,y_0)} \\
+% \= \Cu{p(x,y)} \\
+% \> \Cu{\te x_0, y_0: x=x_0 \wedge y=y_0 \wedge p(x_0,y_0)} \\
+% \> \Cu{x=x_0 \wedge y=y_0 \wedge p(x_0,y_0)} \\
 % \>  $swap(x,y) $                         \\
-% \> \C{y=x_0 \wedge x=y_0 \wedge p(x_0,y_0)} \\
-% \> \C{p(y,x)}
+% \> \Cu{y=x_0 \wedge x=y_0 \wedge p(x_0,y_0)} \\
+% \> \Cu{p(y,x)}
 % \end{tabbing}
 
 Then we can exhibit an appropriate proof outline in the proof
@@ -1924,24 +1924,24 @@ system II that at the relevant place uses the just established property of
  \begin{figure}[ht]
  \begin{tabbing}
  \qquad\qquad                                       
-\= \C{x=x_0 \wedge y=y_0 \wedge x>0 \wedge y>0} \\
-\> \C{gcd(x,y)=gcd(x_0, y_0)  \wedge x>0 \wedge y>0} \\
-\> \C{\textbf{inv} : gcd(x,y)=gcd(x_0, y_0)  \wedge x>0 \wedge y>0} \C{\textbf{bd}: x+y}    \\
+\= \Cu{x=x_0 \wedge y=y_0 \wedge x>0 \wedge y>0} \\
+\> \Cu{gcd(x,y)=gcd(x_0, y_0)  \wedge x>0 \wedge y>0} \\
+\> \Cu{\textbf{inv} : gcd(x,y)=gcd(x_0, y_0)  \wedge x>0 \wedge y>0} \Cu{\textbf{bd}: x+y}    \\
 \> $\WD{x \neq y}$                          \\
-\>  \qquad \C{gcd(x,y)=gcd(x_0, y_0)  \wedge x>0 \wedge y>0 \wedge z = x+y \wedge x \neq y} \\
+\>  \qquad \Cu{gcd(x,y)=gcd(x_0, y_0)  \wedge x>0 \wedge y>0 \wedge z = x+y \wedge x \neq y} \\
 \>  \qquad $\IF x < y \THEN$                         \\
-\> \qquad \qquad \C{gcd(x,y)=gcd(x_0, y_0)  \wedge x>0 \wedge y>0 \wedge z = x+y \wedge x < y} \\
+\> \qquad \qquad \Cu{gcd(x,y)=gcd(x_0, y_0)  \wedge x>0 \wedge y>0 \wedge z = x+y \wedge x < y} \\
 \>  \qquad \qquad  $swap(x,y) $                         \\
-\> \qquad \qquad \C{gcd(y,x)=gcd(x_0, y_0)  \wedge y>0 \wedge x>0 \wedge z = y+x \wedge y < x} \\
-\> \qquad \qquad \C{gcd(x,y)=gcd(x_0, y_0)  \wedge x>0 \wedge y>0 \wedge z = x+y \wedge x > y} \\
+\> \qquad \qquad \Cu{gcd(y,x)=gcd(x_0, y_0)  \wedge y>0 \wedge x>0 \wedge z = y+x \wedge y < x} \\
+\> \qquad \qquad \Cu{gcd(x,y)=gcd(x_0, y_0)  \wedge x>0 \wedge y>0 \wedge z = x+y \wedge x > y} \\
 \>  \qquad \FI; \\
-\>  \qquad \C{gcd(x,y)=gcd(x_0, y_0)  \wedge x>0 \wedge y>0 \wedge z = x+y \wedge x > y} \\
+\>  \qquad \Cu{gcd(x,y)=gcd(x_0, y_0)  \wedge x>0 \wedge y>0 \wedge z = x+y \wedge x > y} \\
 \>  \qquad $x:= x-y$                         \\
-\>  \qquad \C{gcd(x,y)=gcd(x_0, y_0)  \wedge x>0 \wedge y>0 \wedge z < x+y} \\
+\>  \qquad \Cu{gcd(x,y)=gcd(x_0, y_0)  \wedge x>0 \wedge y>0 \wedge z < x+y} \\
 \>  \OD                                      \\
-\> \C{gcd(x,y)=gcd(x_0, y_0)  \wedge x>0 \wedge y>0 \wedge x=y} \\
-\> \C{x=y = gcd(x,y) \wedge gcd(x,y)=gcd(x_0, y_0)} \\
-\> \C{x=y=gcd(x_0, y_0)} 
+\> \Cu{gcd(x,y)=gcd(x_0, y_0)  \wedge x>0 \wedge y>0 \wedge x=y} \\
+\> \Cu{x=y = gcd(x,y) \wedge gcd(x,y)=gcd(x_0, y_0)} \\
+\> \Cu{x=y=gcd(x_0, y_0)} 
 \end{tabbing}
 \caption{Proof outline for the conditional correctness formula (\ref{equ:gcd}).}
 \label{fig:gcd}
@@ -2346,7 +2346,7 @@ Equivalence Theorem~\ref{thm:abo} (The proof systems II--V are equivalent.),
 it suffices to instantiate Lemma~\ref{lem:equ}, 
 for each of the four pair of rules
 \[
-  (R_1, R_2) \in \C{(\mathrm{II}, \mathrm{III}),
+  (R_1, R_2) \in \Cu{(\mathrm{II}, \mathrm{III}),
     (\mathrm{III},\mathrm{II}),
     (\mathrm{III}, \mathrm{IV}),
     (\mathrm{IV}, \mathrm{III})}
