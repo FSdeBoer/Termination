@@ -857,7 +857,14 @@ a specific set of rules $\AUX$ drawn from the set of auxiliary rules
 listed in the previous section, augmented with the CONSEQUENCE rule
 (that also is an adaptation rule).
 
-More specifically, we establish the following two lemmas.
+\III
+\NI
+*** ERO: CONNECTING SENTENCES INTRODUCED FOR THE NEXT TWO LEMMAS.
+
+Following Lemma~\ref{lem:equ}, we proceed in two steps.
+Instantiating part (i) of the lemma, we first deal with derivability.
+
+% More specifically, we establish the following two lemmas.
 
 \begin{lemma}[Derivability]
   \label{lem:derivability}
@@ -896,7 +903,7 @@ The following derivability results hold:
 
 \end{lemma}
 
-
+Then, instantiating part (ii) of Lemma~\ref{lem:equ}, we deal with admissibilty.
 
 \begin{lemma}[Admissibility] \label{lem:admissibility}
 The following admissibility results hold:
@@ -3132,6 +3139,7 @@ So altogether $T \cup \mathrm{LOOP\ II}\ \approx\ T \cup \mathrm{LOOP\ III}$,
 which means proof system II $\approx$ proof system III.
 
 
+
 \section{Admissibility of the LOOP $B$ versions}
 \label{sec:B}
 
@@ -3139,7 +3147,7 @@ which means proof system II $\approx$ proof system III.
 
 We establish here the following result that clarifies the
 proof-theoretic status of the $B$ versions of the LOOP rules.
-Let us mark the proof systems using these versions with a $B$ in the end.
+Let us denote the proof systems using these versions with a $B$ in the end.
 
 \begin{theorem}\label{thm:B}
   Each proof system $\alpha B$ is equivalent to the proof system
@@ -3174,8 +3182,8 @@ Suppose that for some loop invariant $p$ and bound function $t$
 \HT{p \A B \A t=z}{S}{t<z}
 \end{equation}
 and
-$p \A B \ra t \geq 0$.
-By the INVARIANCE axiom in the proof system I (see Note \ref{note:1})
+$p \A B \ra t \geq 0$ hold.
+By the INVARIANCE axiom in the proof system I (see Note \ref{note:1}),
 we have
 \[
 \vdash_{\rm{I}}  \HT{z' = z+1 \A 0 < z'}{S}{z' = z+1 \A 0 < z'},
@@ -3197,7 +3205,7 @@ and
 \[
   z' = z+1 \A 0 < z' \A t<z \ra t' < z',
 \]
-so applying the CONSEQUENCE rule to (\ref{eq:bd-hc}) we obtain
+so applying the CONSEQUENCE rule to (\ref{eq:bd-hc}) yields
 \[
   \HT{z' = z+1 \A 0 < z' \A p \A B \A t'=z'}{S}{t'<z'}.
 \]
