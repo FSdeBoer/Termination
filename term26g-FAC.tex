@@ -126,14 +126,18 @@
 
 
 \begin{abstract}
-  We provide a comparative analysis of different proof rules for
-  proving termination of \textbf{while} programs and show their
-  proof-theoretic equivalence.  This involves a proof-theoretic
-  analysis of various auxiliary proof rules in Hoare's logic.  By
-  discussing representations of proofs in the form of proof outlines,
-  we reveal differences between these equivalent proof rules when used
-  in practice.  We also address applications in the context of the
-  paradigm of design by contract.
+  In the context of Hoare's logic various variants of proof rules for
+  proving termination of \textbf{while} programs were proposed.
+  We provide here a comparative analysis of these rules and show their
+  proof-theoretic equivalence. By introducing the distinction between
+  admissible and derivable proof rules, we clarify the crucial role
+  auxiliary rules play in such an analysis. By discussing
+  representations of proofs in the form of proof outlines, we reveal
+  differences between these equivalent proof rules when used in
+  practice. We also address applications in the context of the paradigm
+  of design by contract.
+  Finally, we show how to extend the equivalence result to a larger
+  class of programs that access a library of procedures.
 \end{abstract}
 
 %%
@@ -154,7 +158,7 @@
 
 %% Keywords. The author(s) should pick words that accurately describe
 %% the work being presented. Separate the keywords with commas.
-\keywords{Program verification, Termination, Analysis of proof rules}
+\keywords{Program verification, Termination, Analysis of proof rules, Proof outlines}
 
 \received{Day Month 2026}
 % \received[revised]{?? ???? 2025}
@@ -221,8 +225,10 @@ C programs, Java bytecode programs, logic programs,
 functional programs, and term rewriting systems.
 Here we focus on the shape of termination proofs in the context of
 Hoare's logic. 
-To this end, we investigate three natural proof rules 
-from the proof-theoretic point of view.
+*** ERO: FOOTNOTE
+In this paper, we investigate three natural proof rules and their variants
+from the proof-theoretic point of view\footnote{This paper 
+ is a modified and extended version of~\cite{ABO25}.}.
 More specifically, we study {\bf while} programs with Hoare's 
 original proof system for program correctness, in which the well-known
 proof rule for partial correctness of the {\bf while} loops, which we
@@ -294,8 +300,52 @@ contract paradigm.
 Finally, we show how to extend the equivalence result to a larger class of programs
 that access a library of procedures.
 
+\III
+\NI
+*** ERO: ADDED
+
+Our paper is organized as follows.
+In Section~\ref{sec:loop-rules}, we present extend the classical proof rule
+for partial correctness in three ways to deal with termination.
+We end by stating the main result of the paper: Equivalence Theorem~\ref{thm:abo}.
+In Section~\ref{sec:discussion}, we discuss we origins and merits 
+of the loop rules for termination and point to variants that will be analyzed in Appendix~\ref{sec:B}.
+Section~\ref{sec:proving-equiv}, is devoted to proving the Equivalence Theorem~\ref{thm:abo}. 
+We distinguish the notions
+of admissibility and derivability of proof rules and relate them
+by referring to the notion of auxiliary rules. 
+These lemmas provide the blue-print for our equivalence proof.
+The auxiliary rules needed for our analysis are then introduced. 
+The overall structure of the equivalence
+proof is outlined by referring to the central lemmas of 
+derivability and admissibilty, which are proven in Appendix~\ref{sec:proof}.
+We close by discussing restrictions imposed on the bound functions
+in the loop rules for termination.
+In Section~\ref{sec:rep-proofs}, we discuss the representation of proofs
+in the form of proof outlines and we reveal differences between the
+equivalent proof rules when used in practice.
+The termination proof of an example program serves to illustrate this.
+In Section~\ref{sec:applications}, we point to applications of proof outlines
+in the context of the paradigm of design by contract,
+in particular the Java Modeling Language (JML).
+In Section~\ref{sec:assumptions}, we show how to extend the equivalence result 
+to a larger class of programs that access a library of procedures.
+In Section~\ref{sec:conc}, we conclude our paper.
+
+Three appendices complete the paper.
+Appendix~\ref{sec:I} recalls the proof system for partial
+correctness of {\bf while} programs.
+Appendix~\ref{sec:proof} gives all details of the proof of the 
+Equivalence Theorem~\ref{thm:abo}.
+Appendix~\ref{sec:B} shows the equivalence of variants of the loop rules
+alluded to in Section~\ref{sec:discussion}.
+
+
+
+
 
 \section{LOOP rules}
+\label{sec:loop-rules}
 
 We shall be concerned here with the language, the formulas of
 which are either first-order formulas, called \bfe{assertions}, or
@@ -486,6 +536,7 @@ formulas can be proved in each of them.
 
 
 \section{Discussion}
+\label{sec:discussion}
 
 Before we proceed with the proof of the Equivalence Theorem~\ref{thm:abo} let us
 discuss the introduced rules and some of their variants.  It is
@@ -585,6 +636,7 @@ KRA: END
 
 
 \section{Proving Equivalence}
+\label{sec:proving-equiv}
 
 A direct proof of the Equivalence Theorem~\ref{thm:abo} would require a detailed
 analysis of the shape of proofs. For example, in the case of the proof
@@ -1411,6 +1463,7 @@ LOOP rule no restriction on the bound function $t$ is used.
 % END
 
 \section{Representing Proofs}
+\label{sec:rep-proofs}
 
 \subsection{Proof outlines}
 
@@ -1731,6 +1784,7 @@ $$\HT{\T\A 0<j\A  \mbox{\it max}(j,0)= z}{j:=j-1}{\mbox{\it max}(j,0) < z}.$$
 
 
 \section{Practical Applications}
+\label{sec:applications}
 
 Research on program verification has entered practice most visibly by
 the use of assertions as annotations of programs and program
@@ -1805,6 +1859,7 @@ the particular program structure.
 
 
 \section{Proofs from Assumptions}
+\label{sec:assumptions}
 
 KRA (5-03-26): NEW SECTION
 \III
@@ -2099,6 +2154,31 @@ two-step approach not work here as well ?
 This result underlies, yet again, the importance of auxiliary rules in this comparative study of
 the LOOP rules.
 
+
+\section{Conclusion}
+\label{sec:conc}
+
+We provided here a comparative proof-theoretic analysis of three proof
+rules for proving termination of \textbf{while} programs
+and their variants % I refer here to the B versions
+By introducing the distinction between the admissible and derivable
+proof rules, we could clarify the crucial role auxiliary rules play in
+such an analysis. More specifically, we showed that 
+each loop rule for termination can be derived from one of the
+other loop rules using certain auxiliary rules
+and that each of the used auxiliary rules is admissible,
+which allowed us in the final equivalence theorem to dispense with these rules.
+
+Further, the distinction between logical and program variables (and
+subsequent removal of them) allowed us to deal with a restriction 
+(on the bound functions) that we needed to impose to obtain the
+appropriate equivalence results in~\cite{ABO25}.
+Additionally, we showed how to extend these results to the setting in
+which one uses procedure calls. It turns out that in this setting the
+auxiliary rules cannot be dispensed with.
+
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 \bibliographystyle{ACM-Reference-Format}
@@ -2112,7 +2192,7 @@ the LOOP rules.
 \section{Proof System I}
 \label{sec:I}
 
-The proof system I consists of the following axioms and rules:
+The proof system I consists of the following axiom and rules:
 \VV
 
 \NI
