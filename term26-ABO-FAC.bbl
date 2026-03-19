@@ -1,0 +1,403 @@
+%%% -*-BibTeX-*-
+%%% Do NOT edit. File created by BibTeX with style
+%%% ACM-Reference-Format-Journals [18-Jan-2012].
+
+\begin{thebibliography}{26}
+
+%%% ====================================================================
+%%% NOTE TO THE USER: you can override these defaults by providing
+%%% customized versions of any of these macros before the \bibliography
+%%% command.  Each of them MUST provide its own final punctuation,
+%%% except for \shownote{}, \showDOI{}, and \showURL{}.  The latter two
+%%% do not use final punctuation, in order to avoid confusing it with
+%%% the Web address.
+%%%
+%%% To suppress output of a particular field, define its macro to expand
+%%% to an empty string, or better, \unskip, like this:
+%%%
+%%% \newcommand{\showDOI}[1]{\unskip}   % LaTeX syntax
+%%%
+%%% \def \showDOI #1{\unskip}           % plain TeX syntax
+%%%
+%%% ====================================================================
+
+\ifx \showCODEN    \undefined \def \showCODEN     #1{\unskip}     \fi
+\ifx \showDOI      \undefined \def \showDOI       #1{#1}\fi
+\ifx \showISBNx    \undefined \def \showISBNx     #1{\unskip}     \fi
+\ifx \showISBNxiii \undefined \def \showISBNxiii  #1{\unskip}     \fi
+\ifx \showISSN     \undefined \def \showISSN      #1{\unskip}     \fi
+\ifx \showLCCN     \undefined \def \showLCCN      #1{\unskip}     \fi
+\ifx \shownote     \undefined \def \shownote      #1{#1}          \fi
+\ifx \showarticletitle \undefined \def \showarticletitle #1{#1}   \fi
+\ifx \showURL      \undefined \def \showURL       {\relax}        \fi
+% The following commands are used for tagged output and should be
+% invisible to TeX
+\providecommand\bibfield[2]{#2}
+\providecommand\bibinfo[2]{#2}
+\providecommand\natexlab[1]{#1}
+\providecommand\showeprint[2][]{arXiv:#2}
+
+\bibitem[\protect\citeauthoryear{Almeida, Frade, Pinto, and Melo~de
+  Sousa}{Almeida et~al\mbox{.}}{2011}]%
+        {Almeida11}
+\bibfield{author}{\bibinfo{person}{Jos{\'e}~Bacelar Almeida},
+  \bibinfo{person}{Maria~Jo{\~a}o Frade}, \bibinfo{person}{Jorge~Sousa Pinto},
+  {and} \bibinfo{person}{Sim{\~a}o Melo~de Sousa}.}
+  \bibinfo{year}{2011}\natexlab{}.
+\newblock \bibinfo{booktitle}{\emph{Rigorous Software Development: An
+  Introduction to Program Verification}}.
+\newblock \bibinfo{publisher}{Springer}, \bibinfo{address}{London}.
+\newblock
+\showISBNx{978-1-4471-7557-5}
+
+
+\bibitem[\protect\citeauthoryear{Apt}{Apt}{1981}]%
+        {Apt81a}
+\bibfield{author}{\bibinfo{person}{K.~R. Apt}.}
+  \bibinfo{year}{1981}\natexlab{}.
+\newblock \showarticletitle{Recursive Assertions and Parallel Programs}.
+\newblock \bibinfo{journal}{\emph{Acta Inf.}}  \bibinfo{volume}{13}
+  (\bibinfo{year}{1981}), \bibinfo{pages}{219--232}.
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.1007/BF00289262}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Apt, de~Boer, and Olderog}{Apt
+  et~al\mbox{.}}{1990}]%
+        {ABO90}
+\bibfield{author}{\bibinfo{person}{K.~R. Apt}, \bibinfo{person}{F.~S. de Boer},
+  {and} \bibinfo{person}{E.-R. Olderog}.} \bibinfo{year}{1990}\natexlab{}.
+\newblock \showarticletitle{Proving termination of parallel programs}. In
+  \bibinfo{booktitle}{\emph{Beauty is Our Business, A Birthday Salute to Edsger
+  W. Dijkstra}}, \bibfield{editor}{\bibinfo{person}{W.~H.~J. Feijen},
+  \bibinfo{person}{A.~J.~M. van Gasteren}, \bibinfo{person}{D.~Gries}, {and}
+  \bibinfo{person}{J.~Misra}} (Eds.). \bibinfo{publisher}{Springer-Verlag},
+  \bibinfo{address}{New York}, \bibinfo{pages}{0--6}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Apt, de~Boer, and Olderog}{Apt
+  et~al\mbox{.}}{2009}]%
+        {ABO09}
+\bibfield{author}{\bibinfo{person}{K.~R. Apt}, \bibinfo{person}{F.~S. de Boer},
+  {and} \bibinfo{person}{E.-R. Olderog}.} \bibinfo{year}{2009}\natexlab{}.
+\newblock \bibinfo{booktitle}{\emph{Verification of Sequential and Concurrent
+  Programs} (\bibinfo{edition}{third} ed.)}.
+\newblock \bibinfo{publisher}{Springer-Verlag}, \bibinfo{address}{New York}.
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.1007/978-1-84882-745-5}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Apt, de~Boer, and Olderog}{Apt
+  et~al\mbox{.}}{2025}]%
+        {ABO25}
+\bibfield{author}{\bibinfo{person}{K.~R. Apt}, \bibinfo{person}{F.~S. de Boer},
+  {and} \bibinfo{person}{E.-R. Olderog}.} \bibinfo{year}{2025}\natexlab{}.
+\newblock \showarticletitle{Three Ways of Proving Termination of Loops}. In
+  \bibinfo{booktitle}{\emph{The Combined Power of Research, Education, and
+  Dissemination - Essays Dedicated to Tiziana Margaria on the Occasion of Her
+  60th Birthday}} \emph{(\bibinfo{series}{LNCS},
+  Vol.~\bibinfo{volume}{15240})}, \bibfield{editor}{\bibinfo{person}{Mike
+  Hinchey} {and} \bibinfo{person}{Bernhard Steffen}} (Eds.).
+  \bibinfo{publisher}{Springer}, \bibinfo{address}{Cham},
+  \bibinfo{pages}{280--301}.
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.1007/978-3-031-73887-6\_19}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Apt and Olderog}{Apt and Olderog}{2019}]%
+        {AO19}
+\bibfield{author}{\bibinfo{person}{K.~R. Apt} {and} \bibinfo{person}{E.-R.
+  Olderog}.} \bibinfo{year}{2019}\natexlab{}.
+\newblock \showarticletitle{Fifty years of {Hoare's} logic}.
+\newblock \bibinfo{journal}{\emph{Formal Aspects of Computing}}
+  \bibinfo{volume}{31}, \bibinfo{number}{6} (\bibinfo{year}{2019}),
+  \bibinfo{pages}{751--807}.
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.1007/S00165-019-00501-3}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Apt and Plotkin}{Apt and Plotkin}{1986}]%
+        {AptP86}
+\bibfield{author}{\bibinfo{person}{Krzysztof~R. Apt} {and}
+  \bibinfo{person}{Gordon~D. Plotkin}.} \bibinfo{year}{1986}\natexlab{}.
+\newblock \showarticletitle{Countable nondeterminism and random assignment}.
+\newblock \bibinfo{journal}{\emph{J. {ACM}}} \bibinfo{volume}{33},
+  \bibinfo{number}{4} (\bibinfo{year}{1986}), \bibinfo{pages}{724--767}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Baudin, Bobot, B{\"{u}}hler, Correnson,
+  Kirchner, Kosmatov, Maroneze, Perrelle, Prevosto, Signoles, and
+  Williams}{Baudin et~al\mbox{.}}{2021}]%
+        {BBBCKKMPPS21}
+\bibfield{author}{\bibinfo{person}{Patrick Baudin},
+  \bibinfo{person}{Fran{\c{c}}ois Bobot}, \bibinfo{person}{David B{\"{u}}hler},
+  \bibinfo{person}{Lo{\"{\i}}c Correnson}, \bibinfo{person}{Florent Kirchner},
+  \bibinfo{person}{Nikolai Kosmatov}, \bibinfo{person}{Andr{\'{e}} Maroneze},
+  \bibinfo{person}{Valentin Perrelle}, \bibinfo{person}{Virgile Prevosto},
+  \bibinfo{person}{Julien Signoles}, {and} \bibinfo{person}{Nicky Williams}.}
+  \bibinfo{year}{2021}\natexlab{}.
+\newblock \showarticletitle{The dogged pursuit of bug-free {C} programs: the
+  {Frama-C} software analysis platform}.
+\newblock \bibinfo{journal}{\emph{Commun. {ACM}}} \bibinfo{volume}{64},
+  \bibinfo{number}{8} (\bibinfo{year}{2021}), \bibinfo{pages}{56--68}.
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.1145/3470569}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Cook, Podelski, and Rybalchenko}{Cook
+  et~al\mbox{.}}{2011}]%
+        {CookPR11}
+\bibfield{author}{\bibinfo{person}{Byron Cook}, \bibinfo{person}{Andreas
+  Podelski}, {and} \bibinfo{person}{Andrey Rybalchenko}.}
+  \bibinfo{year}{2011}\natexlab{}.
+\newblock \showarticletitle{Proving program termination}.
+\newblock \bibinfo{journal}{\emph{Commun. {ACM}}} \bibinfo{volume}{54},
+  \bibinfo{number}{5} (\bibinfo{year}{2011}), \bibinfo{pages}{88--98}.
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.1145/1941487.1941509}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{de~Gouw and Rot}{de~Gouw and Rot}{2016}]%
+        {GR16}
+\bibfield{author}{\bibinfo{person}{Stijn de Gouw} {and}
+  \bibinfo{person}{Jurriaan Rot}.} \bibinfo{year}{2016}\natexlab{}.
+\newblock \showarticletitle{Effectively Eliminating Auxiliaries}. In
+  \bibinfo{booktitle}{\emph{Theory and Practice of Formal Methods -- Essays
+  Dedicated to Frank de Boer on the Occasion of His 60th Birthday}}
+  \emph{(\bibinfo{series}{LNCS}, Vol.~\bibinfo{volume}{9660})},
+  \bibfield{editor}{\bibinfo{person}{Erika {\'{A}}brah{\'{a}}m},
+  \bibinfo{person}{Marcello~M. Bonsangue}, {and} \bibinfo{person}{Einar~Broch
+  Johnsen}} (Eds.). \bibinfo{publisher}{Springer}, \bibinfo{address}{Cham},
+  \bibinfo{pages}{226--241}.
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.1007/978-3-319-30734-3\_16}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Dijkstra}{Dijkstra}{1976}]%
+        {EWD:EWD573}
+\bibfield{author}{\bibinfo{person}{Edsger~W. Dijkstra}.}
+  \bibinfo{year}{1976}\natexlab{}.
+\newblock \bibinfo{title}{A great improvement}.  (\bibinfo{date}{July}
+  \bibinfo{year}{1976}).
+\newblock
+\newblock
+\shownote{Available at
+  \url{http://www.cs.utexas.edu/users/EWD/ewd05xx/EWD573.PDF}, published as
+  \cite{EWD:EWD573pub}.}
+
+
+\bibitem[\protect\citeauthoryear{Dijkstra}{Dijkstra}{1982}]%
+        {EWD:EWD573pub}
+\bibfield{author}{\bibinfo{person}{Edsger~W. Dijkstra}.}
+  \bibinfo{year}{1982}\natexlab{}.
+\newblock \showarticletitle{A great improvement}.
+\newblock In \bibinfo{booktitle}{\emph{Selected Writings on Computing: A
+  Personal Perspective}}. \bibinfo{publisher}{Springer-Verlag},
+  \bibinfo{address}{New York, Heidelberg, Berlin}, \bibinfo{pages}{217--219}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Floyd}{Floyd}{1967}]%
+        {Flo67a}
+\bibfield{author}{\bibinfo{person}{R.~W. Floyd}.}
+  \bibinfo{year}{1967}\natexlab{}.
+\newblock \showarticletitle{Assigning Meaning to Programs}. In
+  \bibinfo{booktitle}{\emph{Proceedings of Symposium on Applied Mathematics 19,
+  Mathematical Aspects of Computer Science}},
+  \bibfield{editor}{\bibinfo{person}{J.~T. Schwartz}} (Ed.).
+  \bibinfo{publisher}{American Mathematical Society}, \bibinfo{address}{New
+  York}, \bibinfo{pages}{19--32}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Foley and Hoare}{Foley and Hoare}{1971}]%
+        {FH71}
+\bibfield{author}{\bibinfo{person}{M. Foley} {and} \bibinfo{person}{C.~A.~R.
+  Hoare}.} \bibinfo{year}{1971}\natexlab{}.
+\newblock \showarticletitle{Proof of a Recursive Program: Quicksort}.
+\newblock \bibinfo{journal}{\emph{Comput. J.}} \bibinfo{volume}{14},
+  \bibinfo{number}{4} (\bibinfo{year}{1971}), \bibinfo{pages}{391--395}.
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.1093/COMJNL/14.4.391}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Harel}{Harel}{1979}]%
+        {Harel79}
+\bibfield{author}{\bibinfo{person}{David Harel}.}
+  \bibinfo{year}{1979}\natexlab{}.
+\newblock \bibinfo{booktitle}{\emph{First-Order Dynamic Logic}}.
+  \bibinfo{series}{Lecture Notes in Computer Science},
+  Vol.~\bibinfo{volume}{68}.
+\newblock \bibinfo{publisher}{Springer}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Hoare}{Hoare}{1961}]%
+        {Hoa61b}
+\bibfield{author}{\bibinfo{person}{C.~A.~R. Hoare}.}
+  \bibinfo{year}{1961}\natexlab{}.
+\newblock \showarticletitle{Algorithm 64: Quicksort}.
+\newblock \bibinfo{journal}{\emph{Commun. {ACM}}} \bibinfo{volume}{4},
+  \bibinfo{number}{7} (\bibinfo{year}{1961}), \bibinfo{pages}{321}.
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.1145/366622.366644}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Hoare}{Hoare}{1969}]%
+        {Hoa69}
+\bibfield{author}{\bibinfo{person}{C.~A.~R. Hoare}.}
+  \bibinfo{year}{1969}\natexlab{}.
+\newblock \showarticletitle{An Axiomatic Basis for Computer Programming}.
+\newblock \bibinfo{journal}{\emph{Commun. {ACM}}}  \bibinfo{volume}{12}
+  (\bibinfo{year}{1969}), \bibinfo{pages}{576--580, 583}.
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.1145/363235.363259}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Hoare}{Hoare}{1971}]%
+        {Hoa71}
+\bibfield{author}{\bibinfo{person}{C.~A.~R. Hoare}.}
+  \bibinfo{year}{1971}\natexlab{}.
+\newblock \showarticletitle{Procedures and parameters: an axiomatic approach}.
+  In \bibinfo{booktitle}{\emph{Proceedings of Symposium on the Semantics of
+  Algorithmic Languages}}, \bibfield{editor}{\bibinfo{person}{E.~Engeler}}
+  (Ed.). \bibinfo{publisher}{Lecture Notes in Mathematics 188,
+  Springer-Verlag}, \bibinfo{address}{New York}, \bibinfo{pages}{102--116}.
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.1007/BFB0059696}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Leavens, Cheon, Clifton, Ruby, and
+  Cok}{Leavens et~al\mbox{.}}{2005}]%
+        {JML05}
+\bibfield{author}{\bibinfo{person}{G.~T. Leavens}, \bibinfo{person}{Y. Cheon},
+  \bibinfo{person}{C. Clifton}, \bibinfo{person}{C. Ruby}, {and}
+  \bibinfo{person}{D.~R. Cok}.} \bibinfo{year}{2005}\natexlab{}.
+\newblock \showarticletitle{How the Design of {JML} Accomodates Both Runtime
+  Assertion Checking and Formal Verification}.
+\newblock \bibinfo{journal}{\emph{Sci. of Comput. Prog.}}  \bibinfo{volume}{55}
+  (\bibinfo{year}{2005}), \bibinfo{pages}{185--208}.
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.1016/J.SCICO.2004.05.015}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Manna and Pnueli}{Manna and Pnueli}{1974}]%
+        {MP74}
+\bibfield{author}{\bibinfo{person}{Z. Manna} {and} \bibinfo{person}{A.
+  Pnueli}.} \bibinfo{year}{1974}\natexlab{}.
+\newblock \showarticletitle{Axiomatic approach to total correctness of
+  programs}.
+\newblock \bibinfo{journal}{\emph{Acta Inf.}}  \bibinfo{volume}{3}
+  (\bibinfo{year}{1974}), \bibinfo{pages}{253--263}.
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.1007/BF00288637}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Meyer}{Meyer}{1997}]%
+        {Mey97}
+\bibfield{author}{\bibinfo{person}{B. Meyer}.} \bibinfo{year}{1997}\natexlab{}.
+\newblock \bibinfo{booktitle}{\emph{Object-Oriented Software Construction}
+  (\bibinfo{edition}{2nd} ed.)}.
+\newblock \bibinfo{publisher}{Prentice Hall}, \bibinfo{address}{New Jersey}.
+\newblock
+\newblock
+\shownote{Available at
+  \url{https://bertrandmeyer.com/wp-content/upLoads/OOSC2.pdf}.}
+
+
+\bibitem[\protect\citeauthoryear{Olderog}{Olderog}{1983}]%
+        {Old83}
+\bibfield{author}{\bibinfo{person}{E.-R. Olderog}.}
+  \bibinfo{year}{1983}\natexlab{}.
+\newblock \showarticletitle{On the notion of expressiveness and the rule of
+  adaptation}.
+\newblock \bibinfo{journal}{\emph{Theoretical Computer Science}}
+  \bibinfo{volume}{30} (\bibinfo{year}{1983}), \bibinfo{pages}{337--347}.
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.1016/0304-3975(83)90009-9}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Owicki and Gries}{Owicki and Gries}{1976}]%
+        {OG76a}
+\bibfield{author}{\bibinfo{person}{S. Owicki} {and} \bibinfo{person}{D.
+  Gries}.} \bibinfo{year}{1976}\natexlab{}.
+\newblock \showarticletitle{An Axiomatic Proof Technique for Parallel
+  Programs}.
+\newblock \bibinfo{journal}{\emph{Acta Inf.}}  \bibinfo{volume}{6}
+  (\bibinfo{year}{1976}), \bibinfo{pages}{319--340}.
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.1007/BF00268134}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Reynolds}{Reynolds}{1998}]%
+        {Rey98}
+\bibfield{author}{\bibinfo{person}{J.~C. Reynolds}.}
+  \bibinfo{year}{1998}\natexlab{}.
+\newblock \bibinfo{booktitle}{\emph{Theories of Programming Languages}}.
+\newblock \bibinfo{publisher}{Cambridge University Press},
+  \bibinfo{address}{Cambridge, Great Britain}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Tiuryn}{Tiuryn}{2002}]%
+        {Tiu02}
+\bibfield{author}{\bibinfo{person}{Jerzy Tiuryn}.}
+  \bibinfo{year}{2002}\natexlab{}.
+\newblock \showarticletitle{Hoare Logic: From First-Order to Propositional
+  Formalism}.
+\newblock In \bibinfo{booktitle}{\emph{Proof and System-Reliability}},
+  \bibfield{editor}{\bibinfo{person}{H.~Schwichtenberg} {and}
+  \bibinfo{person}{R.~Steinbr{\"u}ggen}} (Eds.). \bibinfo{publisher}{Springer},
+  \bibinfo{address}{Dordrecht}, \bibinfo{pages}{323--340}.
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.1007/978-94-010-0413-8_10}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{{von Plato}}{{von Plato}}{2014}]%
+        {Pla13}
+\bibfield{author}{\bibinfo{person}{Jan {von Plato}}.}
+  \bibinfo{year}{2014}\natexlab{}.
+\newblock \bibinfo{booktitle}{\emph{Elements of Logical Reasoning}}.
+\newblock \bibinfo{publisher}{Cambridge University Press},
+  \bibinfo{address}{Cambridge, Great Britain}.
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.1017/CBO9781139567862}
+\showDOI{\tempurl}
+
+
+\end{thebibliography}

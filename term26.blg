@@ -1,0 +1,48 @@
+This is BibTeX, Version 0.99d (TeX Live 2021)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: term26.aux
+The style file: abbrv.bst
+Database file #1: term25.bib
+Warning--I didn't find a database entry for "TZ88"
+You've used 22 entries,
+            2118 wiz_defined-function locations,
+            659 strings with 6995 characters,
+and the built_in function-call counts, 7894 in all, are:
+= -- 782
+> -- 361
+< -- 9
++ -- 143
+- -- 116
+* -- 547
+:= -- 1301
+add.period$ -- 71
+call.type$ -- 22
+change.case$ -- 114
+chr.to.int$ -- 0
+cite$ -- 22
+duplicate$ -- 314
+empty$ -- 624
+format.name$ -- 116
+if$ -- 1671
+int.to.chr$ -- 0
+int.to.str$ -- 22
+missing$ -- 27
+newline$ -- 113
+num.names$ -- 54
+pop$ -- 129
+preamble$ -- 1
+purify$ -- 96
+quote$ -- 0
+skip$ -- 211
+stack$ -- 0
+substring$ -- 507
+swap$ -- 77
+text.length$ -- 9
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 76
+warning$ -- 0
+while$ -- 84
+width$ -- 24
+write$ -- 251
+(There was 1 warning)
