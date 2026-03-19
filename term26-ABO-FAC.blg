@@ -1,4 +1,4 @@
-This is BibTeX, Version 0.99d (TeX Live 2021)
+This is BibTeX, Version 0.99d (TeX Live 2022/dev/Debian)
 Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: term26-ABO-FAC.aux
 The style file: ACM-Reference-Format.bst
@@ -11,46 +11,44 @@ Reallocated glb_str_ptr (elt_size=4) to 20 items from 10.
 Reallocated global_strs (elt_size=200001) to 20 items from 10.
 Reallocated glb_str_end (elt_size=4) to 20 items from 10.
 Reallocated singl_function (elt_size=4) to 100 items from 50.
-Warning--empty address in Harel79
 You've used 26 entries,
-            5959 wiz_defined-function locations,
-            1536 strings with 18912 characters,
-and the built_in function-call counts, 30036 in all, are:
-= -- 4019
-> -- 945
+            5981 wiz_defined-function locations,
+            1680 strings with 21916 characters,
+and the built_in function-call counts, 28709 in all, are:
+= -- 3938
+> -- 761
 < -- 0
-+ -- 301
-- -- 351
-* -- 2067
-:= -- 3059
++ -- 244
+- -- 294
+* -- 1930
+:= -- 2760
 add.period$ -- 142
 call.type$ -- 26
 change.case$ -- 163
 chr.to.int$ -- 26
-cite$ -- 27
-duplicate$ -- 2623
-empty$ -- 1837
-format.name$ -- 393
-if$ -- 7231
+cite$ -- 26
+duplicate$ -- 2543
+empty$ -- 1784
+format.name$ -- 336
+if$ -- 7040
 int.to.chr$ -- 2
 int.to.str$ -- 1
 missing$ -- 87
-newline$ -- 298
-num.names$ -- 220
-pop$ -- 826
+newline$ -- 301
+num.names$ -- 194
+pop$ -- 842
 preamble$ -- 1
-purify$ -- 395
+purify$ -- 369
 quote$ -- 0
-skip$ -- 932
+skip$ -- 926
 stack$ -- 0
-substring$ -- 2416
-swap$ -- 307
+substring$ -- 2320
+swap$ -- 282
 text.length$ -- 19
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 522
-warning$ -- 1
-while$ -- 241
+warning$ -- 0
+while$ -- 215
 width$ -- 0
-write$ -- 558
-(There was 1 warning)
+write$ -- 615

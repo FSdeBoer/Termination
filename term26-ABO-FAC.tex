@@ -931,8 +931,11 @@ The restriction is weak enough for performing the termination proof
 of the partitioning program {\it PART}.
 
 What about a LOOP rule without any restriction on the bound function $t$\,?
-To prove the Equivalence Theorem \ref{thm:abo} in this setting we
-reason at the level proofs instead of at the level of proof rules.
+To prove the Equivalence Theorem \ref{thm:abo} in this setting ideally we would
+like to reason at the level of proof rules, using an appropriate
+substitution rule. However, we did not succeed in establishing
+admissibility of such a rule. So instead we reason at the level of
+proofs.
 
 Consider a proof of a correctness formula $\phi$ in a proof system
 $\alpha \in \{\mathrm{II, III, IV}\}$ in which no distinction is made
