@@ -1575,7 +1575,7 @@ out that in this setting the auxiliary rules cannot be dispensed with.
 Under current investigation is an extension of our
 comparative  analysis to the following rule 
 which has been introduced in 
- \cite{AptP86}  to deal with unbounded nondeterminism.
+ \cite{AptP86}  to deal with \emph{unbounded} nondeterminism.
 
 \[
  \begin{array}{l}
@@ -1587,12 +1587,14 @@ which has been introduced in
   \HT{\exists x:p(x)}{\WDD{B}{S}}{p(0)}
  \end{array}
 \]
-In this rule it was stipulated
-that the  paramteter $x$ ranges over ordinals instead over integers.   Such parameterized LOOP invariants were first used in a rule proposed
+In this rule it was stipulated that the parameter $x$ ranges over
+ordinals instead over integers, but in the context of
+programs which only give rise to \emph{bounded} non-determinism  the range of integers suffices.
+ Parameterized LOOP invariants were first used in a rule proposed
 in \cite{Harel79}.
 
 Further,   the question naturally arises  to what extent
-the  separation of concerns underrlying the different
+the  separation of concerns underlying the different
 LOOP rules is applicable to proving termination of recursive procedures.
 
 
