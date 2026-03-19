@@ -1,0 +1,132 @@
+\begin{thebibliography}{10}
+
+\bibitem{Almeida11}
+J.~B. Almeida, M.~J. Frade, J.~S. Pinto, and S.~Melo~de Sousa.
+\newblock {\em Rigorous Software Development: An Introduction to Program
+  Verification}.
+\newblock Springer, 2011.
+
+\bibitem{Apt81a}
+K.~R. Apt.
+\newblock Recursive assertions and parallel programs.
+\newblock {\em Acta Inf.}, 13:219--232, 1981.
+
+\bibitem{ABO90}
+K.~R. Apt, F.~S. de~Boer, and E.-R. Olderog.
+\newblock Proving termination of parallel programs.
+\newblock In W.~H.~J. Feijen, A.~J.~M. van Gasteren, D.~Gries, and J.~Misra,
+  editors, {\em Beauty is Our Business, A Birthday Salute to Edsger W.
+  Dijkstra}, pages 0--6, New York, 1990. Springer-Verlag.
+
+\bibitem{ABO09}
+K.~R. Apt, F.~S. de~Boer, and E.-R. Olderog.
+\newblock {\em Verification of Sequential and Concurrent Programs}.
+\newblock Springer-Verlag, New York, third edition, 2009.
+
+\bibitem{ABO25}
+K.~R. Apt, F.~S. de~Boer, and E.-R. Olderog.
+\newblock Three ways of proving termination of loops.
+\newblock In M.~Hinchey and B.~Steffen, editors, {\em The Combined Power of
+  Research, Education, and Dissemination - Essays Dedicated to Tiziana Margaria
+  on the Occasion of Her 60th Birthday}, volume 15240 of {\em LNCS}, pages
+  280--301. Springer, 2025.
+
+\bibitem{AO19}
+K.~R. Apt and E.-R. Olderog.
+\newblock Fifty years of {Hoare's} logic.
+\newblock {\em Formal Aspects of Computing}, 31(6):751--807, 2019.
+
+\bibitem{AptP86}
+K.~R. Apt and G.~D. Plotkin.
+\newblock Countable nondeterminism and random assignment.
+\newblock {\em J. {ACM}}, 33(4):724--767, 1986.
+
+\bibitem{BBBCKKMPPS21}
+P.~Baudin, F.~Bobot, D.~B{\"{u}}hler, L.~Correnson, F.~Kirchner, N.~Kosmatov,
+  A.~Maroneze, V.~Perrelle, V.~Prevosto, J.~Signoles, and N.~Williams.
+\newblock The dogged pursuit of bug-free {C} programs: the {Frama-C} software
+  analysis platform.
+\newblock {\em Commun. {ACM}}, 64(8):56--68, 2021.
+
+\bibitem{CookPR11}
+B.~Cook, A.~Podelski, and A.~Rybalchenko.
+\newblock Proving program termination.
+\newblock {\em Commun. {ACM}}, 54(5):88--98, 2011.
+
+\bibitem{GR16}
+S.~de~Gouw and J.~Rot.
+\newblock Effectively eliminating auxiliaries.
+\newblock In E.~{\'{A}}brah{\'{a}}m, M.~M. Bonsangue, and E.~B. Johnsen,
+  editors, {\em Theory and Practice of Formal Methods - Essays Dedicated to
+  Frank de Boer on the Occasion of His 60th Birthday}, volume 9660 of {\em
+  Lecture Notes in Computer Science}, pages 226--241. Springer, 2016.
+
+\bibitem{EWD:EWD573}
+E.~W. Dijkstra.
+\newblock A great improvement.
+\newblock Available at
+  \url{http://www.cs.utexas.edu/users/EWD/ewd05xx/EWD573.PDF}, published as
+  \cite{EWD:EWD573pub}, July 1976.
+
+\bibitem{EWD:EWD573pub}
+E.~W. Dijkstra.
+\newblock A great improvement.
+\newblock In {\em Selected Writings on Computing: A Personal Perspective},
+  pages 217--219. Springer-Verlag, 1982.
+
+\bibitem{Flo67a}
+R.~W. Floyd.
+\newblock Assigning meaning to programs.
+\newblock In J.~T. Schwartz, editor, {\em Proceedings of Symposium on Applied
+  Mathematics 19, Mathematical Aspects of Computer Science}, pages 19--32,
+  American Mathematical Society, New York, 1967.
+
+\bibitem{Harel79}
+D.~Harel.
+\newblock {\em First-Order Dynamic Logic}, volume~68 of {\em Lecture Notes in
+  Computer Science}.
+\newblock Springer, 1979.
+
+\bibitem{Hoa69}
+C.~A.~R. Hoare.
+\newblock An axiomatic basis for computer programming.
+\newblock {\em Commun. {ACM}}, 12:576--580, 583, 1969.
+
+\bibitem{JML05}
+G.~T. Leavens, Y.~Cheon, C.~Clifton, C.~Ruby, and D.~R. Cok.
+\newblock How the design of {JML} accomodates both runtime assertion checking
+  and formal verification.
+\newblock {\em Sci. of Comput. Prog.}, 55:185--208, 2005.
+
+\bibitem{MP74}
+Z.~Manna and A.~Pnueli.
+\newblock Axiomatic approach to total correctness of programs.
+\newblock {\em Acta Inf.}, 3:253--263, 1974.
+
+\bibitem{Mey97}
+B.~Meyer.
+\newblock {\em Object-Oriented Software Construction}.
+\newblock Prentice Hall, 2nd edition, 1997.
+
+\bibitem{OG76a}
+S.~Owicki and D.~Gries.
+\newblock An axiomatic proof technique for parallel programs.
+\newblock {\em Acta Inf.}, 6:319--340, 1976.
+
+\bibitem{Rey98}
+J.~C. Reynolds.
+\newblock {\em Theories of Programming Languages}.
+\newblock Cambridge University Press, Cambridge, Great Britain, 1998.
+
+\bibitem{Tiu02}
+J.~Tiuryn.
+\newblock Hoare logic: From first-order to propositional formalism.
+\newblock In H.~Schwichtenberg and R.~Steinbr{\"u}ggen, editors, {\em Proof and
+  System-Reliability}, pages 323--340. Kluwer Academic Publishers, 2002.
+
+\bibitem{Pla13}
+J.~{von Plato}.
+\newblock {\em Elements of Logical Reasoning}.
+\newblock Cambridge University Press, 2014.
+
+\end{thebibliography}

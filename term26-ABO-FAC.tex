@@ -1548,7 +1548,7 @@ This result underlies, yet again, the importance of auxiliary rules in this comp
 the LOOP rules.
 
 
-\section{Conclusion}
+\section{Conclusion and Future Work}
 \label{sec:conc}
 
 We provided here a comparative proof-theoretic analysis of three proof
@@ -1572,12 +1572,35 @@ Additionally, we showed how to extend these results to the setting in
 which programs have access to a library of procedures. It turns
 out that in this setting the auxiliary rules cannot be dispensed with.
 
+Under current investigation is an extension of our
+comparative  analysis to the following rule 
+which has been introduced in 
+ \cite{AptP86}  to deal with unbounded nondeterminism.
+
+\[
+ \begin{array}{l}
+   p(x) \wedge x > 0 \ra B,                         \\
+ \HT{p(x)\wedge x > 0}{S}{\exists y: p(y)\wedge y< x},          \\
+   p(0) \ra \neg B,                         \\ 
+  [-\medskipamount]
+  \hrulefill                                \\
+  \HT{\exists x:p(x)}{\WDD{B}{S}}{p(0)}
+ \end{array}
+\]
+In this rule it was stipulated
+that the  paramteter $x$ ranges over ordinals instead over integers.   Such parameterized LOOP invariants were first used in a rule proposed
+in \cite{Harel79}.
+
+Further,   the question naturally arises  to what extent
+the  separation of concerns underrlying the different
+LOOP rules is applicable to proving termination of recursive procedures.
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 \bibliographystyle{ACM-Reference-Format}
-% \bibliographystyle{abbrv}
+% \bibliographystyle{abbr
 \bibliography{term26}
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
