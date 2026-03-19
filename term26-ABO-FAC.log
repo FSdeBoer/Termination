@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2026.1.30)  19 MAR 2026 15:46
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2026.1.30)  19 MAR 2026 17:08
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1262,11 +1262,11 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
  [19.19]
 
 Class acmart Warning: \vspace should only be used to provide space above/below 
-surrounding objects on input line 1713.
+surrounding objects on input line 1709.
 
 
 Class acmart Warning: \vspace should only be used to provide space above/below 
-surrounding objects on input line 1729.
+surrounding objects on input line 1725.
 
 
 Underfull \vbox (badness 1466) has occurred while \output is active []
@@ -1274,42 +1274,42 @@ Underfull \vbox (badness 1466) has occurred while \output is active []
  [20.20]
 
 Class acmart Warning: \vspace should only be used to provide space above/below 
-surrounding objects on input line 1751.
+surrounding objects on input line 1747.
 
 [21.21]
 
 Class acmart Warning: \vspace should only be used to provide space above/below 
-surrounding objects on input line 1836.
+surrounding objects on input line 1832.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1846--1847
+Underfull \hbox (badness 10000) in paragraph at lines 1842--1843
 
  []
 
 
 Class acmart Warning: \vspace should only be used to provide space above/below 
-surrounding objects on input line 1860.
+surrounding objects on input line 1856.
 
 
 Class acmart Warning: \vspace should only be used to provide space above/below 
-surrounding objects on input line 1888.
+surrounding objects on input line 1884.
 
 
 Class acmart Warning: \vspace should only be used to provide space above/below 
-surrounding objects on input line 1909.
+surrounding objects on input line 1905.
 
 
 Class acmart Warning: \vspace should only be used to provide space above/below 
-surrounding objects on input line 1933.
+surrounding objects on input line 1929.
 
 [22.22]
 
 Class acmart Warning: \vspace should only be used to provide space above/below 
-surrounding objects on input line 1968.
+surrounding objects on input line 1964.
 
 
 Class acmart Warning: \vspace should only be used to provide space above/below 
-surrounding objects on input line 2025.
+surrounding objects on input line 2021.
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
@@ -1317,15 +1317,15 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
  [23.23]
 
 Class acmart Warning: \vspace should only be used to provide space above/below 
-surrounding objects on input line 2038.
+surrounding objects on input line 2034.
 
 
 Class acmart Warning: \vspace should only be used to provide space above/below 
-surrounding objects on input line 2066.
+surrounding objects on input line 2062.
 
 
 Class acmart Warning: \vspace should only be used to provide space above/below 
-surrounding objects on input line 2092.
+surrounding objects on input line 2088.
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
@@ -1333,28 +1333,28 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
  [24.24]
 
 Class acmart Warning: \vspace should only be used to provide space above/below 
-surrounding objects on input line 2121.
+surrounding objects on input line 2117.
 
 
 Class acmart Warning: \vspace should only be used to provide space above/below 
-surrounding objects on input line 2179.
+surrounding objects on input line 2175.
 
 
 Class acmart Warning: \vspace should only be used to provide space above/below 
-surrounding objects on input line 2192.
+surrounding objects on input line 2188.
 
 [25.25]
 
 Class acmart Warning: \vspace should only be used to provide space above/below 
-surrounding objects on input line 2237.
+surrounding objects on input line 2233.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 2277.
+(hyperref)                removing `math shift' on input line 2273.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 2277.
+(hyperref)                removing `math shift' on input line 2273.
 
 [26.26]
 Underfull \vbox (badness 10000) has occurred while \output is active []
@@ -1383,7 +1383,7 @@ ence can ingest your work..
 
 
 Class acmart Warning: \vspace should only be used to provide space above/below 
-surrounding objects on input line 2405.
+surrounding objects on input line 2401.
 
 [28.28] (./term26-ABO-FAC.aux)
 Package rerunfilecheck Info: File `term26-ABO-FAC.out' has not changed.
@@ -1424,7 +1424,7 @@ xlive/texmf-dist/fonts/type1/public/newtx/txmiaX.pfb></usr/share/texlive/texmf-
 dist/fonts/type1/public/txfonts/txsya.pfb></usr/share/texlive/texmf-dist/fonts/
 type1/public/txfonts/txsyc.pfb></usr/share/texlive/texmf-dist/fonts/type1/publi
 c/newtx/txsys.pfb>
-Output written on term26-ABO-FAC.pdf (28 pages, 671066 bytes).
+Output written on term26-ABO-FAC.pdf (28 pages, 671031 bytes).
 PDF statistics:
  623 PDF objects out of 1000 (max. 8388607)
  544 compressed objects within 6 object streams
