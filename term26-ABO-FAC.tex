@@ -1319,12 +1319,9 @@ Theorem~\ref{thm:abo} to a more realistic class of programs.
 To this end, consider a situation in which programs can access a library of
 procedures each of which is specified by means of a correctness
 formula. The access is provided by means of procedure calls.  For
-simplicity we assume that procedures do not have global variables and
-that Pascal's call by variable mechanism is used.
-according to which the formal parameters are initialized at the
-beginning of the procedure execution with the values of the actual
-parameters, and, at the end of the  procedure's execution are
-copied back to the original variables addresses.
+simplicity we assume the parameter mechanism \emph{call-by-value},
+according to which the values of the fomal parameters are assigned to the
+formal parameters.
 
 Let us start with a motivating toy example. Consider the following program
 that invokes an unknown (though of course one with the expected meaning)
@@ -1445,7 +1442,7 @@ It is clear how to modify all considered proof rules to deal with the
 conditional correctness formulas: it suffices to prefix each
 correctness formula by `$\phi_1, \dots, \phi_n \vdash$'.  
 
-Additionally, we add the INVARIANCE axiom
+Additionally, we add the following axiom:
 \III
 
 \NI
@@ -1602,7 +1599,7 @@ LOOP rules is applicable to proving termination of recursive procedures.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 \bibliographystyle{ACM-Reference-Format}
-% \bibliographystyle{abbr
+% \bibliographystyle{abbrv}
 \bibliography{term26}
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
